@@ -178,7 +178,7 @@ elif not st.session_state.giocatori_attivi:
 else:
     opzioni_menu = {id_p: st.session_state.nomi_giocatori[id_p] for id_p in st.session_state.giocatori_attivi}
     
-    # --- MODIFICA RICHIESTA: Testo aggiornato sopra e tendina subito sotto ---
+    # --- MODIFICA RICHIESTA DI SCRITTA E TENDINA ---
     giocatore_utente = st.selectbox(
         "TABELLONE DI:", 
         list(opzioni_menu.keys()),
@@ -186,18 +186,50 @@ else:
         key="utente_locale"
     )
     
-    # Rimosso il vecchio testo st.write("### Tabellone di...") che duplicava le informazioni
-    
+    # --- CLASSIFICA TORNEO AGGIORNATA IN TEMPO REALE ---
     with st.container():
         st.subheader("🏆 Classifica Torneo")
         classifica = {}
         for player_id in st.session_state.giocatori_attivi:
             lista_qta = st.session_state.punteggi_giocatori[player_id]
+            
+            # Controllo di sicurezza per assicurarci che la lista dei punteggi esista ed sia allineata
+            if not lista_qta or len(lista_qta) != len(st.session_state.creature):
+                st.session_state.punteggi_giocatori[player_id] = [0] * len(st.session_state.creature)
+                lista_qta = st.session_state.punteggi_giocatori[player_id]
+                
             totale_player = sum(st.session_state.creature[i]["punti"] * lista_qta[i] for i in range(len(st.session_state.creature)))
             nome_reale = st.session_state.nomi_giocatori[player_id]
-            classifica[nome_reale] = (totale_player, player_id)
+            classifica[nome_reale] = totale_player
             
-        # Generazione visiva base per la classifica
-        classifica_ordinata = sorted(classifica.items(), key=lambda x: x, reverse=True)
-        for rank, (nome, (punti, _)) in enumerate(classifica_ordinata, 1):
-            st.write(f"**{rank}° {nome}**: {punti} pt")
+        # Mostra la classifica ordinata
+        classifica_ordinata = sorted(classifica.items(), key=lambda x: x[1], reverse=True)
+        for rank, (nome, punti) in enumerate(classifica_ordinata, 1):
+            prefisso = "🥇" if rank == 1 else "🥈" if rank == 2 else "🥉" if rank == 3 else "👤"
+            st.write(f"{prefisso} **{rank}° {nome}**: {punti} Punti")
+
+    st.write("---")
+    st.subheader("🐙 Inserisci Catture")
+
+    # --- TABELLONE DINAMICO DELLE CREATURE CON PULSANTI ---
+    lista_catture_giocatore = st.session_state.punteggi_giocatori[giocatore_utente]
+
+    for idx, c in enumerate(st.session_state.creature):
+        with st.container():
+            st.markdown(
+                f"""
+                <div class="creature-card">
+                    <b>Creatura #{c['id']}</b><br>
+                    Valore: {c['punti']} Punti<br>
+                    Catturate: {lista_catture_giocatore[idx]}
+                </div>
+                """, 
+                unsafe_allow_html=True
+            )
+            
+            # Pulsanti + e - affiancati per lo schermo dello smartphone
+            col_meno, col_piu = st.columns(2)
+            with col_meno:
+                if st.button("➖ Rimuovi", key=f"meno_{giocatore_utente}_{idx}", use_container_width=True):
+                    if st.session_state.punteggi_giocatori[giocatore_utente][idx] > 0:
+                        st.session_state.punteggi_giocatori[giocatore_utente][idx] -= 1
