@@ -78,6 +78,8 @@ st.markdown(
         font-size: min(7vw, 34px);
         display: inline-block;
     }
+    div[data-testid="stImageFilter"] { display: flex !important; justify-content: center !important; } img { margin: 0 auto !important; display: block !important; }
+
     </style>
     """,
     unsafe_allow_html=True
