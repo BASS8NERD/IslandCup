@@ -42,6 +42,7 @@ st.markdown(
         display: block !important;
         margin-left: auto !important;
         margin-right: auto !important;
+        text-align: center !important;
     }
     /* Centra il testo del Valore */
     div[data-testid="stMarkdownContainer"] {
