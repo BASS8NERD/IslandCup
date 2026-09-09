@@ -159,7 +159,7 @@ with st.expander("🛠️ TORNEO FAI DA TE"):
     if st.button("✨ AGGIUNGI ALLA TABELLA IN BASSO", use_container_width=True):
         nuovo_id = len(st.session_state.creature) + 1
         st.session_state.creature.append({
-            "id": nuevo_id,
+            "id": nuovo_id,
             "punti": punti_nuova_creatura,
             "immagine": file_foto_nuovo
         })
