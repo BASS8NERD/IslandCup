@@ -229,7 +229,7 @@ else:
     for idx, creatura in enumerate(st.session_state.creature):
         st.markdown(f'<div class="creature-card">', unsafe_allow_html=True)
         
-              if creatura["immagine"] is not None:
+        if creatura["immagine"] is not None:
             try:
                 col_sx, col_cx, col_dx = st.columns([1, 2, 1])
                 with col_cx:
@@ -238,9 +238,9 @@ else:
                     else:
                         st.image(creatura["immagine"], width=80)
             except Exception:
+ 
                 st.write(f"🖼️ Creatura #{creatura['id']}")
         else:
-
             st.write(f"✨ #{creatura['id']}")
             
         quantita_corrente = st.session_state.punteggi_giocatori[giocatore_utente][idx]
