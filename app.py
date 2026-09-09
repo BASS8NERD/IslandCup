@@ -230,15 +230,11 @@ else:
         st.markdown(f'<div class="creature-card">', unsafe_allow_html=True)
         
         if creatura["immagine"] is not None:
-            try:
-                col_sx, col_cx, col_dx = st.columns([1, 2, 1])
+            try:                
+                col_sx, col_cx, col_dx = st.columns([2.5, 1, 2.5])
                 with col_cx:
-                    if isinstance(creatura["immagine"], str):
-                        st.image(f"https://githubusercontent.com{creatura['immagine']}", width=80)
-                    else:
-                        st.image(creatura["immagine"], width=80)
+                    st.image(creatura["immagine"], width=70)
             except Exception:
- 
                 st.write(f"🖼️ Creatura #{creatura['id']}")
         else:
             st.write(f"✨ #{creatura['id']}")
