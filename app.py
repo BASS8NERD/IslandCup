@@ -1,25 +1,49 @@
 import streamlit as st
 
-# Configurazione della pagina
-st.set_page_config(page_title="Island Cup Tracker", page_icon="🏝️", layout="wide")
+# Configurazione della pagina ottimizzata per smartphone
+st.set_page_config(page_title="Island Cup Tracker", page_icon="🏝️", layout="centered")
 
-# --- STILE GRAFICO COZY ISLAND ---
+# --- STILE GRAFICO APPOSITAMENTE STRUTTURATO PER CELLULARI ---
 st.markdown(
     """
     <style>
+    /* Sfondo e colori generali dell'isola */
     .stApp { background-color: #fcf8f2; }
-    h1, h2, h3, p, label, .stMarkdown, span { color: #4a3728 !important; }
-    .stExpander, div[data-baseweb="select"] { background-color: #f4ebd9 !important; border-radius: 10px; }
+    h1, h2, h3, p, label, .stMarkdown, span, div { color: #4a3728 !important; }
+    
+    /* Riquadri dei menu espandibili */
+    .stExpander, div[data-baseweb="select"] { 
+        background-color: #f4ebd9 !important; 
+        border-radius: 12px; 
+    }
+    
+    /* Pulsanti verdi grandi, facili da premere col pollice */
     div.stButton > button {
-        background-color: #78b159 !important; color: white !important;
-        border: none !important; border-radius: 8px !important; font-weight: bold !important;
+        background-color: #78b159 !important; 
+        color: white !important;
+        border: none !important; 
+        border-radius: 10px !important; 
+        font-weight: bold !important;
+        padding: 10px !important;
+        font-size: 1.1rem !important;
+    }
+    
+    /* Stile speciale per i riquadri delle singole creature marine */
+    .creature-card {
+        background-color: #f4ebd9;
+        border: 2px solid #e2d4b7;
+        border-radius: 15px;
+        padding: 12px;
+        margin-bottom: 15px;
+        text-align: center;
+        box-shadow: 0px 4px 6px rgba(0,0,0,0.05);
     }
     </style>
     """,
     unsafe_allow_html=True
 )
 
-st.markdown("<h1 style='text-align: center; letter-spacing: 2px;'>🌴 ISLAND CUP 🌴</h1>", unsafe_allow_html=True)
+st.markdown("<h1 style='text-align: center; letter-spacing: 1px;'>🌴 ISLAND CUP 🌴</h1>", unsafe_allow_html=True)
 st.write("---")
 
 # Inizializzazione variabili di sessione nel browser locale
@@ -35,10 +59,10 @@ if "tipo_torneo_precedente" not in st.session_state:
     st.session_state.tipo_torneo_precedente = ""
 
 # --- 🏆 SELEZIONE DEL TORNEO PRESTABILITO 🏆 ---
-st.subheader("📊 Seleziona il Torneo della Partita")
+st.subheader("📊 Seleziona il Torneo")
 tipo_torneo = st.selectbox(
-    "Scegli quale competizione avviare ora:",
-    ["🗺️ Scegli un torneo...", "🌊 Torneo Creature Marine (40 Creature)", "🎣 Torneo di Pesca (Pronto per la tua lista)", "🦋 Torneo Insetti (Pronto per la tua lista)"]
+    "Scegli quale competizione avviare:",
+    ["🗺️ Scegli un torneo...", "🌊 Torneo Creature Marine (40 Creature)", "🎣 Torneo di Pesca", "🦋 Torneo Insetti"]
 )
 
 if tipo_torneo != st.session_state.tipo_torneo_precedente:
@@ -53,9 +77,9 @@ if tipo_torneo != st.session_state.tipo_torneo_precedente:
         st.session_state.creature = [
             {"id": i, "punti": punti_creature[i], "immagine": f"{i}.png"} for i in range(1, 41)
         ]
-    elif tipo_torneo == "🎣 Torneo di Pesca (Pronto per la tua lista)":
+    elif tipo_torneo == "🎣 Torneo di Pesca":
         st.session_state.creature = [{"id": "P1", "punti": 3, "immagine": None}]
-    elif tipo_torneo == "🦋 Torneo Insetti (Pronto per la tua lista)":
+    elif tipo_torneo == "🦋 Torneo Insetti":
         st.session_state.creature = [{"id": "I1", "punti": 2, "immagine": None}]
     else:
         st.session_state.creature = []
@@ -63,116 +87,45 @@ if tipo_torneo != st.session_state.tipo_torneo_precedente:
     for player_id in st.session_state.punteggi_giocatori:
         st.session_state.punteggi_giocatori[player_id] = [0] * len(st.session_state.creature)
 
-st.write("---")
-
-# --- PANNELLI DI CONFIGURAZIONE AVANZATA ---
-col_setup_nomi, col_setup_creature = st.columns(2)
-
-with col_setup_nomi:
-    with st.expander("⚙️ Selezione e Personalizzazione Giocatori"):
-        st.write("Spunta i partecipanti per la partita attuale e scrivi i loro nomi:")
-        partecipanti_scelti = []
-        for i in range(1, 13):
-            id_p = f"Player {i}"
-            col_chk, col_txt = st.columns([0.5, 5])
-            with col_chk:
-                if st.checkbox("", key=f"check_{id_p}", value=(id_p in st.session_state.giocatori_attivi), label_visibility="collapsed"):
-                    partecipanti_scelti.append(id_p)
-            with col_txt:
-                nuovo_nome = st.text_input(f"Nome per {id_p}", value=st.session_state.nomi_giocatori[id_p], key=f"edit_{id_p}", label_visibility="collapsed")
-                if nuovo_nome.strip():
-                    st.session_state.nomi_giocatori[id_p] = nuovo_nome.strip()
-        st.session_state.giocatori_attivi = partecipanti_scelti
-
-with col_setup_creature:
-    with st.expander("➕ Inserisci Creatura Extra a Mano (Opzionale)"):
-        st.write("Vuoi aggiungere una foto dal PC di una creatura fuori catalogo? Caricala qui:")
-        punti_nuova_creatura = st.number_input("Valore in Punti:", min_value=0, max_value=100, value=2, key="nuovi_punti_c")
-        file_foto_nuovo = st.file_uploader("Carica Foto dal PC:", type=["png", "jpg", "jpeg"], key="nuovo_upload_c")
-        
-        if st.button("✨ AGGIUNGI AL TORNEO CORRENTE", use_container_width=True):
-            nuovo_id = len(st.session_state.creature) + 1
-            st.session_state.creature.append({
-                "id": nuovo_id,
-                "punti": punti_nuova_creatura,
-                "immagine": file_foto_nuovo
-            })
-            for player_id in st.session_state.punteggi_giocatori:
-                st.session_state.punteggi_giocatori[player_id].append(0)
-            st.success("✅ Nuova riga aggiunta al tabellone!")
-            st.rerun()
+# --- PANNELLI DI CONFIGURAZIONE COMPATTI ---
+with st.expander("⚙️ Configura Giocatori (Spunta e Rinomina)"):
+    st.write("Seleziona chi partecipa al torneo attuale:")
+    partecipanti_scelti = []
+    for i in range(1, 13):
+        id_p = f"Player {i}"
+        col_chk, col_txt = st.columns([1, 5])
+        with col_chk:
+            if st.checkbox("", key=f"check_{id_p}", value=(id_p in st.session_state.giocatori_attivi)):
+                partecipanti_scelti.append(id_p)
+        with col_txt:
+            nuovo_nome = st.text_input(f"Nome per {id_p}", value=st.session_state.nomi_giocatori[id_p], key=f"edit_{id_p}", label_visibility="collapsed")
+            if nuovo_nome.strip():
+                st.session_state.nomi_giocatori[id_p] = nuovo_nome.strip()
+    st.session_state.giocatori_attivi = partecipanti_scelti
 
 st.write("---")
 
-# --- SCHERMATA PRINCIPALE ---
-col_griglia, col_classifica = st.columns([3, 1.5], gap="large")
-
-with col_griglia:
-    st.subheader("📝 Il Tuo Registro delle Catture")
+# --- SCHERMATA PRINCIPALE OTTIMIZZATA PER MOBILE ---
+if tipo_torneo == "🗺️ Scegli un torneo...":
+    st.info("👋 Scegli un torneo dal menu in alto per iniziare!")
+elif not st.session_state.giocatori_attivi:
+    st.info("👋 Apri il pannello '⚙️ Configura Giocatori' per attivare i partecipanti di oggi!")
+else:
+    # Selettore Giocatore molto grande
+    opzioni_menu = {id_p: st.session_state.nomi_giocatori[id_p] for id_p in st.session_state.giocatori_attivi}
+    giocatore_utente = st.selectbox(
+        "📱 Di chi sono le catture che stai inserendo?", 
+        list(opzioni_menu.keys()),
+        format_func=lambda x: opzioni_menu[x],
+        key="utente_locale"
+    )
     
-    if tipo_torneo == "🗺️ Scegli un torneo...":
-        st.info("👋 Per iniziare, seleziona il tipo di torneo dal menu a tendina in alto!")
-    elif not st.session_state.giocatori_attivi:
-        st.info("👋 Nessun giocatore in gara. Attiva i partecipanti nel pannello in alto a sinistra '⚙️ Selezione e Personalizzazione Giocatori'!")
-    else:
-        opzioni_menu = {id_p: st.session_state.nomi_giocatori[id_p] for id_p in st.session_state.giocatori_attivi}
-        giocatore_utente = st.selectbox(
-            "📱 Seleziona il nome del Giocatore da aggiornare:", 
-            list(opzioni_menu.keys()),
-            format_func=lambda x: opzioni_menu[x],
-            key="utente_locale"
-        )
-        
-        nome_visualizzato = st.session_state.nomi_giocatori[giocatore_utente]
-        st.write(f"### 🎣 Tabellone di: **{nome_visualizzato}**")
-        st.write("---")
-
-        if not st.session_state.creature:
-            st.info("👋 Il tabellone è vuoto.")
-        else:
-            col_img_h, col_val_h, col_qta_h, col_tot_h = st.columns([1.5, 1.5, 2, 1.5])
-            col_img_h.write("**Creatura (Foto)**")
-            col_val_h.write("**Valore**")
-            col_qta_h.write("**Quantità**")
-            col_tot_h.write("**Totale**")
-            st.write("---")
-
-            for idx, creatura in enumerate(st.session_state.creature):
-                col_img, col_val, col_qta, col_tot = st.columns([1.5, 1.5, 2, 1.5])
-                
-                with col_img:
-                    if creatura["immagine"] is not None:
-                        try:
-                            st.image(creatura["immagine"], width=55)
-                        except Exception:
-                            st.write(f"🖼️ # {creatura['id']}")
-                    else:
-                        st.write(f"✨ #{creatura['id']}")
-
-                with col_val:
-                    st.write(f"{creatura['punti']} Pt")
-                    
-                with col_qta:
-                    quantita_corrente = st.session_state.punteggi_giocatori[giocatore_utente][idx]
-                    nuova_qta = st.number_input(
-                        f"Q.tà {creatura['id']}", 
-                        min_value=0, 
-                        value=quantita_corrente, 
-                        key=f"qta_{giocatore_utente}_{creatura['id']}", 
-                        label_visibility="collapsed"
-                    )
-                    st.session_state.punteggi_giocatori[giocatore_utente][idx] = nuova_qta
-                    
-                totale_riga = creatura["punti"] * nuova_qta
-                with col_tot:
-                    st.write(f"**{totale_riga} Pt**")
-
-with col_classifica:
-    st.subheader("🏆 Classifica Generale Live")
+    nome_visualizzato = st.session_state.nomi_giocatori[giocatore_utente]
+    st.write(f"### 🎣 Tabellone di: **{nome_visualizzato}**")
     
-    if tipo_torneo == "🗺️ Scegli un torneo..." or not st.session_state.giocatori_attivi:
-        st.write("*In attesa dei partecipanti...*")
-    else:
+    # Su mobile mostriamo prima la Classifica e poi il Registro, messi in colonna verticale!
+    with st.container():
+        st.subheader("🏆 Classifica Torneo")
         classifica = {}
         for player_id in st.session_state.giocatori_attivi:
             lista_qta = st.session_state.punteggi_giocatori[player_id]
@@ -180,13 +133,47 @@ with col_classifica:
             nome_reale = st.session_state.nomi_giocatori[player_id]
             classifica[nome_reale] = (totale_player, player_id)
             
-        classifica_ordinata = sorted(classifica.items(), key=lambda x: x[1], reverse=True)
+        classifica_ordinata = sorted(classifica.items(), key=lambda x: x[1][0], reverse=True)
         
+        # Classifica a elenco verticale compatta
         for i, (nome_reale, (punti_totali, player_id)) in enumerate(classifica_ordinata, 1):
             emoji = "🥇" if i == 1 else "🥈" if i == 2 else "🥉" if i == 3 else "👤"
-            is_utente_corrente = (player_id == giocatore_utente)
-                
-            if is_utente_corrente:
-                st.markdown(f"### 👉 {emoji} {i}° {nome_reale}: **{punti_totali} PT**")
+            if player_id == giocatore_utente:
+                st.markdown(f"👉 **{emoji} {i}° {nome_reale}: {punti_totali} PT**")
             else:
-                st.markdown(f"### {emoji} {i}° {nome_reale}: {punti_totali} PT")
+                st.write(f"{emoji} {i}° {nome_reale}: {punti_totali} PT")
+                
+    st.write("---")
+    st.subheader("📝 Inserisci Catture")
+    
+    # Generazione a SCHEDE VERTICALI (Card) perfetta per i pollici e gli schermi dei telefoni
+    for idx, creatura in enumerate(st.session_state.creature):
+        # Apriamo un riquadro per ogni creatura
+        st.markdown(f'<div class="creature-card">', unsafe_allow_html=True)
+        
+        # 1. Mostriamo l'immagine centrata e leggibile
+        if creatura["immagine"] is not None:
+            try:
+                st.image(creatura["immagine"], width=90) # Più grande rispetto a prima
+            except Exception:
+                st.write(f"🖼️ Creatura #{creatura['id']}")
+        else:
+            st.write(f"✨ #{creatura['id']}")
+            
+        # 2. Mostriamo il valore in punti e il totale parziale di questa creatura
+        quantita_corrente = st.session_state.punteggi_giocatori[giocatore_utente][idx]
+        totale_riga = creatura["punti"] * quantita_corrente
+        st.markdown(f"**Valore:** {creatura['punti']} Pt | **Totale:** {totale_riga} Pt")
+        
+        # 3. Casella numerica grande per aumentare la quantità comodamente da smartphone
+        nuova_qta = st.number_input(
+            f"Quantità per #{creatura['id']}", 
+            min_value=0, 
+            value=quantita_corrente, 
+            key=f"qta_{giocatore_utente}_{creatura['id']}",
+            label_visibility="collapsed"
+        )
+        st.session_state.punteggi_giocatori[giocatore_utente][idx] = nuova_qta
+        
+        st.markdown('</div>', unsafe_allow_html=True)
+
