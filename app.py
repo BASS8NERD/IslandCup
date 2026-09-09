@@ -8,7 +8,7 @@ st.markdown(
     """
     <style>
     /* Sfondo e colori generali dell'isola */
-    .stApp { background-color: #fcf8f2; }
+        .stApp { background-color: #e0f7fa; }
     h1, h2, h3, p, label, .stMarkdown, span, div { color: #4a3728 !important; }
     
     /* Riquadri dei menu espandibili */
@@ -37,27 +37,6 @@ st.markdown(
         margin-bottom: 15px;
         text-align: center;
         box-shadow: 0px 4px 6px rgba(0,0,0,0.05);
-    }
-
-    /* Regole CSS aggiunte per centrare immagini, valori e totali */
-    div[data-testid="stImage"], div[data-testid="stImage"] > img {
-        display: block !important;
-        margin-left: auto !important;
-        margin-right: auto !important;
-        text-align: center !important;
-    }
-    div[data-testid="stMarkdownContainer"] {
-        text-align: center !important;
-    }
-    div[data-testid="stNumberInput"] {
-        display: flex !important;
-        flex-direction: column !important;
-        align-items: center !important;
-        justify-content: center !important;
-        width: 100% !important;
-    }
-    div[data-testid="stNumberInput"] > div {
-        width: 120px !important;
     }
 
     /* Contenitore Flexbox per mantenere il titolo fluido, centrato e su una sola riga */
@@ -215,28 +194,45 @@ else:
             lista_qta = st.session_state.punteggi_giocatori[player_id]
             totale_player = sum(st.session_state.creature[i]["punti"] * lista_qta[i] for i in range(len(st.session_state.creature)))
             nome_reale = st.session_state.nomi_giocatori[player_id]
-            classifica[nome_reale] = totale_player
+            classifica[nome_reale] = (totale_player, player_id)
+            
+        classifica_ordinata = sorted(classifica.items(), key=lambda x: x[1][0], reverse=True)
         
-        # Mostra la classifica ordinata dal punteggio più alto
-        classifica_ordinata = sorted(classifica.items(), key=lambda x: x[1], reverse=True)
-        for posizione, (nome, punti) in enumerate(classifica_ordinata, 1):
-            st.write(f"{posizione}. **{nome}**: {punti} punti")
-            
+        for i, (nome_reale, (punti_totali, player_id)) in enumerate(classifica_ordinata, 1):
+            emoji = "🥇" if i == 1 else "🥈" if i == 2 else "🥉" if i == 3 else "👤"
+            if player_id == giocatore_utente:
+                st.markdown(f"### 👉 {emoji} {i}° {nome_reale}: **{punti_totali} PT**")
+            else:
+                st.markdown(f"### {emoji} {i}° {nome_reale}: {punti_totali} PT")
+                
     st.write("---")
-    st.subheader("🗂️ Elenco Creature da Inserire")
+    st.subheader("📝 Inserisci Catture")
     
-    # Ciclo per mostrare le tessere delle creature centrate
-    for i, c in enumerate(st.session_state.creature):
-        with st.container():
-            st.markdown(f'<div class="creature-card">', unsafe_allow_html=True)
+    # Generazione a SCHEDE VERTICALI (Card)
+    for idx, creatura in enumerate(st.session_state.creature):
+        st.markdown(f'<div class="creature-card">', unsafe_allow_html=True)
+        
+        if creatura["immagine"] is not None:
+            try:
+                st.image(creatura["immagine"], width=95)
+            except Exception:
+                st.write(f"🖼️ Creatura #{creatura['id']}")
+        else:
+            st.write(f"✨ #{creatura['id']}")
             
-            # Mostra l'immagine se disponibile
-            if c["immagine"]:
-                if isinstance(c["immagine"], str):
-                    st.image(f"https://githubusercontent.com{c['immagine']}", width=100)
-                else:
-                    st.image(c["immagine"], width=100)
+        quantita_corrente = st.session_state.punteggi_giocatori[giocatore_utente][idx]
+        totale_riga = creatura["punti"] * quantita_corrente
+        st.markdown(f"**Valore:** {creatura['punti']} Pt | **Totale:** {totale_riga} Pt")
+        
+        nuova_qta = st.number_input(
+            f"Quantità per #{creatura['id']}",
+            min_value=0,
+            value=quantita_corrente,
+            key=f"qta_{giocatore_utente}_{idx}",
+            label_visibility="collapsed"
+        )
+        if nuova_qta != quantita_corrente:
+            st.session_state.punteggi_giocatori[giocatore_utente][idx] = nuova_qta
+            st.rerun()
             
-            st.markdown(f"**Valore:** {c['punti']} Punti")
-            
-            # Input numerico per inserire le catture del giocatore selezionato
+        st.markdown('</div>', unsafe_allow_html=True)
