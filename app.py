@@ -43,10 +43,6 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-# --- TITOLO PERFETTAMENTE CENTRATO ---
-st.markdown("<h1 style='text-align: center; font-size: 2.2rem; font-weight: bold; letter-spacing: 2px; margin-bottom: 0px;'>🌴 ISLAND CUP 🌴</h1>", unsafe_allow_html=True)
-st.write("---")
-
 # Inizializzazione variabili di sessione nel browser locale
 if "creature" not in st.session_state:
     st.session_state.creature = []
@@ -57,7 +53,17 @@ if "punteggi_giocatori" not in st.session_state:
 if "giocatori_attivi" not in st.session_state:
     st.session_state.giocatori_attivi = []
 if "tipo_torneo_precedente" not in st.session_state:
-    st.session_state.tipo_torneo_precedente = ""
+    st.session_state.tipo_torneo_precedente = "🗺️ Scegli un torneo..."
+
+# Recuperiamo il tipo di torneo o usiamo quello predefinito per il titolo iniziale
+tipo_torneo_attuale = st.session_state.get("tipo_torneo_precedente", "🗺️ Scegli un torneo...")
+nome_torneo_pulito = tipo_torneo_attuale.split(" ", 1)[-1] if " " in tipo_torneo_attuale else tipo_torneo_attuale
+if nome_torneo_pulito == "Scegli un torneo...":
+    nome_torneo_pulito = "ISLAND CUP"
+
+# --- TITOLO PERFETTAMENTE CENTRATO TRA LE PALME ---
+st.markdown(f"<h1 style='text-align: center; font-size: 2.2rem; font-weight: bold; letter-spacing: 2px; margin-bottom: 0px;'>🌴 {nome_torneo_pulito.upper()} 🌴</h1>", unsafe_allow_html=True)
+st.write("---")
 
 # --- PANNELLI DI CONFIGURAZIONE COMPATTI E SIMMETRICI CON LE NUOVE EMOTICON ---
 
@@ -67,7 +73,8 @@ with st.expander("🏆 TORNEI ISOLANI"):
     tipo_torneo = st.selectbox(
         "Seleziona torneo:",
         ["🗺️ Scegli un torneo...", "🌊 Torneo Creature Marine (40 Creature)", "🎣 Torneo di Pesca", "🦋 Torneo Insetti"],
-        label_visibility="collapsed"
+        label_visibility="collapsed",
+        index=["🗺️ Scegli un torneo...", "🌊 Torneo Creature Marine (40 Creature)", "🎣 Torneo di Pesca", "🦋 Torneo Insetti"].index(tipo_torneo_attuale)
     )
 
 if tipo_torneo != st.session_state.tipo_torneo_precedente:
@@ -91,6 +98,7 @@ if tipo_torneo != st.session_state.tipo_torneo_precedente:
         
     for player_id in st.session_state.punteggi_giocatori:
         st.session_state.punteggi_giocatori[player_id] = [0] * len(st.session_state.creature)
+    st.rerun()
 
 # 2. NUOVA ICONA: JOYPAD
 with st.expander("🎮 ISOLANI"):
@@ -98,7 +106,6 @@ with st.expander("🎮 ISOLANI"):
     partecipanti_scelti = []
     for i in range(1, 13):
         id_p = f"Player {i}"
-        # CORREZIONE: Assegnate proporzioni numeriche per le colonne su mobile (1 parte checkbox, 4 parti testo)
         col_chk, col_txt = st.columns([1, 4])
         with col_chk:
             if st.checkbox("", key=f"check_{id_p}", value=(id_p in st.session_state.giocatori_attivi), label_visibility="collapsed"):
@@ -183,7 +190,6 @@ else:
         totale_riga = creatura["punti"] * quantita_corrente
         st.markdown(f"**Valore:** {creatura['punti']} Pt | **Totale:** {totale_riga} Pt")
         
-        # CORREZIONE: Ricostruito e completato l'input troncato della quantità
         nuova_qta = st.number_input(
             f"Quantità per #{creatura['id']}",
             min_value=0,
@@ -196,3 +202,4 @@ else:
             st.rerun()
             
         st.markdown('</div>', unsafe_allow_html=True)
+
