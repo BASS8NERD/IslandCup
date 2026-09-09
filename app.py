@@ -38,6 +38,31 @@ st.markdown(
         text-align: center;
         box-shadow: 0px 4px 6px rgba(0,0,0,0.05);
     }
+
+    /* Contenitore Flexbox per mantenere il titolo fluido, centrato e su una sola riga */
+    .title-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 8px;
+        width: 100%;
+        margin-bottom: 10px;
+    }
+
+    .title-text {
+        font-family: 'Source Sans Pro', sans-serif;
+        font-weight: bold;
+        letter-spacing: 1px;
+        text-align: center;
+        white-space: nowrap;
+        /* Usa le unità vw per adattarsi fluidamente alla larghezza dello schermo */
+        font-size: min(6.5vw, 32px); 
+    }
+
+    .title-emoji {
+        font-size: min(7vw, 34px);
+        display: inline-block;
+    }
     </style>
     """,
     unsafe_allow_html=True
@@ -61,8 +86,17 @@ nome_torneo_pulito = tipo_torneo_attuale.split(" ", 1)[-1] if " " in tipo_torneo
 if nome_torneo_pulito == "Scegli un torneo...":
     nome_torneo_pulito = "ISLAND CUP"
 
-# --- TITOLO PERFETTAMENTE CENTRATO TRA LE PALME ---
-st.markdown(f"<h1 style='text-align: center; font-size: 2.2rem; font-weight: bold; letter-spacing: 2px; margin-bottom: 0px;'>🌴 {nome_torneo_pulito.upper()} 🌴</h1>", unsafe_allow_html=True)
+# --- TITOLO REATTIVO FLUIDO E SEMPRE CENTRATO ---
+st.markdown(
+    f"""
+    <div class="title-container">
+        <span class="title-emoji">🌴</span>
+        <span class="title-text">{nome_torneo_pulito.upper()}</span>
+        <span class="title-emoji">🌴</span>
+    </div>
+    """, 
+    unsafe_allow_html=True
+)
 st.write("---")
 
 # --- PANNELLI DI CONFIGURAZIONE COMPATTI E SIMMETRICI CON LE NUOVE EMOTICON ---
@@ -125,7 +159,7 @@ with st.expander("🛠️ TORNEO FAI DA TE"):
     if st.button("✨ AGGIUNGI ALLA TABELLA IN BASSO", use_container_width=True):
         nuovo_id = len(st.session_state.creature) + 1
         st.session_state.creature.append({
-            "id": nuovo_id,
+            "id": nuevo_id,
             "punti": punti_nuova_creatura,
             "immagine": file_foto_nuovo
         })
@@ -202,4 +236,3 @@ else:
             st.rerun()
             
         st.markdown('</div>', unsafe_allow_html=True)
-
