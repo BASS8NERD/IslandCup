@@ -124,9 +124,9 @@ if tipo_torneo != st.session_state.tipo_torneo_precedente:
             {"id": i, "punti": punti_creature[i], "immagine": f"{i}.png"} for i in range(1, 41)
         ]
     elif tipo_torneo == "🎣 Torneo di Pesca":
-        st.session_state.creature = [{"id": f"P{i}", "punti": 3, "immagine": None} for i in range(1, 11)] # Esteso a 10 righe per esempio
+        st.session_state.creature = [{"id": f"Pesce {i}", "punti": 3, "immagine": None} for i in range(1, 11)]
     elif tipo_torneo == "🦋 Torneo Insetti":
-        st.session_state.creature = [{"id": f"I{i}", "punti": 2, "immagine": None} for i in range(1, 11)] # Esteso a 10 righe per esempio
+        st.session_state.creature = [{"id": f"Insetto {i}", "punti": 2, "immagine": None} for i in range(1, 11)]
     else:
         st.session_state.creature = []
         
@@ -147,7 +147,7 @@ with st.expander("🎮 ISOLANI"):
         with col_txt:
             nuovo_nome = st.text_input(f"Nome per {id_p}", value=st.session_state.nomi_giocatori[id_p], key=f"edit_{id_p}", label_visibility="collapsed")
             if nuovo_nome.strip():
-                st.session_state.nomi_giocatori[id_p] = nuevo_nome.strip()
+                st.session_state.nomi_giocatori[id_p] = nuovo_nome.strip()
     st.session_state.giocatori_attivi = partecipanti_scelti
 
 # 3. TORNEO FAI DA TE
@@ -179,7 +179,7 @@ else:
     # Mappatura ID -> Nome reale per la tendina
     opzioni_menu = {id_p: st.session_state.nomi_giocatori[id_p] for id_p in st.session_state.giocatori_attivi}
     
-    # --- NUOVA SEZIONE: SELEZIONE GIOCATORE DIRETTAMENTE NEL TITOLO TABELLONE ---
+    # --- SEZIONE SELEZIONE GIOCATORE ---
     st.write("### 📊 Gestione Catture")
     giocatore_utente = st.selectbox(
         "📱 Di chi sono le catture che stai inserendo?", 
@@ -198,15 +198,18 @@ else:
     classifica = {}
     for player_id in st.session_state.giocatori_attivi:
         lista_qta = st.session_state.punteggi_giocatori[player_id]
-        # Calcolo del punteggio totale
-        totale_player = sum(st.session_state.creature[i]["punti"] * lista_qta[i] for i in range(len(st.session_state.creature)))
+        # Controllo di sicurezza sulla lunghezza della lista punteggi
+        if len(lista_qta) == len(st.session_state.creature):
+            totale_player = sum(st.session_state.creature[i]["punti"] * lista_qta[i] for i in range(len(st.session_state.creature)))
+        else:
+            totale_player = 0
         nome_reale = st.session_state.nomi_giocatori[player_id]
         classifica[nome_reale] = totale_player
 
-    # Ordina la classifica dal punteggio più alto a quello più basso
+    # Ordina la classifica
     classifica_ordinata = sorted(classifica.items(), key=lambda x: x[1], reverse=True)
     
-    # Mostra podio visivo semplice ed elegante
+    # Mostra podio
     for rank, (nome, punti) in enumerate(classifica_ordinata, 1):
         prefisso = "🥇" if rank == 1 else "🥈" if rank == 2 else "🥉" if rank == 3 else "👤"
         st.write(f"{prefisso} **{rank}° {nome}**: {punti} Punti")
@@ -214,11 +217,14 @@ else:
     st.write("---")
     st.subheader("🐙 Inserisci Catture")
 
-    # --- ELENCO DELLE CREATURE CON PULSANTI PIÙ E MENO ---
+    # Allinea le liste nel caso in cui ci siano discrepanze temporanee
+    if len(st.session_state.punteggi_giocatori[giocatore_utente]) != len(st.session_state.creature):
+        st.session_state.punteggi_giocatori[giocatore_utente] = [0] * len(st.session_state.creature)
+
     lista_catture_giocatore = st.session_state.punteggi_giocatori[giocatore_utente]
 
+    # --- ELENCO DELLE CREATURE CON PULSANTI ---
     for idx, c in enumerate(st.session_state.creature):
-        # Card visiva per la creatura
         with st.container():
             st.markdown(
                 f"""
@@ -231,8 +237,6 @@ else:
                 unsafe_allow_html=True
             )
             
-            # Pulsanti + e - messi su due colonne affiancate comode per il pollice
+            # Pulsanti + e -
             col_meno, col_piu = st.columns(2)
             with col_meno:
-                if st.button("➖ Rimuovi", key=f"meno_{giocatore_utente}_{idx}", use_container_width=True):
-                    if lista_catture_giocatore[idx] > 0:
