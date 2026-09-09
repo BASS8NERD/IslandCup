@@ -99,9 +99,9 @@ st.markdown(
 )
 st.write("---")
 
-# --- PANNELLI DI CONFIGURAZIONE COMPATTI E SIMMETRICI CON LE NUOVE EMOTICON ---
+# --- PANNELLI DI CONFIGURAZIONE COMPATTI E SIMMETRICI ---
 
-# 1. NUOVA ICONA: COPPA
+# 1. TORNEI ISOLANI
 with st.expander("🏆 TORNEI ISOLANI"):
     st.write("Scegli quale competizione avviare:")
     tipo_torneo = st.selectbox(
@@ -130,11 +130,12 @@ if tipo_torneo != st.session_state.tipo_torneo_precedente:
     else:
         st.session_state.creature = []
         
+    # Reset corretto delle liste in base al numero di creature caricate
     for player_id in st.session_state.punteggi_giocatori:
         st.session_state.punteggi_giocatori[player_id] = [0] * len(st.session_state.creature)
     st.rerun()
 
-# 2. NUOVA ICONA: JOYPAD
+# 2. ISOLANI
 with st.expander("🎮 ISOLANI"):
     st.write("Spunta chi partecipa al torneo attuale e scrivi i loro nomi:")
     partecipanti_scelti = []
@@ -147,10 +148,10 @@ with st.expander("🎮 ISOLANI"):
         with col_txt:
             nuovo_nome = st.text_input(f"Nome per {id_p}", value=st.session_state.nomi_giocatori[id_p], key=f"edit_{id_p}", label_visibility="collapsed")
             if nuovo_nome.strip():
-                st.session_state.nomi_giocatori[id_p] = nuovo_nome.strip()
+                st.session_state.nomi_giocatori[id_p] = nuevo_nome.strip()
     st.session_state.giocatori_attivi = partecipanti_scelti
 
-# 3. NUOVA ICONA: MARTELLO E CHIAVE INGLESE
+# 3. TORNEO FAI DA TE
 with st.expander("🛠️ TORNEO FAI DA TE"):
     st.write("Vuoi aggiungere a mano una foto o creare una riga personalizzata? Fallo qui:")
     punti_nuova_creatura = st.number_input("Valore in Punti per questa creatura:", min_value=0, max_value=100, value=2, key="nuovi_punti_c")
@@ -177,59 +178,56 @@ elif not st.session_state.giocatori_attivi:
     st.info("👋 Apri il pannello '🎮 ISOLANI' per attivare i partecipanti di oggi!")
 else:
     opzioni_menu = {id_p: st.session_state.nomi_giocatori[id_p] for id_p in st.session_state.giocatori_attivi}
-    
-    # --- MODIFICA RICHIESTA DI SCRITTA E TENDINA ---
     giocatore_utente = st.selectbox(
-        "TABELLONE DI:", 
+        "📱 Di chi sono le catture che stai inserendo?", 
         list(opzioni_menu.keys()),
         format_func=lambda x: opzioni_menu[x],
         key="utente_locale"
     )
     
-    # --- CLASSIFICA TORNEO AGGIORNATA IN TEMPO REALE ---
+    nome_visualizzato = st.session_state.nomi_giocatori[giocatore_utente]
+    
+    # --- SEZIONE CLASSIFICA IN TEMPO REALE ---
     with st.container():
         st.subheader("🏆 Classifica Torneo")
-        classifica = {}
+        classifica = []
         for player_id in st.session_state.giocatori_attivi:
             lista_qta = st.session_state.punteggi_giocatori[player_id]
             
-            # Controllo di sicurezza per assicurarci che la lista dei punteggi esista ed sia allineata
-            if not lista_qta or len(lista_qta) != len(st.session_state.creature):
-                st.session_state.punteggi_giocatori[player_id] = [0] * len(st.session_state.creature)
+            # Controllo di sicurezza per evitare IndexError se le liste non sono sincronizzate
+            if len(lista_qta) < len(st.session_state.creature):
+                st.session_state.punteggi_giocatori[player_id] += [0] * (len(st.session_state.creature) - len(lista_qta))
                 lista_qta = st.session_state.punteggi_giocatori[player_id]
                 
             totale_player = sum(st.session_state.creature[i]["punti"] * lista_qta[i] for i in range(len(st.session_state.creature)))
             nome_reale = st.session_state.nomi_giocatori[player_id]
-            classifica[nome_reale] = totale_player
+            classifica.append((totale_player, nome_reale))
             
-        # Mostra la classifica ordinata
-        classifica_ordinata = sorted(classifica.items(), key=lambda x: x[1], reverse=True)
-        for rank, (nome, punti) in enumerate(classifica_ordinata, 1):
-            prefisso = "🥇" if rank == 1 else "🥈" if rank == 2 else "🥉" if rank == 3 else "👤"
-            st.write(f"{prefisso} **{rank}° {nome}**: {punti} Punti")
+        # Ordina la classifica dal punteggio più alto
+        classifica.sort(key=lambda x: x[0], reverse=True)
+        
+        # Mostra la classifica in modo compatto
+        for pos, (punti, nome) in enumerate(classifica, 1):
+            medaglia = "🥇" if pos == 1 else "🥈" if pos == 2 else "🥉" if pos == 3 else "🏅"
+            st.write(f"{medaglia} **{pos}° {nome}**: {punti} Punti")
 
     st.write("---")
-    st.subheader("🐙 Inserisci Catture")
+    st.write(f"### 🎣 Tabellone di inserimento: **{nome_visualizzato}**")
 
-    # --- TABELLONE DINAMICO DELLE CREATURE CON PULSANTI ---
-    lista_catture_giocatore = st.session_state.punteggi_giocatori[giocatore_utente]
-
-    for idx, c in enumerate(st.session_state.creature):
-        with st.container():
-            st.markdown(
-                f"""
-                <div class="creature-card">
-                    <b>Creatura #{c['id']}</b><br>
-                    Valore: {c['punti']} Punti<br>
-                    Catturate: {lista_catture_giocatore[idx]}
-                </div>
-                """, 
-                unsafe_allow_html=True
-            )
-            
-            # Pulsanti + e - affiancati per lo schermo dello smartphone
-            col_meno, col_piu = st.columns(2)
-            with col_meno:
-                if st.button("➖ Rimuovi", key=f"meno_{giocatore_utente}_{idx}", use_container_width=True):
-                    if st.session_state.punteggi_giocatori[giocatore_utente][idx] > 0:
-                        st.session_state.punteggi_giocatori[giocatore_utente][idx] -= 1
+    # --- INPUT DELLE CATTURE PER IL GIOCATORE SELEZIONATO ---
+    for i, c in enumerate(st.session_state.creature):
+        # Riquadro estetico per smartphone definito nel CSS in alto
+        st.markdown(f'<div class="creature-card"><b>Creatura #{c["id"]}</b> ({c["punti"]} Punti)</div>', unsafe_allow_html=True)
+        
+        # Gestione dell'immagine personalizzata o di default
+        if c["immagine"]:
+            if isinstance(c["immagine"], str):
+                # Se è un file locale (es. "1.png") proviamo a caricarlo, altrimenti mostriamo un placeholder
+                try:
+                    st.image(f"images/{c['immagine']}", width=80)
+                except:
+                    st.caption("📷 [Immagine Temporanea]")
+            else:
+                # Se è un file caricato dall'utente tramite file_uploader
+                st.image(c["immagine"], width=80)
+        
