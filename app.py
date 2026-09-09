@@ -59,10 +59,10 @@ if "giocatori_attivi" not in st.session_state:
 if "tipo_torneo_precedente" not in st.session_state:
     st.session_state.tipo_torneo_precedente = ""
 
-# --- PANNELLI DI CONFIGURAZIONE COMPATTI E SIMMETRICI ---
+# --- PANNELLI DI CONFIGURAZIONE COMPATTI E SIMMETRICI CON LE NUOVE EMOTICON ---
 
-# 1. NUOVO FORMATO ESPANDIBILE: TORNEI ISOLANI
-with st.expander("⚙️ TORNEI ISOLANI"):
+# 1. NUOVA ICONA: COPPA
+with st.expander("🏆 TORNEI ISOLANI"):
     st.write("Scegli quale competizione avviare:")
     tipo_torneo = st.selectbox(
         "Seleziona torneo:",
@@ -92,13 +92,13 @@ if tipo_torneo != st.session_state.tipo_torneo_precedente:
     for player_id in st.session_state.punteggi_giocatori:
         st.session_state.punteggi_giocatori[player_id] = [0] * len(st.session_state.creature)
 
-# 2. PANNELLO: ISOLANI
-with st.expander("⚙️ ISOLANI"):
+# 2. NUOVA ICONA: JOYPAD
+with st.expander("🎮 ISOLANI"):
     st.write("Spunta chi partecipa al torneo attuale e scrivi i loro nomi:")
     partecipanti_scelti = []
     for i in range(1, 13):
         id_p = f"Player {i}"
-        col_chk, col_txt = st.columns([1, 5])
+        col_chk, col_txt = st.columns()
         with col_chk:
             if st.checkbox("", key=f"check_{id_p}", value=(id_p in st.session_state.giocatori_attivi), label_visibility="collapsed"):
                 partecipanti_scelti.append(id_p)
@@ -108,8 +108,8 @@ with st.expander("⚙️ ISOLANI"):
                 st.session_state.nomi_giocatori[id_p] = nuovo_nome.strip()
     st.session_state.giocatori_attivi = partecipanti_scelti
 
-# 3. PANNELLO: TORNEO FAI DA TE
-with st.expander("➕ TORNEO FAI DA TE"):
+# 3. NUOVA ICONA: MARTELLO E CHIAVE INGLESE
+with st.expander("🛠️ TORNEO FAI DA TE"):
     st.write("Vuoi aggiungere a mano una foto o creare una riga personalizzata? Fallo qui:")
     punti_nuova_creatura = st.number_input("Valore in Punti per questa creatura:", min_value=0, max_value=100, value=2, key="nuovi_punti_c")
     file_foto_nuovo = st.file_uploader("Sfoglia e Carica la Foto dal dispositivo:", type=["png", "jpg", "jpeg"], key="nuovo_upload_c")
@@ -130,9 +130,9 @@ st.write("---")
 
 # --- SCHERMATA PRINCIPALE ---
 if tipo_torneo == "🗺️ Scegli un torneo...":
-    st.info("👋 Apri il pannello '⚙️ TORNEI ISOLANI' in alto per iniziare!")
+    st.info("👋 Apri il pannello '🏆 TORNEI ISOLANI' in alto per iniziare!")
 elif not st.session_state.giocatori_attivi:
-    st.info("👋 Apri il pannello '⚙️ ISOLANI' per attivare i partecipanti di oggi!")
+    st.info("👋 Apri il pannello '🎮 ISOLANI' per attivare i partecipanti di oggi!")
 else:
     opzioni_menu = {id_p: st.session_state.nomi_giocatori[id_p] for id_p in st.session_state.giocatori_attivi}
     giocatore_utente = st.selectbox(
