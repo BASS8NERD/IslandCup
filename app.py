@@ -98,7 +98,8 @@ with st.expander("🎮 ISOLANI"):
     partecipanti_scelti = []
     for i in range(1, 13):
         id_p = f"Player {i}"
-        col_chk, col_txt = st.columns()
+        # CORREZIONE: Assegnate proporzioni numeriche per le colonne su mobile (1 parte checkbox, 4 parti testo)
+        col_chk, col_txt = st.columns([1, 4])
         with col_chk:
             if st.checkbox("", key=f"check_{id_p}", value=(id_p in st.session_state.giocatori_attivi), label_visibility="collapsed"):
                 partecipanti_scelti.append(id_p)
@@ -154,7 +155,7 @@ else:
             nome_reale = st.session_state.nomi_giocatori[player_id]
             classifica[nome_reale] = (totale_player, player_id)
             
-        classifica_ordinata = sorted(classifica.items(), key=lambda x: x, reverse=True)
+        classifica_ordinata = sorted(classifica.items(), key=lambda x: x[1][0], reverse=True)
         
         for i, (nome_reale, (punti_totali, player_id)) in enumerate(classifica_ordinata, 1):
             emoji = "🥇" if i == 1 else "🥈" if i == 2 else "🥉" if i == 3 else "👤"
@@ -182,13 +183,16 @@ else:
         totale_riga = creatura["punti"] * quantita_corrente
         st.markdown(f"**Valore:** {creatura['punti']} Pt | **Totale:** {totale_riga} Pt")
         
+        # CORREZIONE: Ricostruito e completato l'input troncato della quantità
         nuova_qta = st.number_input(
-            f"Quantità per #{creatura['id']}", 
-            min_value=0, 
-            value=quantita_corrente, 
-            key=f"qta_{giocatore_utente}_{creatura['id']}",
+            f"Quantità per #{creatura['id']}",
+            min_value=0,
+            value=quantita_corrente,
+            key=f"qta_{giocatore_utente}_{idx}",
             label_visibility="collapsed"
         )
-        st.session_state.punteggi_giocatori[giocatore_utente][idx] = nuova_qta
-        
+        if nuova_qta != quantita_corrente:
+            st.session_state.punteggi_giocatori[giocatore_utente][idx] = nuova_qta
+            st.rerun()
+            
         st.markdown('</div>', unsafe_allow_html=True)
