@@ -37,31 +37,7 @@ st.markdown(
         margin-bottom: 15px;
         text-align: center;
         box-shadow: 0px 4px 6px rgba(0,0,0,0.05);
-    }       /* Centra l'immagine e forza tutto il suo contenitore al centro */
-    [data-testid="stVerticalBlock"] > div:has(img) {
-        display: flex !important;
-        justify-content: center !important;
-        align-items: center !important;
-        text-align: center !important;
-        width: 100% !important;
     }
-    div[data-testid="stImage"] img {
-        margin: 0 auto !important;
-        display: block !important;
-    }
-
-    }
-    /* Centra il testo del Valore */
-    div[data-testid="stMarkdownContainer"] {
-        text-align: center !important;
-    }
-    /* Centra il selettore numerico della Quantità */
-    div[data-testid="stNumberInput"] {
-        display: flex !important;
-        flex-direction: column !important;
-        align-items: center !important;
-    }
-
 
     /* Contenitore Flexbox per mantenere il titolo fluido, centrato e su una sola riga */
     .title-container {
