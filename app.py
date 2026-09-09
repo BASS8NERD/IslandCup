@@ -37,7 +37,23 @@ st.markdown(
         margin-bottom: 15px;
         text-align: center;
         box-shadow: 0px 4px 6px rgba(0,0,0,0.05);
+    }    /* Centra le immagini delle creature */
+    div[data-testid="stImage"], div[data-testid="stImage"] > img {
+        display: block !important;
+        margin-left: auto !important;
+        margin-right: auto !important;
     }
+    /* Centra il testo del Valore */
+    div[data-testid="stMarkdownContainer"] {
+        text-align: center !important;
+    }
+    /* Centra il selettore numerico della Quantità */
+    div[data-testid="stNumberInput"] {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+    }
+
 
     /* Contenitore Flexbox per mantenere il titolo fluido, centrato e su una sola riga */
     .title-container {
