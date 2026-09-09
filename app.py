@@ -59,13 +59,16 @@ if "giocatori_attivi" not in st.session_state:
 if "tipo_torneo_precedente" not in st.session_state:
     st.session_state.tipo_torneo_precedente = ""
 
-# --- 🏆 SELEZIONE "TORNEI ISOLANI" 🏆 ---
-st.subheader("📊 TORNEI ISOLANI")
-tipo_torneo = st.selectbox(
-    "Scegli quale competizione avviare:",
-    ["🗺️ Scegli un torneo...", "🌊 Torneo Creature Marine (40 Creature)", "🎣 Torneo di Pesca", "🦋 Torneo Insetti"],
-    label_visibility="collapsed"
-)
+# --- PANNELLI DI CONFIGURAZIONE COMPATTI E SIMMETRICI ---
+
+# 1. NUOVO FORMATO ESPANDIBILE: TORNEI ISOLANI
+with st.expander("⚙️ TORNEI ISOLANI"):
+    st.write("Scegli quale competizione avviare:")
+    tipo_torneo = st.selectbox(
+        "Seleziona torneo:",
+        ["🗺️ Scegli un torneo...", "🌊 Torneo Creature Marine (40 Creature)", "🎣 Torneo di Pesca", "🦋 Torneo Insetti"],
+        label_visibility="collapsed"
+    )
 
 if tipo_torneo != st.session_state.tipo_torneo_precedente:
     st.session_state.tipo_torneo_precedente = tipo_torneo
@@ -89,8 +92,7 @@ if tipo_torneo != st.session_state.tipo_torneo_precedente:
     for player_id in st.session_state.punteggi_giocatori:
         st.session_state.punteggi_giocatori[player_id] = [0] * len(st.session_state.creature)
 
-# --- PANNELLI DI CONFIGURAZIONE MODIFICATI ---
-# 1. NUOVO NOME: ISOLANI
+# 2. PANNELLO: ISOLANI
 with st.expander("⚙️ ISOLANI"):
     st.write("Spunta chi partecipa al torneo attuale e scrivi i loro nomi:")
     partecipanti_scelti = []
@@ -106,7 +108,7 @@ with st.expander("⚙️ ISOLANI"):
                 st.session_state.nomi_giocatori[id_p] = nuovo_nome.strip()
     st.session_state.giocatori_attivi = partecipanti_scelti
 
-# 2. NUOVO NOME: TORNEO FAI DA TE
+# 3. PANNELLO: TORNEO FAI DA TE
 with st.expander("➕ TORNEO FAI DA TE"):
     st.write("Vuoi aggiungere a mano una foto o creare una riga personalizzata? Fallo qui:")
     punti_nuova_creatura = st.number_input("Valore in Punti per questa creatura:", min_value=0, max_value=100, value=2, key="nuovi_punti_c")
@@ -128,7 +130,7 @@ st.write("---")
 
 # --- SCHERMATA PRINCIPALE ---
 if tipo_torneo == "🗺️ Scegli un torneo...":
-    st.info("👋 Scegli un torneo dal menu 'TORNEI ISOLANI' per iniziare!")
+    st.info("👋 Apri il pannello '⚙️ TORNEI ISOLANI' in alto per iniziare!")
 elif not st.session_state.giocatori_attivi:
     st.info("👋 Apri il pannello '⚙️ ISOLANI' per attivare i partecipanti di oggi!")
 else:
