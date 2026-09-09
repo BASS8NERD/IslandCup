@@ -7,34 +7,19 @@ st.set_page_config(page_title="Island Cup Tracker", page_icon="🏝️", layout=
 st.markdown(
     """
     <style>
-    /* Sfondo generale dell'app: Turchese chiaro/pastello */
-    .stApp { background-color: #e0f4f5; }
-    h1, h2, h3, p, label, .stMarkdown, span, div { color: #2d4a4d !important; }
+    /* Sfondo e colori generali dell'isola */
+    .stApp { background-color: #fcf8f2; }
+    h1, h2, h3, p, label, .stMarkdown, span, div { color: #4a3728 !important; }
     
-    /* 1. Menu Tornei Isolani: Giallo Sabbia/Sole caldo */
-    .stExpander:nth-of-type(1), .stExpander:nth-of-type(1) div[data-baseweb="select"] {
-        background-color: #fceecb !important;
-        border-radius: 12px;
-        border: 1px solid #ebd094 !important;
+    /* Riquadri dei menu espandibili */
+    .stExpander, div[data-baseweb="select"] { 
+        background-color: #f4ebd9 !important; 
+        border-radius: 12px; 
     }
     
-    /* 2. Menu Isolani: Rosa Corallo morbido */
-    .stExpander:nth-of-type(2), .stExpander:nth-of-type(2) div[data-baseweb="select"] {
-        background-color: #fcdbd2 !important;
-        border-radius: 12px;
-        border: 1px solid #eba998 !important;
-    }
-    
-    /* 3. Menu Torneo Fai da Te: Verde Menta chiaro */
-    .stExpander:nth-of-type(3), .stExpander:nth-of-type(3) div[data-baseweb="select"] {
-        background-color: #dbf0db !important;
-        border-radius: 12px;
-        border: 1px solid #afdba1 !important;
-    }
-    
-    /* Pulsanti grandi, facili da premere col pollice */
+    /* Pulsanti verdi grandi, facili da premere col pollice */
     div.stButton > button {
-        background-color: #4ca6a4 !important; 
+        background-color: #78b159 !important; 
         color: white !important;
         border: none !important; 
         border-radius: 10px !important; 
@@ -43,10 +28,10 @@ st.markdown(
         font-size: 1.1rem !important;
     }
     
-    /* Stile speciale per i riquadri delle singole creature marine (Sabbia chiarissimo) */
+    /* Stile speciale per i riquadri delle singole creature marine */
     .creature-card {
-        background-color: #f7f1e6;
-        border: 2px solid #e0d5c1;
+        background-color: #f4ebd9;
+        border: 2px solid #e2d4b7;
         border-radius: 15px;
         padding: 12px;
         margin-bottom: 15px;
@@ -70,6 +55,7 @@ st.markdown(
         letter-spacing: 1px;
         text-align: center;
         white-space: nowrap;
+        /* Usa le unità vw per adattarsi fluidamente alla larghezza dello schermo */
         font-size: min(6.5vw, 32px); 
     }
 
@@ -115,7 +101,7 @@ st.write("---")
 
 # --- PANNELLI DI CONFIGURAZIONE COMPATTI E SIMMETRICI CON LE NUOVE EMOTICON ---
 
-# 1. NUOVA ICONA: COPPA (Sfondo Giallo Sabbia)
+# 1. NUOVA ICONA: COPPA
 with st.expander("🏆 TORNEI ISOLANI"):
     st.write("Scegli quale competizione avviare:")
     tipo_torneo = st.selectbox(
@@ -148,7 +134,7 @@ if tipo_torneo != st.session_state.tipo_torneo_precedente:
         st.session_state.punteggi_giocatori[player_id] = [0] * len(st.session_state.creature)
     st.rerun()
 
-# 2. NUOVA ICONA: JOYPAD (Sfondo Rosa Corallo)
+# 2. NUOVA ICONA: JOYPAD
 with st.expander("🎮 ISOLANI"):
     st.write("Spunta chi partecipa al torneo attuale e scrivi i loro nomi:")
     partecipanti_scelti = []
@@ -164,7 +150,7 @@ with st.expander("🎮 ISOLANI"):
                 st.session_state.nomi_giocatori[id_p] = nuovo_nome.strip()
     st.session_state.giocatori_attivi = partecipanti_scelti
 
-# 3. NUOVA ICONA: MARTELLO E CHIAVE INGLESE (Sfondo Verde Menta)
+# 3. NUOVA ICONA: MARTELLO E CHIAVE INGLESE
 with st.expander("🛠️ TORNEO FAI DA TE"):
     st.write("Vuoi aggiungere a mano una foto o creare una riga personalizzata? Fallo qui:")
     punti_nuova_creatura = st.number_input("Valore in Punti per questa creatura:", min_value=0, max_value=100, value=2, key="nuovi_punti_c")
@@ -234,3 +220,19 @@ else:
         else:
             st.write(f"✨ #{creatura['id']}")
             
+        quantita_corrente = st.session_state.punteggi_giocatori[giocatore_utente][idx]
+        totale_riga = creatura["punti"] * quantita_corrente
+        st.markdown(f"**Valore:** {creatura['punti']} Pt | **Totale:** {totale_riga} Pt")
+        
+        nuova_qta = st.number_input(
+            f"Quantità per #{creatura['id']}",
+            min_value=0,
+            value=quantita_corrente,
+            key=f"qta_{giocatore_utente}_{idx}",
+            label_visibility="collapsed"
+        )
+        if nuova_qta != quantita_corrente:
+            st.session_state.punteggi_giocatori[giocatore_utente][idx] = nuova_qta
+            st.rerun()
+            
+        st.markdown('</div>', unsafe_allow_html=True)
