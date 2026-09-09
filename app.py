@@ -231,7 +231,7 @@ else:
         
         if creatura["immagine"] is not None:
             try:                
-                col_sx, col_cx, col_dx = st.columns([2.5, 1, 2.5])
+                col_sx, col_cx, col_dx = st.columns([3, 1, 3])
                 with col_cx:
                     st.image(creatura["immagine"], width=70)
             except Exception:
