@@ -37,18 +37,11 @@ st.markdown(
         margin-bottom: 15px;
         text-align: center;
         box-shadow: 0px 4px 6px rgba(0,0,0,0.05);
-    }       /* Forza il contenitore invisibile a centrare l'immagine */
-    div[data-testid="element-container"]:has(img) {
-        display: flex !important;
-        justify-content: center !important;
-        align-items: center !important;
-        width: 100% !important;
-    }
-    div[data-testid="stImage"] img {
+    }    /* Centra le immagini delle creature */
+    div[data-testid="stImage"], div[data-testid="stImage"] > img {
         display: block !important;
-        margin: 0 auto !important;
-    }
-
+        margin-left: auto !important;
+        margin-right: auto !important;
     }
     /* Centra il testo del Valore */
     div[data-testid="stMarkdownContainer"] {
