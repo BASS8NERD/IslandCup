@@ -231,11 +231,9 @@ else:
         
         if creatura["immagine"] is not None:
             try:                
-                col_sx, col_cx, col_dx = st.columns([2.5 , 1, 2.5])
+                col_sx, col_cx, col_dx = st.columns([1.5 , 2, 1.5])
                 with col_cx:
-                    st.markdown('<div style="text-align: center;">', unsafe_allow_html=True)
                     st.image(creatura["immagine"], width=70)
-                    st.markdown('</div>', unsafe_allow_html=True)
             except Exception:
                 st.write(f"🖼️ Creatura #{creatura['id']}")
         else:
