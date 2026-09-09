@@ -99,9 +99,9 @@ st.markdown(
 )
 st.write("---")
 
-# --- PANNELLI DI CONFIGURAZIONE COMPATTI E SIMMETRICI ---
+# --- PANNELLI DI CONFIGURAZIONE COMPATTI E SIMMETRICI CON LE NUOVE EMOTICON ---
 
-# 1. TORNEI ISOLANI
+# 1. NUOVA ICONA: COPPA
 with st.expander("🏆 TORNEI ISOLANI"):
     st.write("Scegli quale competizione avviare:")
     tipo_torneo = st.selectbox(
@@ -130,12 +130,11 @@ if tipo_torneo != st.session_state.tipo_torneo_precedente:
     else:
         st.session_state.creature = []
         
-    # Reset corretto delle liste in base al numero di creature caricate
     for player_id in st.session_state.punteggi_giocatori:
         st.session_state.punteggi_giocatori[player_id] = [0] * len(st.session_state.creature)
     st.rerun()
 
-# 2. ISOLANI
+# 2. NUOVA ICONA: JOYPAD
 with st.expander("🎮 ISOLANI"):
     st.write("Spunta chi partecipa al torneo attuale e scrivi i loro nomi:")
     partecipanti_scelti = []
@@ -151,7 +150,7 @@ with st.expander("🎮 ISOLANI"):
                 st.session_state.nomi_giocatori[id_p] = nuovo_nome.strip()
     st.session_state.giocatori_attivi = partecipanti_scelti
 
-# 3. TORNEO FAI DA TE
+# 3. NUOVA ICONA: MARTELLO E CHIAVE INGLESE
 with st.expander("🛠️ TORNEO FAI DA TE"):
     st.write("Vuoi aggiungere a mano una foto o creare una riga personalizzata? Fallo qui:")
     punti_nuova_creatura = st.number_input("Valore in Punti per questa creatura:", min_value=0, max_value=100, value=2, key="nuovi_punti_c")
@@ -186,48 +185,54 @@ else:
     )
     
     nome_visualizzato = st.session_state.nomi_giocatori[giocatore_utente]
+    st.write(f"### 🎣 Tabellone di: **{nome_visualizzato}**")
     
-    # --- SEZIONE CLASSIFICA IN TEMPO REALE ---
     with st.container():
         st.subheader("🏆 Classifica Torneo")
-        classifica = []
+        classifica = {}
         for player_id in st.session_state.giocatori_attivi:
             lista_qta = st.session_state.punteggi_giocatori[player_id]
-            
-            # Controllo di sicurezza per evitare IndexError se le liste non sono sincronizzate
-            if len(lista_qta) < len(st.session_state.creature):
-                st.session_state.punteggi_giocatori[player_id] += [0] * (len(st.session_state.creature) - len(lista_qta))
-                lista_qta = st.session_state.punteggi_giocatori[player_id]
-                
             totale_player = sum(st.session_state.creature[i]["punti"] * lista_qta[i] for i in range(len(st.session_state.creature)))
             nome_reale = st.session_state.nomi_giocatori[player_id]
-            classifica.append((totale_player, nome_reale))
+            classifica[nome_reale] = (totale_player, player_id)
             
-        # Ordina la classifica dal punteggio più alto
-        classifica.sort(key=lambda x: x[0], reverse=True)
+        classifica_ordinata = sorted(classifica.items(), key=lambda x: x[1][0], reverse=True)
         
-        # Mostra la classifica in modo compatto
-        for pos, (punti, nome) in enumerate(classifica, 1):
-            medaglia = "🥇" if pos == 1 else "🥈" if pos == 2 else "🥉" if pos == 3 else "🏅"
-            st.write(f"{medaglia} **{pos}° {nome}**: {punti} Punti")
-
-    st.write("---")
-    st.write(f"### 🎣 Tabellone di inserimento: **{nome_visualizzato}**")
-
-    # --- INPUT DELLE CATTURE PER IL GIOCATORE SELEZIONATO ---
-    for i, c in enumerate(st.session_state.creature):
-        # Riquadro estetico per smartphone definito nel CSS in alto
-        st.markdown(f'<div class="creature-card"><b>Creatura #{c["id"]}</b> ({c["punti"]} Punti)</div>', unsafe_allow_html=True)
-        
-        # Gestione dell'immagine personalizzata o di default
-        if c["immagine"]:
-            if isinstance(c["immagine"], str):
-                # Se è un file locale (es. "1.png") proviamo a caricarlo, altrimenti mostriamo un placeholder
-                try:
-                    st.image(f"images/{c['immagine']}", width=80)
-                except:
-                    st.caption("📷 [Immagine Temporanea]")
+        for i, (nome_reale, (punti_totali, player_id)) in enumerate(classifica_ordinata, 1):
+            emoji = "🥇" if i == 1 else "🥈" if i == 2 else "🥉" if i == 3 else "👤"
+            if player_id == giocatore_utente:
+                st.markdown(f"### 👉 {emoji} {i}° {nome_reale}: **{punti_totali} PT**")
             else:
-                # Se è un file caricato dall'utente tramite file_uploader
-                st.image(c["immagine"], width=80)
+                st.markdown(f"### {emoji} {i}° {nome_reale}: {punti_totali} PT")
+                
+    st.write("---")
+    st.subheader("📝 Inserisci Catture")
+    
+    # Generazione a SCHEDE VERTICALI (Card)
+    for idx, creatura in enumerate(st.session_state.creature):
+        st.markdown(f'<div class="creature-card">', unsafe_allow_html=True)
         
+        if creatura["immagine"] is not None:
+            try:
+                st.image(creatura["immagine"], width=95)
+            except Exception:
+                st.write(f"🖼️ Creatura #{creatura['id']}")
+        else:
+            st.write(f"✨ #{creatura['id']}")
+            
+        quantita_corrente = st.session_state.punteggi_giocatori[giocatore_utente][idx]
+        totale_riga = creatura["punti"] * quantita_corrente
+        st.markdown(f"**Valore:** {creatura['punti']} Pt | **Totale:** {totale_riga} Pt")
+        
+        nuova_qta = st.number_input(
+            f"Quantità per #{creatura['id']}",
+            min_value=0,
+            value=quantita_corrente,
+            key=f"qta_{giocatore_utente}_{idx}",
+            label_visibility="collapsed"
+        )
+        if nuova_qta != quantita_corrente:
+            st.session_state.punteggi_giocatori[giocatore_utente][idx] = nuova_qta
+            st.rerun()
+            
+        st.markdown('</div>', unsafe_allow_html=True)
