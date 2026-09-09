@@ -39,7 +39,7 @@ st.markdown(
         box-shadow: 0px 4px 6px rgba(0,0,0,0.05);
     }
 
-    /* Regole CSS per centrare immagini, testi dei valori e blocchi numerici di Streamlit */
+    /* Regole CSS aggiunte per centrare immagini, valori e totali */
     div[data-testid="stImage"], div[data-testid="stImage"] > img {
         display: block !important;
         margin-left: auto !important;
@@ -57,7 +57,7 @@ st.markdown(
         width: 100% !important;
     }
     div[data-testid="stNumberInput"] > div {
-        width: 120px !important; /* Mantiene compatto e centrato il selettore numerico */
+        width: 120px !important;
     }
 
     /* Contenitore Flexbox per mantenere il titolo fluido, centrato e su una sola riga */
@@ -215,3 +215,28 @@ else:
             lista_qta = st.session_state.punteggi_giocatori[player_id]
             totale_player = sum(st.session_state.creature[i]["punti"] * lista_qta[i] for i in range(len(st.session_state.creature)))
             nome_reale = st.session_state.nomi_giocatori[player_id]
+            classifica[nome_reale] = totale_player
+        
+        # Mostra la classifica ordinata dal punteggio più alto
+        classifica_ordinata = sorted(classifica.items(), key=lambda x: x[1], reverse=True)
+        for posizione, (nome, punti) in enumerate(classifica_ordinata, 1):
+            st.write(f"{posizione}. **{nome}**: {punti} punti")
+            
+    st.write("---")
+    st.subheader("🗂️ Elenco Creature da Inserire")
+    
+    # Ciclo per mostrare le tessere delle creature centrate
+    for i, c in enumerate(st.session_state.creature):
+        with st.container():
+            st.markdown(f'<div class="creature-card">', unsafe_allow_html=True)
+            
+            # Mostra l'immagine se disponibile
+            if c["immagine"]:
+                if isinstance(c["immagine"], str):
+                    st.image(f"https://githubusercontent.com{c['immagine']}", width=100)
+                else:
+                    st.image(c["immagine"], width=100)
+            
+            st.markdown(f"**Valore:** {c['punti']} Punti")
+            
+            # Input numerico per inserire le catture del giocatore selezionato
