@@ -39,6 +39,27 @@ st.markdown(
         box-shadow: 0px 4px 6px rgba(0,0,0,0.05);
     }
 
+    /* Regole CSS per centrare immagini, testi dei valori e blocchi numerici di Streamlit */
+    div[data-testid="stImage"], div[data-testid="stImage"] > img {
+        display: block !important;
+        margin-left: auto !important;
+        margin-right: auto !important;
+        text-align: center !important;
+    }
+    div[data-testid="stMarkdownContainer"] {
+        text-align: center !important;
+    }
+    div[data-testid="stNumberInput"] {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        justify-content: center !important;
+        width: 100% !important;
+    }
+    div[data-testid="stNumberInput"] > div {
+        width: 120px !important; /* Mantiene compatto e centrato il selettore numerico */
+    }
+
     /* Contenitore Flexbox per mantenere il titolo fluido, centrato e su una sola riga */
     .title-container {
         display: flex;
@@ -194,45 +215,3 @@ else:
             lista_qta = st.session_state.punteggi_giocatori[player_id]
             totale_player = sum(st.session_state.creature[i]["punti"] * lista_qta[i] for i in range(len(st.session_state.creature)))
             nome_reale = st.session_state.nomi_giocatori[player_id]
-            classifica[nome_reale] = (totale_player, player_id)
-            
-        classifica_ordinata = sorted(classifica.items(), key=lambda x: x[1][0], reverse=True)
-        
-        for i, (nome_reale, (punti_totali, player_id)) in enumerate(classifica_ordinata, 1):
-            emoji = "🥇" if i == 1 else "🥈" if i == 2 else "🥉" if i == 3 else "👤"
-            if player_id == giocatore_utente:
-                st.markdown(f"### 👉 {emoji} {i}° {nome_reale}: **{punti_totali} PT**")
-            else:
-                st.markdown(f"### {emoji} {i}° {nome_reale}: {punti_totali} PT")
-                
-    st.write("---")
-    st.subheader("📝 Inserisci Catture")
-    
-    # Generazione a SCHEDE VERTICALI (Card)
-    for idx, creatura in enumerate(st.session_state.creature):
-        st.markdown(f'<div class="creature-card">', unsafe_allow_html=True)
-        
-        if creatura["immagine"] is not None:
-            try:
-                st.image(creatura["immagine"], width=95)
-            except Exception:
-                st.write(f"🖼️ Creatura #{creatura['id']}")
-        else:
-            st.write(f"✨ #{creatura['id']}")
-            
-        quantita_corrente = st.session_state.punteggi_giocatori[giocatore_utente][idx]
-        totale_riga = creatura["punti"] * quantita_corrente
-        st.markdown(f"**Valore:** {creatura['punti']} Pt | **Totale:** {totale_riga} Pt")
-        
-        nuova_qta = st.number_input(
-            f"Quantità per #{creatura['id']}",
-            min_value=0,
-            value=quantita_corrente,
-            key=f"qta_{giocatore_utente}_{idx}",
-            label_visibility="collapsed"
-        )
-        if nuova_qta != quantita_corrente:
-            st.session_state.punteggi_giocatori[giocatore_utente][idx] = nuova_qta
-            st.rerun()
-            
-        st.markdown('</div>', unsafe_allow_html=True)
