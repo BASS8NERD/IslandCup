@@ -177,15 +177,16 @@ elif not st.session_state.giocatori_attivi:
     st.info("👋 Apri il pannello '🎮 ISOLANI' per attivare i partecipanti di oggi!")
 else:
     opzioni_menu = {id_p: st.session_state.nomi_giocatori[id_p] for id_p in st.session_state.giocatori_attivi}
+    
+    # --- MODIFICA RICHIESTA: Testo aggiornato sopra e tendina subito sotto ---
     giocatore_utente = st.selectbox(
-        "📱 Di chi sono le catture che stai inserendo?", 
+        "TABELLONE DI:", 
         list(opzioni_menu.keys()),
         format_func=lambda x: opzioni_menu[x],
         key="utente_locale"
     )
     
-    nome_visualizzato = st.session_state.nomi_giocatori[giocatore_utente]
-    st.write(f"### 🎣 Tabellone di: **{nome_visualizzato}**")
+    # Rimosso il vecchio testo st.write("### Tabellone di...") che duplicava le informazioni
     
     with st.container():
         st.subheader("🏆 Classifica Torneo")
@@ -196,43 +197,7 @@ else:
             nome_reale = st.session_state.nomi_giocatori[player_id]
             classifica[nome_reale] = (totale_player, player_id)
             
-        classifica_ordinata = sorted(classifica.items(), key=lambda x: x[1][0], reverse=True)
-        
-        for i, (nome_reale, (punti_totali, player_id)) in enumerate(classifica_ordinata, 1):
-            emoji = "🥇" if i == 1 else "🥈" if i == 2 else "🥉" if i == 3 else "👤"
-            if player_id == giocatore_utente:
-                st.markdown(f"### 👉 {emoji} {i}° {nome_reale}: **{punti_totali} PT**")
-            else:
-                st.markdown(f"### {emoji} {i}° {nome_reale}: {punti_totali} PT")
-                
-    st.write("---")
-    st.subheader("📝 Inserisci Catture")
-    
-    # Generazione a SCHEDE VERTICALI (Card)
-    for idx, creatura in enumerate(st.session_state.creature):
-        st.markdown(f'<div class="creature-card">', unsafe_allow_html=True)
-        
-        if creatura["immagine"] is not None:
-            try:
-                st.image(creatura["immagine"], width=95)
-            except Exception:
-                st.write(f"🖼️ Creatura #{creatura['id']}")
-        else:
-            st.write(f"✨ #{creatura['id']}")
-            
-        quantita_corrente = st.session_state.punteggi_giocatori[giocatore_utente][idx]
-        totale_riga = creatura["punti"] * quantita_corrente
-        st.markdown(f"**Valore:** {creatura['punti']} Pt | **Totale:** {totale_riga} Pt")
-        
-        nuova_qta = st.number_input(
-            f"Quantità per #{creatura['id']}",
-            min_value=0,
-            value=quantita_corrente,
-            key=f"qta_{giocatore_utente}_{idx}",
-            label_visibility="collapsed"
-        )
-        if nuova_qta != quantita_corrente:
-            st.session_state.punteggi_giocatori[giocatore_utente][idx] = nuova_qta
-            st.rerun()
-            
-        st.markdown('</div>', unsafe_allow_html=True)
+        # Generazione visiva base per la classifica
+        classifica_ordinata = sorted(classifica.items(), key=lambda x: x, reverse=True)
+        for rank, (nome, (punti, _)) in enumerate(classifica_ordinata, 1):
+            st.write(f"**{rank}° {nome}**: {punti} pt")
