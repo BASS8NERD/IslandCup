@@ -43,7 +43,7 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-# --- TITOLO PERFETTAMPETE CENTRATO ---
+# --- TITOLO PERFETTAMENTE CENTRATO ---
 st.markdown("<h1 style='text-align: center; font-size: 2.2rem; font-weight: bold; letter-spacing: 2px; margin-bottom: 0px;'>🌴 ISLAND CUP 🌴</h1>", unsafe_allow_html=True)
 st.write("---")
 
@@ -59,12 +59,12 @@ if "giocatori_attivi" not in st.session_state:
 if "tipo_torneo_precedente" not in st.session_state:
     st.session_state.tipo_torneo_precedente = ""
 
-# --- 🏆 SELEZIONE CON IL NUOVO NOME "TORNEI ISOLANI" 🏆 ---
+# --- 🏆 SELEZIONE "TORNEI ISOLANI" 🏆 ---
 st.subheader("📊 TORNEI ISOLANI")
 tipo_torneo = st.selectbox(
     "Scegli quale competizione avviare:",
     ["🗺️ Scegli un torneo...", "🌊 Torneo Creature Marine (40 Creature)", "🎣 Torneo di Pesca", "🦋 Torneo Insetti"],
-    label_visibility="collapsed" # Mantiene l'interfaccia pulitissima per mobile
+    label_visibility="collapsed"
 )
 
 if tipo_torneo != st.session_state.tipo_torneo_precedente:
@@ -89,9 +89,10 @@ if tipo_torneo != st.session_state.tipo_torneo_precedente:
     for player_id in st.session_state.punteggi_giocatori:
         st.session_state.punteggi_giocatori[player_id] = [0] * len(st.session_state.creature)
 
-# --- PANNELLI DI CONFIGURAZIONE COMPATTI ---
-with st.expander("⚙️ Configura Giocatori (Spunta e Rinomina)"):
-    st.write("Seleziona chi partecipa al torneo attuale:")
+# --- PANNELLI DI CONFIGURAZIONE MODIFICATI ---
+# 1. NUOVO NOME: ISOLANI
+with st.expander("⚙️ ISOLANI"):
+    st.write("Spunta chi partecipa al torneo attuale e scrivi i loro nomi:")
     partecipanti_scelti = []
     for i in range(1, 13):
         id_p = f"Player {i}"
@@ -105,8 +106,9 @@ with st.expander("⚙️ Configura Giocatori (Spunta e Rinomina)"):
                 st.session_state.nomi_giocatori[id_p] = nuovo_nome.strip()
     st.session_state.giocatori_attivi = partecipanti_scelti
 
-with st.expander("➕ Inserisci Creatura Extra a Mano (Opzionale)"):
-    st.write("Vuoi inserire a mano una foto o creare una riga da zero? Fallo qui:")
+# 2. NUOVO NOME: TORNEO FAI DA TE
+with st.expander("➕ TORNEO FAI DA TE"):
+    st.write("Vuoi aggiungere a mano una foto o creare una riga personalizzata? Fallo qui:")
     punti_nuova_creatura = st.number_input("Valore in Punti per questa creatura:", min_value=0, max_value=100, value=2, key="nuovi_punti_c")
     file_foto_nuovo = st.file_uploader("Sfoglia e Carica la Foto dal dispositivo:", type=["png", "jpg", "jpeg"], key="nuovo_upload_c")
     
@@ -128,7 +130,7 @@ st.write("---")
 if tipo_torneo == "🗺️ Scegli un torneo...":
     st.info("👋 Scegli un torneo dal menu 'TORNEI ISOLANI' per iniziare!")
 elif not st.session_state.giocatori_attivi:
-    st.info("👋 Apri il pannello '⚙️ Configura Giocatori' per attivare i partecipanti di oggi!")
+    st.info("👋 Apri il pannello '⚙️ ISOLANI' per attivare i partecipanti di oggi!")
 else:
     opzioni_menu = {id_p: st.session_state.nomi_giocatori[id_p] for id_p in st.session_state.giocatori_attivi}
     giocatore_utente = st.selectbox(
