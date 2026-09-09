@@ -225,19 +225,22 @@ else:
     st.write("---")
     st.subheader("📝 Inserisci Catture")
     
-    # Generazione a SCHEDE VERTICALI (Card)
+   # Generazione a SCHEDE VERTICALI (Card)
     for idx, creatura in enumerate(st.session_state.creature):
         st.markdown(f'<div class="creature-card">', unsafe_allow_html=True)
         
         if creatura["immagine"] is not None:
-            try:
-                st.image(creatura["immagine"], width=95)
+            try:                
+                col_sx, col_cx, col_dx = st.columns([1, 2, 1])
+                with col_cx:
+                    st.image(creatura["immagine"], use_container_width=True)
             except Exception:
                 st.write(f"🖼️ Creatura #{creatura['id']}")
         else:
             st.write(f"✨ #{creatura['id']}")
             
         quantita_corrente = st.session_state.punteggi_giocatori[giocatore_utente][idx]
+
         totale_riga = creatura["punti"] * quantita_corrente
         st.markdown(f"**Valore:** {creatura['punti']} Pt | **Totale:** {totale_riga} Pt")
         
