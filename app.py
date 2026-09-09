@@ -161,7 +161,7 @@ with st.expander("🎮 ISOLANI"):
         with col_txt:
             nuovo_nome = st.text_input(f"Nome per {id_p}", value=st.session_state.nomi_giocatori[id_p], key=f"edit_{id_p}", label_visibility="collapsed")
             if nuovo_nome.strip():
-                st.session_state.nomi_giocatori[id_p] = nuevo_nome.strip()
+                st.session_state.nomi_giocatori[id_p] = nuovo_nome.strip()
     st.session_state.giocatori_attivi = partecipanti_scelti
 
 # 3. NUOVA ICONA: MARTELLO E CHIAVE INGLESE (Sfondo Verde Menta)
