@@ -233,7 +233,7 @@ else:
             try:                
                 col_sx, col_cx, col_dx = st.columns()
                 with col_cx:
-                     st.markdown('<div style="text-align: center;">', unsafe_allow_html=True)
+                    st.markdown('<div style="text-align: center;">', unsafe_allow_html=True)
                     st.image(creatura["immagine"], width=70)
                     st.markdown('</div>', unsafe_allow_html=True)
             except Exception:
