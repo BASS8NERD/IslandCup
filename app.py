@@ -1,7 +1,11 @@
 import base64
+import json
 from pathlib import Path
 
 import streamlit as st
+
+SAVE_DIR = Path(__file__).resolve().parent / "tornei_salvati"
+SAVE_DIR.mkdir(exist_ok=True)
 
 
 def to_data_uri_from_file(file_or_path):
@@ -75,6 +79,49 @@ def resolve_image_source(value, creature_id):
                     return matches[0]
 
     return None
+
+
+def normalize_tournament_code(code):
+    if code is None:
+        return ""
+    cleaned = str(code).strip().upper().replace(" ", "-")
+    return "".join(ch for ch in cleaned if ch.isalnum() or ch in "-")
+
+
+def generate_tournament_code():
+    import random
+    letters = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789"
+    return "ISL-" + "".join(random.choice(letters) for _ in range(5))
+
+
+def save_tournament_state(code, state):
+    tournament_code = normalize_tournament_code(code)
+    if not tournament_code:
+        return None
+    save_path = SAVE_DIR / f"{tournament_code}.json"
+    payload = {
+        "codice": tournament_code,
+        "tipo_torneo": state.get("tipo_torneo_precedente", "🗺️ Scegli un torneo..."),
+        "creature": state.get("creature", []),
+        "nomi_giocatori": state.get("nomi_giocatori", {}),
+        "giocatori_attivi": state.get("giocatori_attivi", []),
+        "punteggi_giocatori": state.get("punteggi_giocatori", {}),
+    }
+    save_path.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
+    return tournament_code
+
+
+def load_tournament_state(code):
+    tournament_code = normalize_tournament_code(code)
+    if not tournament_code:
+        return None
+    save_path = SAVE_DIR / f"{tournament_code}.json"
+    if not save_path.exists():
+        return None
+    try:
+        return json.loads(save_path.read_text(encoding="utf-8"))
+    except Exception:
+        return None
 
 
 # Configurazione della pagina ottimizzata per smartphone
@@ -242,6 +289,8 @@ if "giocatori_attivi" not in st.session_state:
     st.session_state.giocatori_attivi = []
 if "tipo_torneo_precedente" not in st.session_state:
     st.session_state.tipo_torneo_precedente = "🗺️ Scegli un torneo..."
+if "current_tournament_code" not in st.session_state:
+    st.session_state.current_tournament_code = ""
 
 # Recuperiamo il tipo di torneo o usiamo quello predefinito per il titolo iniziale
 tipo_torneo_attuale = st.session_state.get("tipo_torneo_precedente", "🗺️ Scegli un torneo...")
@@ -263,6 +312,54 @@ st.markdown(
 st.write("---")
 
 # --- PANNELLI DI CONFIGURAZIONE COMPATTI E SIMMETRICI CON LE NUOVE EMOTICON ---
+
+with st.expander("💾 TORNEO SALVATO"):
+    st.write("Crea un codice per il torneo, salva tutto e poi riapri lo stesso torneo dopo.")
+    new_code = st.text_input("Codice torneo", value=st.session_state.current_tournament_code or "", key="new_tournament_code")
+    col_create, col_load, col_save = st.columns([1, 1, 1])
+    with col_create:
+        if st.button("Crea nuovo", use_container_width=True):
+            generated = generate_tournament_code()
+            st.session_state.current_tournament_code = generated
+            st.session_state.tipo_torneo_precedente = "🗺️ Scegli un torneo..."
+            st.session_state.creature = []
+            st.session_state.nomi_giocatori = {f"Player {i}": f"Player {i}" for i in range(1, 13)}
+            st.session_state.punteggi_giocatori = {f"Player {i}": [] for i in range(1, 13)}
+            st.session_state.giocatori_attivi = []
+            st.success(f"Codice creato: {generated}")
+            st.rerun()
+    with col_load:
+        if st.button("Carica", use_container_width=True):
+            loaded = load_tournament_state(new_code or st.session_state.current_tournament_code)
+            if loaded:
+                st.session_state.current_tournament_code = loaded.get("codice", "")
+                st.session_state.tipo_torneo_precedente = loaded.get("tipo_torneo", "🗺️ Scegli un torneo...")
+                st.session_state.creature = loaded.get("creature", [])
+                st.session_state.nomi_giocatori = loaded.get("nomi_giocatori", {f"Player {i}": f"Player {i}" for i in range(1, 13)})
+                st.session_state.giocatori_attivi = loaded.get("giocatori_attivi", [])
+                st.session_state.punteggi_giocatori = loaded.get("punteggi_giocatori", {f"Player {i}": [] for i in range(1, 13)})
+                st.success(f"Torneo caricato: {st.session_state.current_tournament_code}")
+                st.rerun()
+            else:
+                st.warning("Nessun torneo trovato con questo codice.")
+    with col_save:
+        if st.button("Salva", use_container_width=True):
+            code_to_save = normalize_tournament_code(new_code or st.session_state.current_tournament_code)
+            if not code_to_save:
+                st.warning("Inserisci o crea un codice prima di salvare.")
+            else:
+                saved = save_tournament_state(code_to_save, {
+                    "tipo_torneo_precedente": st.session_state.tipo_torneo_precedente,
+                    "creature": st.session_state.creature,
+                    "nomi_giocatori": st.session_state.nomi_giocatori,
+                    "giocatori_attivi": st.session_state.giocatori_attivi,
+                    "punteggi_giocatori": st.session_state.punteggi_giocatori,
+                })
+                if saved:
+                    st.session_state.current_tournament_code = saved
+                    st.success(f"Torneo salvato con codice: {saved}")
+                else:
+                    st.error("Impossibile salvare il torneo.")
 
 # 1. NUOVA ICONA: COPPA
 with st.expander("🏆 TORNEI ISOLANI"):
