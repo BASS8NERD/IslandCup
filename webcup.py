@@ -155,6 +155,7 @@ st.markdown(
             <span class="pill">Isole</span>
             <span class="pill">Eventi</span>
             <span class="pill">Crea</span>
+            <span class="pill">Invita</span>
         </div>
     </div>
     """,
