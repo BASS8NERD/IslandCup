@@ -233,7 +233,7 @@ else:
             try:                
                 col_sx, col_cx, col_dx = st.columns([2 , 1, 2])
                 with col_cx:
-                    st.image(creatura["immagine"], _width=70)
+                    st.image(creatura["immagine"], use_container_width=False)
             except Exception:
                 st.write(f"🖼️ Creatura #{creatura['id']}")
         else:
