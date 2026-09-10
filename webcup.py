@@ -1,3 +1,4 @@
+import pandas as pd
 import streamlit as st
 
 st.set_page_config(
@@ -5,6 +6,13 @@ st.set_page_config(
     page_icon="🌊",
     layout="wide",
 )
+
+if "show_create_menu" not in st.session_state:
+    st.session_state.show_create_menu = False
+if "creature_points" not in st.session_state:
+    st.session_state.creature_points = 1
+if "creature_rows" not in st.session_state:
+    st.session_state.creature_rows = pd.DataFrame(columns=["Creatura", "Punti", "Foto"])
 
 st.markdown(
     """
@@ -156,6 +164,7 @@ st.markdown(
             <span class="pill">Eventi</span>
             <span class="pill">Crea</span>
             <span class="pill">Invita</span>
+            <span class="pill">Info</span>
         </div>
     </div>
     """,
@@ -225,5 +234,81 @@ with right:
         """,
         unsafe_allow_html=True,
     )
+
+if st.button("Crea", key="toggle_create_menu", use_container_width=True):
+    st.session_state.show_create_menu = not st.session_state.show_create_menu
+
+if st.session_state.show_create_menu:
+    st.markdown('<div class="section-title">Crea nuova creatura</div>', unsafe_allow_html=True)
+
+    st.markdown(
+        """
+        <div class="glass">
+            <p style="color:#1f4f5d; font-weight:600; margin:0 0 0.7rem 0;">
+                Vuoi aggiungere a mano una foto o creare una riga personalizzata? Fallo qui:
+            </p>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+
+    option = st.radio(
+        "Tipo di inserimento",
+        ["Aggiungi foto", "Crea riga personalizzata"],
+        horizontal=True,
+        label_visibility="collapsed",
+    )
+
+    creature_name = st.text_input(
+        "Nome creatura",
+        placeholder="Es. Lince, Pipistrello, Anatra...",
+    )
+
+    st.markdown(
+        "<div style='margin-top: 1rem; color: #0c5964; font-weight: 700; font-size: 1.05rem;'>Valore in Punti per questa creatura:</div>",
+        unsafe_allow_html=True,
+    )
+
+    points_col1, points_col2, points_col3 = st.columns([1, 2, 1])
+    with points_col1:
+        if st.button("-", key="decrease_points", use_container_width=True):
+            st.session_state.creature_points = max(0, st.session_state.creature_points - 1)
+    with points_col2:
+        st.markdown(
+            f"<div style='text-align:center; padding: 0.7rem 0; border-radius: 12px; background: rgba(255,255,255,0.7); border: 1px solid rgba(12,135,154,0.15); font-size: 2rem; font-weight: 800; color: #0c5964;'>{st.session_state.creature_points}</div>",
+            unsafe_allow_html=True,
+        )
+    with points_col3:
+        if st.button("+", key="increase_points", use_container_width=True):
+            st.session_state.creature_points = st.session_state.creature_points + 1
+
+    uploaded_file = st.file_uploader(
+        "Carica foto PNG o JPEG",
+        type=["png", "jpg", "jpeg"],
+        help="Puoi caricare un'immagine della creatura da associare alla riga.",
+    )
+
+    if uploaded_file is not None:
+        st.image(uploaded_file, caption=uploaded_file.name, width=220)
+
+    if st.button("Aggiungi alla tabella in basso", use_container_width=True):
+        if creature_name.strip() == "":
+            st.warning("Inserisci il nome della creatura prima di aggiungerla.")
+        else:
+            new_row = {
+                "Creatura": creature_name.strip(),
+                "Punti": int(st.session_state.creature_points),
+                "Foto": uploaded_file.name if uploaded_file is not None else "Nessuna foto",
+            }
+            st.session_state.creature_rows = pd.concat(
+                [st.session_state.creature_rows, pd.DataFrame([new_row])],
+                ignore_index=True,
+            )
+            st.success("Creatura aggiunta alla tabella!")
+            st.session_state.creature_points = 1
+            creature_name = ""
+
+    st.markdown('<div class="section-title">Tabella creatura</div>', unsafe_allow_html=True)
+    st.dataframe(st.session_state.creature_rows, use_container_width=True, hide_index=True)
 
 st.caption("Prototipo homepage - CUP OF THE ISLANDS")
