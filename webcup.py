@@ -1,5 +1,8 @@
+import io
+
 import pandas as pd
 import streamlit as st
+from PIL import Image
 
 st.set_page_config(
     page_title="CUP OF THE ISLANDS",
@@ -92,10 +95,9 @@ if "selected_tournament" not in st.session_state:
 if "custom_tournament_rows" not in st.session_state:
     st.session_state.custom_tournament_rows = pd.DataFrame(columns=["Foto", "Valore", "Quantità", "Totale"])
 if "participant_slots" not in st.session_state:
-    default_names = ["Luca", "Marco", "Sofia", "Giulia"] + [f"Giocatore {i + 1}" for i in range(4, 12)]
     st.session_state.participant_slots = [
-        {"selected": False, "name": default_names[i]}
-        for i in range(12)
+        {"selected": False, "name": ""}
+        for _ in range(12)
     ]
 if "selected_participant" not in st.session_state:
     st.session_state.selected_participant = ""
@@ -125,6 +127,28 @@ def build_capture_frame(tournament_name):
             "Totale": 0,
         })
     return pd.DataFrame(rows)
+
+
+def make_image_cell(uploaded_file):
+    if uploaded_file is None:
+        return "Nessuna foto"
+    try:
+        return Image.open(io.BytesIO(uploaded_file.getvalue()))
+    except Exception:
+        return uploaded_file.name
+
+
+def make_custom_rows_from_uploaded(uploaded_files, points):
+    rows = []
+    for uploaded_file in uploaded_files or []:
+        if uploaded_file is not None:
+            rows.append({
+                "Foto": make_image_cell(uploaded_file),
+                "Valore": int(points),
+                "Quantità": 0,
+                "Totale": 0,
+            })
+    return pd.DataFrame(rows, columns=["Foto", "Valore", "Quantità", "Totale"])
 
 
 if st.session_state.selected_tournament != st.session_state.last_tournament:
@@ -262,6 +286,36 @@ st.markdown(
             font-size: 1.8rem;
             display: block;
             margin-bottom: 0.4rem;
+        }
+
+        .score-box {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(180deg, rgba(255,255,255,0.8), rgba(210,247,250,0.8));
+            border: 1px solid rgba(12, 135, 154, 0.14);
+            border-radius: 18px;
+            padding: 1rem 0.75rem;
+            box-shadow: 0 10px 22px rgba(18, 123, 140, 0.08);
+            margin-top: 1rem;
+            min-height: 120px;
+            text-align: center;
+        }
+
+        .score-box .value {
+            font-size: 2.1rem;
+            font-weight: 800;
+            color: #0d6d7b;
+            line-height: 1.1;
+        }
+
+        .score-box .label {
+            font-size: 0.82rem;
+            color: #285863;
+            font-weight: 700;
+            margin-top: 0.4rem;
+            letter-spacing: 0.02em;
         }
     </style>
     """,
@@ -418,9 +472,25 @@ if st.session_state.active_hero_button == "Tornei":
         total_points = int(edited["Totale"].sum())
         qty_col, total_col = st.columns(2)
         with qty_col:
-            st.metric("Totale creature prese", total_creature_count)
+            st.markdown(
+                f"""
+                <div class="score-box">
+                    <div class="value">{total_creature_count}</div>
+                    <div class="label">Totale creature prese</div>
+                </div>
+                """,
+                unsafe_allow_html=True,
+            )
         with total_col:
-            st.metric("Totale punti", total_points)
+            st.markdown(
+                f"""
+                <div class="score-box">
+                    <div class="value">{total_points}</div>
+                    <div class="label">Totale punti</div>
+                </div>
+                """,
+                unsafe_allow_html=True,
+            )
 
 elif st.session_state.active_hero_button == "Classifiche":
     st.markdown('<div class="section-title">Classifica del torneo</div>', unsafe_allow_html=True)
@@ -502,19 +572,16 @@ if st.session_state.active_hero_button == "Crea" or st.session_state.show_create
         if st.button("+", key="custom_increase_points", use_container_width=True):
             st.session_state.creature_points = st.session_state.creature_points + 1
 
+    if uploaded_files and st.session_state.creature_points > 0 and st.session_state.custom_tournament_rows.empty:
+        st.session_state.custom_tournament_rows = make_custom_rows_from_uploaded(uploaded_files, st.session_state.creature_points)
+
     if st.button("Aggiungi alla tabella in basso", use_container_width=True):
-        for uploaded_file in uploaded_files or []:
-            new_row = {
-                "Foto": uploaded_file.name if uploaded_file is not None else "Nessuna foto",
-                "Valore": int(st.session_state.creature_points),
-                "Quantità": 0,
-                "Totale": 0,
-            }
+        new_rows = make_custom_rows_from_uploaded(uploaded_files, st.session_state.creature_points)
+        if not new_rows.empty:
             st.session_state.custom_tournament_rows = pd.concat(
-                [st.session_state.custom_tournament_rows, pd.DataFrame([new_row])],
+                [st.session_state.custom_tournament_rows, new_rows],
                 ignore_index=True,
             )
-        if uploaded_files:
             st.success("Immagini aggiunte alla tabella del torneo personalizzato!")
             st.session_state.creature_points = 1
 
@@ -527,29 +594,31 @@ if st.session_state.active_hero_button == "Crea" or st.session_state.show_create
             with name_col:
                 slot["name"] = st.text_input(
                     "",
-                    value=slot.get("name", f"Giocatore {idx + 1}"),
+                    value=slot.get("name", ""),
                     key=f"custom_participant_name_{idx}",
                     placeholder=f"Partecipante {idx + 1}",
                     label_visibility="collapsed",
                 )
 
     custom_table = st.session_state.custom_tournament_rows.copy()
-    custom_table["Totale"] = custom_table["Valore"] * custom_table["Quantità"]
-    custom_table = custom_table[["Foto", "Valore", "Quantità", "Totale"]]
-    custom_edited = st.data_editor(
-        custom_table,
-        use_container_width=True,
-        hide_index=True,
-        disabled=["Foto", "Valore", "Totale"],
-        column_config={
-            "Foto": st.column_config.ImageColumn("Foto", width="small"),
-            "Valore": st.column_config.NumberColumn("Valore", format="%d"),
-            "Quantità": st.column_config.NumberColumn("Quantità", min_value=0, max_value=999),
-            "Totale": st.column_config.NumberColumn("Totale", format="%d"),
-        },
-        height=900,
-    )
-    custom_edited["Totale"] = custom_edited["Valore"] * custom_edited["Quantità"]
-    st.session_state.custom_tournament_rows = custom_edited
+    if not custom_table.empty:
+        custom_table["Totale"] = custom_table["Valore"] * custom_table["Quantità"]
+        custom_table = custom_table[["Foto", "Valore", "Quantità", "Totale"]]
+        custom_edited = st.data_editor(
+            custom_table,
+            use_container_width=True,
+            hide_index=True,
+            disabled=["Foto", "Valore", "Totale"],
+            column_config={
+                "Foto": st.column_config.ImageColumn("Foto", width="small"),
+                "Valore": st.column_config.NumberColumn("Valore", format="%d"),
+                "Quantità": st.column_config.NumberColumn("Quantità", min_value=0, max_value=999),
+                "Totale": st.column_config.NumberColumn("Totale", format="%d"),
+            },
+            height=1800,
+            num_rows="dynamic",
+        )
+        custom_edited["Totale"] = custom_edited["Valore"] * custom_edited["Quantità"]
+        st.session_state.custom_tournament_rows = custom_edited
 
 st.caption("Prototipo homepage - CUP OF THE ISLANDS")
