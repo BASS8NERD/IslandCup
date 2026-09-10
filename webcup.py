@@ -13,6 +13,43 @@ if "creature_points" not in st.session_state:
     st.session_state.creature_points = 1
 if "creature_rows" not in st.session_state:
     st.session_state.creature_rows = pd.DataFrame(columns=["Creatura", "Punti", "Foto"])
+if "active_hero_button" not in st.session_state:
+    st.session_state.active_hero_button = "Tornei"
+if "selected_tournament" not in st.session_state:
+    st.session_state.selected_tournament = "Torneo Creature Marine"
+if "participant_count" not in st.session_state:
+    st.session_state.participant_count = 4
+if "participant_names" not in st.session_state:
+    st.session_state.participant_names = ["Luca", "Marco", "Sofia", "Giulia"]
+if "player_scores" not in st.session_state:
+    st.session_state.player_scores = {"Luca": 0, "Marco": 0, "Sofia": 0, "Giulia": 0}
+
+TOURNAMENTS = {
+    "Torneo Creature Marine": [
+        {"Foto": "🐠", "Valore": 10},
+        {"Foto": "🐟", "Valore": 20},
+        {"Foto": "🦀", "Valore": 30},
+        {"Foto": "🐙", "Valore": 40},
+    ],
+    "Torneo Di Pesca": [
+        {"Foto": "🐠", "Valore": 12},
+        {"Foto": "🐡", "Valore": 18},
+        {"Foto": "🐟", "Valore": 25},
+        {"Foto": "🦐", "Valore": 35},
+    ],
+    "Torneo Caccia all'insetto": [
+        {"Foto": "🦋", "Valore": 15},
+        {"Foto": "🐝", "Valore": 22},
+        {"Foto": "🪲", "Valore": 28},
+        {"Foto": "🦗", "Valore": 33},
+    ],
+    "Torneo Mix": [
+        {"Foto": "🦐", "Valore": 16},
+        {"Foto": "🐠", "Valore": 20},
+        {"Foto": "🦋", "Valore": 24},
+        {"Foto": "🐟", "Valore": 32},
+    ],
+}
 
 st.markdown(
     """
@@ -60,35 +97,15 @@ st.markdown(
             margin: 0;
         }
 
-        .pill-row {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.6rem;
-            margin-top: 1.2rem;
-        }
-
-        .pill {
-            display: inline-block;
-            background: rgba(255,255,255,0.14);
-            color: #ecfeff;
-            border: 1px solid rgba(255,255,255,0.22);
-            border-radius: 999px;
-            padding: 0.45rem 0.9rem;
-            font-size: 0.80rem;
-            font-weight: 600;
-        }
-
-        div[data-testid="stHorizontalBlock"] > div > div > button {
-            background: linear-gradient(135deg, #ffd9b3, #ffb870) !important;
-            color: #5d2d00 !important;
-            border: 1px solid rgba(166, 100, 22, 0.25) !important;
+        div.stButton > button {
+            background: linear-gradient(135deg, #f8dcc0, #efbb7d) !important;
+            color: #4d2f12 !important;
+            border: 1px solid rgba(129, 92, 42, 0.25) !important;
             border-radius: 999px !important;
-            padding: 0.45rem 0.9rem !important;
+            padding: 0.5rem 0.9rem !important;
             font-size: 0.80rem !important;
             font-weight: 700 !important;
-            box-shadow: 0 6px 18px rgba(210, 123, 47, 0.22) !important;
-            min-width: auto !important;
-            width: auto !important;
+            box-shadow: 0 6px 18px rgba(198, 143, 83, 0.2) !important;
         }
 
         .glass {
@@ -183,14 +200,11 @@ for col, label in zip(hero_columns, hero_labels):
         clicked = st.button(label, key=f"hero_{label.lower()}", use_container_width=True)
         if clicked and label == "Crea":
             st.session_state.show_create_menu = not st.session_state.show_create_menu
+            st.session_state.active_hero_button = "Crea"
         elif clicked:
             st.session_state.active_hero_button = label
 
-if "active_hero_button" not in st.session_state:
-    st.session_state.active_hero_button = "Tornei"
-
-st.caption(f"Sezione attiva: {st.session_state.active_hero_button}")
-
+# Base panels
 cols = st.columns(4)
 metrics = [
     ("24", "Tornei attivi"),
@@ -206,15 +220,13 @@ for col, (value, label) in zip(cols, metrics):
         )
 
 st.markdown('<div class="section-title">Cosa puoi fare</div>', unsafe_allow_html=True)
-
 features = [
     ("🏆", "Tornei dinamici", "Crea competizioni personalizzate, impostando regole, date e gruppi di partecipazione in pochi secondi."),
     ("📊", "Classifiche live", "Segui i punteggi in tempo reale e scopri subito chi guida la classifica generale."),
     ("🎯", "Gestione eventi", "Organizza sfide, premi e momenti speciali per coinvolgere tutta la community."),
 ]
-
-cols = st.columns(3)
-for col, (icon, title, text) in zip(cols, features):
+feature_cols = st.columns(3)
+for col, (icon, title, text) in zip(feature_cols, features):
     with col:
         st.markdown(
             f"""
@@ -255,9 +267,86 @@ with right:
         unsafe_allow_html=True,
     )
 
-if st.session_state.show_create_menu:
-    st.markdown('<div class="section-title">Crea Torneo</div>', unsafe_allow_html=True)
+if st.session_state.active_hero_button == "Tornei":
+    st.markdown('<div class="section-title">Tornei disponibili</div>', unsafe_allow_html=True)
+    tournament_list = list(TOURNAMENTS.keys())
+    selected_tournament = st.selectbox("Seleziona un torneo", tournament_list, index=tournament_list.index(st.session_state.selected_tournament))
+    st.session_state.selected_tournament = selected_tournament
 
+    participant_count = st.selectbox("Numero di partecipanti (max 12)", list(range(1, 13)), index=min(st.session_state.participant_count - 1, 11))
+    st.session_state.participant_count = participant_count
+
+    names = []
+    for i in range(participant_count):
+        default_name = st.session_state.participant_names[i] if i < len(st.session_state.participant_names) else f"Partecipante {i + 1}"
+        name = st.text_input(f"Nome partecipante {i + 1}", value=default_name, key=f"participant_name_{i}")
+        names.append(name)
+
+    st.session_state.participant_names = names
+
+    if not names:
+        st.warning("Inserisci almeno un partecipante.")
+    else:
+        for name in names:
+            st.session_state.player_scores.setdefault(name, 0)
+
+        tournament_data = pd.DataFrame(TOURNAMENTS[selected_tournament])
+        tournament_data["Quantità"] = 0
+        tournament_data["Totale"] = tournament_data["Valore"] * tournament_data["Quantità"]
+        tournament_data = tournament_data[["Foto", "Valore", "Quantità", "Totale"]]
+
+        edited = st.data_editor(
+            tournament_data,
+            use_container_width=True,
+            hide_index=True,
+            disabled=["Foto", "Valore", "Totale"],
+            column_config={
+                "Foto": st.column_config.TextColumn("Foto", width="small"),
+                "Valore": st.column_config.NumberColumn("Valore", format="%d"),
+                "Quantità": st.column_config.NumberColumn("Quantità", min_value=0, max_value=999),
+                "Totale": st.column_config.NumberColumn("Totale", format="%d"),
+            },
+        )
+
+        edited["Totale"] = edited["Valore"] * edited["Quantità"]
+
+        st.markdown("<div style='margin-top: 1rem; color: #0c5964; font-weight: 700; font-size: 1.05rem;'>Totale torneo</div>", unsafe_allow_html=True)
+        total_creature_count = int(edited["Quantità"].sum())
+        total_points = int(edited["Totale"].sum())
+
+        total_cols = st.columns(2)
+        with total_cols[0]:
+            st.metric("Totale creature prese", total_creature_count)
+        with total_cols[1]:
+            st.metric("Totale punti", total_points)
+
+        st.markdown('<div class="section-title">Assegna punti</div>', unsafe_allow_html=True)
+        active_participant = st.selectbox("Partecipante attivo", names)
+        points_to_assign = st.number_input("Punti da assegnare", min_value=0, step=10, value=0)
+        if st.button("Assegna punti a partecipante selezionato"):
+            st.session_state.player_scores[active_participant] = st.session_state.player_scores.get(active_participant, 0) + int(points_to_assign)
+            st.success(f"Punti assegnati a {active_participant}: +{points_to_assign}")
+
+        st.dataframe(
+            pd.DataFrame({
+                "Nome partecipante": names,
+                "Punti assegnati": [st.session_state.player_scores.get(name, 0) for name in names],
+            }),
+            use_container_width=True,
+            hide_index=True,
+        )
+elif st.session_state.active_hero_button == "Classifiche":
+    st.markdown('<div class="section-title">Classifica del torneo</div>', unsafe_allow_html=True)
+    participants = st.session_state.participant_names[: st.session_state.participant_count]
+    leaderboard = pd.DataFrame({
+        "Nome partecipante": participants,
+        "Totale punti": [st.session_state.player_scores.get(name, 0) for name in participants],
+    }).sort_values("Totale punti", ascending=False).reset_index(drop=True)
+    leaderboard.insert(0, "Posizione", range(1, len(leaderboard) + 1))
+    st.dataframe(leaderboard[["Posizione", "Nome partecipante", "Totale punti"]], use_container_width=True, hide_index=True)
+
+if st.session_state.show_create_menu:
+    st.markdown('<div class="section-title">Crea nuova creatura</div>', unsafe_allow_html=True)
     st.markdown(
         """
         <div class="glass">
