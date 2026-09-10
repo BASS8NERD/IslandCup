@@ -163,26 +163,26 @@ st.markdown(
         display: flex;
         align-items: center;
         justify-content: center;
-        gap: 12px;
+        gap: 14px;
         width: 100%;
-        max-width: 330px;
-        margin: 0 auto 8px auto;
-        padding: 0;
+        max-width: 340px;
+        margin: 0 auto 12px auto;
+        padding: 2px 0;
     }
 
     .creature-image-wrap {
-        flex: 0 0 64px;
+        flex: 0 0 68px;
         display: flex;
         align-items: center;
         justify-content: center;
-        width: 64px;
-        height: 64px;
+        width: 68px;
+        height: 68px;
     }
 
     .creature-image-wrap img {
         display: block !important;
-        width: 64px !important;
-        height: 64px !important;
+        width: 68px !important;
+        height: 68px !important;
         object-fit: contain !important;
         border-radius: 10px !important;
     }
@@ -196,6 +196,8 @@ st.markdown(
         display: flex;
         align-items: center;
         justify-content: center;
+        min-height: 68px;
+        padding: 2px 0;
     }
 
     .creature-title {
@@ -207,6 +209,7 @@ st.markdown(
         color: #4a3728 !important;
         display: inline-block;
         width: 100%;
+        letter-spacing: 0.2px;
     }
 
     .creature-details {
@@ -365,15 +368,16 @@ elif not st.session_state.giocatori_attivi:
     st.info("👋 Apri il pannello '🎮 ISOLANI' per attivare i partecipanti di oggi!")
 else:
     opzioni_menu = {id_p: st.session_state.nomi_giocatori[id_p] for id_p in st.session_state.giocatori_attivi}
+    st.markdown("### 🎣 Tabellone di:")
     giocatore_utente = st.selectbox(
-        "📱 Di chi sono le catture che stai inserendo?", 
+        "Seleziona giocatore",
         list(opzioni_menu.keys()),
         format_func=lambda x: opzioni_menu[x],
-        key="utente_locale"
+        key="utente_locale",
+        label_visibility="collapsed"
     )
-    
     nome_visualizzato = st.session_state.nomi_giocatori[giocatore_utente]
-    st.write(f"### 🎣 Tabellone di: **{nome_visualizzato}**")
+    st.markdown(f"### **{nome_visualizzato}**")
     
     with st.container():
         st.subheader("🏆 Classifica Torneo")
