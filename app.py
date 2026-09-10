@@ -2,6 +2,20 @@ import streamlit as st
 
 # Configurazione della pagina ottimizzata per smartphone
 st.set_page_config(page_title="Island Cup Tracker", page_icon="🏝️", layout="centered")
+st.markdown(
+    """
+    <style>
+    /* Centra e rimpicciolisce le immagini delle creature sullo smartphone */
+    div[data-testid="stImage"] img {
+        margin: 0 auto !important;
+        display: block !important;
+        width: 65px !important;
+        height: auto !important;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
 
 # --- STILE GRAFICO APPOSITAMENTE STRUTTURATO PER CELLULARI ---
 st.markdown(
