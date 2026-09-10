@@ -78,6 +78,27 @@ st.markdown(
         font-size: min(7vw, 34px);
         display: inline-block;
     }
+
+    /* Immagini delle creature: ridotte e centrate anche su schermi piccoli */
+    .creature-card [data-testid="stImage"] {
+        display: flex !important;
+        justify-content: center !important;
+        align-items: center !important;
+        width: 100% !important;
+        max-width: 100% !important;
+    }
+
+    .creature-card img {
+        display: block !important;
+        margin: 0 auto !important;
+        width: 80px !important;
+        height: 80px !important;
+        max-width: 80px !important;
+        max-height: 80px !important;
+        object-fit: contain !important;
+        border-radius: 10px !important;
+    }
+
     div[data-testid="stImageFilter"] { display: flex !important; justify-content: center !important; } img { margin: 0 auto !important; display: block !important; }
 
     </style>
@@ -233,7 +254,7 @@ else:
             try:                
                 col_sx, col_cx, col_dx = st.columns([3.5 , 1, 3.5])
                 with col_cx:
-                    st.image(creatura["immagine"], use_container_width=True)
+                    st.image(creatura["immagine"], width=80)
             except Exception:
                 st.write(f"🖼️ Creatura #{creatura['id']}")
         else:
