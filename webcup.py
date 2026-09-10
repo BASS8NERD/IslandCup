@@ -92,12 +92,13 @@ if "selected_tournament" not in st.session_state:
 if "custom_tournament_rows" not in st.session_state:
     st.session_state.custom_tournament_rows = pd.DataFrame(columns=["Foto", "Valore", "Quantità", "Totale"])
 if "participant_slots" not in st.session_state:
+    default_names = ["Luca", "Marco", "Sofia", "Giulia"] + [f"Giocatore {i + 1}" for i in range(4, 12)]
     st.session_state.participant_slots = [
-        {"selected": i < 4, "name": ["Luca", "Marco", "Sofia", "Giulia"][i] if i < 4 else f"Giocatore {i + 1}"}
+        {"selected": False, "name": default_names[i]}
         for i in range(12)
     ]
 if "selected_participant" not in st.session_state:
-    st.session_state.selected_participant = "Luca"
+    st.session_state.selected_participant = ""
 if "capture_data" not in st.session_state:
     st.session_state.capture_data = {}
 if "last_tournament" not in st.session_state:
@@ -408,17 +409,17 @@ if st.session_state.active_hero_button == "Tornei":
                 "Quantità": st.column_config.NumberColumn("Quantità", min_value=0, max_value=999),
                 "Totale": st.column_config.NumberColumn("Totale", format="%d"),
             },
-            height=380,
+            height=900,
         )
         edited["Totale"] = edited["Valore"] * edited["Quantità"]
         st.session_state.capture_data[selected_name] = edited
 
         total_creature_count = int(edited["Quantità"].sum())
         total_points = int(edited["Totale"].sum())
-        total_cols = st.columns(2)
-        with total_cols[0]:
+        qty_col, total_col = st.columns(2)
+        with qty_col:
             st.metric("Totale creature prese", total_creature_count)
-        with total_cols[1]:
+        with total_col:
             st.metric("Totale punti", total_points)
 
 elif st.session_state.active_hero_button == "Classifiche":
@@ -517,20 +518,20 @@ if st.session_state.active_hero_button == "Crea" or st.session_state.show_create
             st.success("Immagini aggiunte alla tabella del torneo personalizzato!")
             st.session_state.creature_points = 1
 
-    st.markdown('<div class="section-title">Partecipanti</div>', unsafe_allow_html=True)
-    for idx in range(12):
-        slot = st.session_state.participant_slots[idx]
-        checkbox_col, name_col = st.columns([0.3, 2.5])
-        with checkbox_col:
-            slot["selected"] = st.checkbox("", value=slot.get("selected", False), key=f"custom_participant_selected_{idx}", label_visibility="collapsed")
-        with name_col:
-            slot["name"] = st.text_input(
-                "",
-                value=slot.get("name", f"Giocatore {idx + 1}"),
-                key=f"custom_participant_name_{idx}",
-                placeholder=f"Partecipante {idx + 1}",
-                label_visibility="collapsed",
-            )
+    with st.expander("Partecipanti", expanded=False):
+        for idx in range(12):
+            slot = st.session_state.participant_slots[idx]
+            checkbox_col, name_col = st.columns([0.3, 2.5])
+            with checkbox_col:
+                slot["selected"] = st.checkbox("", value=slot.get("selected", False), key=f"custom_participant_selected_{idx}", label_visibility="collapsed")
+            with name_col:
+                slot["name"] = st.text_input(
+                    "",
+                    value=slot.get("name", f"Giocatore {idx + 1}"),
+                    key=f"custom_participant_name_{idx}",
+                    placeholder=f"Partecipante {idx + 1}",
+                    label_visibility="collapsed",
+                )
 
     custom_table = st.session_state.custom_tournament_rows.copy()
     custom_table["Totale"] = custom_table["Valore"] * custom_table["Quantità"]
@@ -546,24 +547,9 @@ if st.session_state.active_hero_button == "Crea" or st.session_state.show_create
             "Quantità": st.column_config.NumberColumn("Quantità", min_value=0, max_value=999),
             "Totale": st.column_config.NumberColumn("Totale", format="%d"),
         },
-        height=700,
+        height=900,
     )
     custom_edited["Totale"] = custom_edited["Valore"] * custom_edited["Quantità"]
     st.session_state.custom_tournament_rows = custom_edited
-
-    with st.expander("Partecipanti", expanded=False):
-        for idx in range(12):
-            slot = st.session_state.participant_slots[idx]
-            checkbox_col, name_col = st.columns([0.3, 2.5])
-            with checkbox_col:
-                slot["selected"] = st.checkbox("", value=slot.get("selected", False), key=f"custom_participant_selected_{idx}", label_visibility="collapsed")
-            with name_col:
-                slot["name"] = st.text_input(
-                    "",
-                    value=slot.get("name", f"Giocatore {idx + 1}"),
-                    key=f"custom_participant_name_{idx}",
-                    placeholder=f"Partecipante {idx + 1}",
-                    label_visibility="collapsed",
-                )
 
 st.caption("Prototipo homepage - CUP OF THE ISLANDS")
