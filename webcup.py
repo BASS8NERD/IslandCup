@@ -7,47 +7,54 @@ st.set_page_config(
     layout="wide",
 )
 
+GITHUB_RAW_BASE = "https://raw.githubusercontent.com/BASS8NERD/IslandCup/main"
+
+POINTS_BY_IMAGE = {
+    1: 2,
+    2: 2,
+    3: 3,
+    4: 9,
+    5: 3,
+    6: 4,
+    7: 6,
+    8: 2,
+    9: 3,
+    10: 3,
+    11: 6,
+    12: 4,
+    13: 4,
+    14: 4,
+    15: 4,
+    16: 4,
+    17: 6,
+    18: 9,
+    19: 6,
+    20: 5,
+    21: 7,
+    22: 9,
+    23: 4,
+    24: 6,
+    25: 6,
+    26: 8,
+    27: 9,
+    28: 2,
+    29: 8,
+    30: 6,
+    31: 4,
+    32: 6,
+    33: 6,
+    34: 7,
+    35: 9,
+    36: 5,
+    37: 5,
+    38: 4,
+    39: 3,
+    40: 7,
+}
+
 MARINE_CREATURES = [
-    {"Foto": "1.png", "Valore": 2},
-    {"Foto": "2.png", "Valore": 2},
-    {"Foto": "3.png", "Valore": 3},
-    {"Foto": "4.png", "Valore": 9},
-    {"Foto": "5.png", "Valore": 3},
-    {"Foto": "6.png", "Valore": 4},
-    {"Foto": "7.png", "Valore": 6},
-    {"Foto": "8.png", "Valore": 2},
-    {"Foto": "9.png", "Valore": 3},
-    {"Foto": "10.png", "Valore": 3},
-    {"Foto": "11.png", "Valore": 6},
-    {"Foto": "12.png", "Valore": 4},
-    {"Foto": "13.png", "Valore": 4},
-    {"Foto": "14.png", "Valore": 4},
-    {"Foto": "15.png", "Valore": 4},
-    {"Foto": "16.png", "Valore": 4},
-    {"Foto": "17.png", "Valore": 6},
-    {"Foto": "18.png", "Valore": 9},
-    {"Foto": "19.png", "Valore": 6},
-    {"Foto": "20.png", "Valore": 5},
-    {"Foto": "21.png", "Valore": 7},
-    {"Foto": "22.png", "Valore": 9},
-    {"Foto": "23.png", "Valore": 4},
-    {"Foto": "24.png", "Valore": 6},
-    {"Foto": "25.png", "Valore": 6},
-    {"Foto": "26.png", "Valore": 8},
-    {"Foto": "27.png", "Valore": 9},
-    {"Foto": "28.png", "Valore": 2},
-    {"Foto": "29.png", "Valore": 8},
-    {"Foto": "30.png", "Valore": 6},
-    {"Foto": "31.png", "Valore": 4},
-    {"Foto": "32.png", "Valore": 6},
-    {"Foto": "33.png", "Valore": 6},
-    {"Foto": "34.png", "Valore": 7},
-    {"Foto": "35.png", "Valore": 9},
-    {"Foto": "36.png", "Valore": 5},
-    {"Foto": "37.png", "Valore": 5},
-    {"Foto": "38.png", "Valore": 4},
-    {"Foto": "39.png", "Valore": 3},
-    {"Foto": "40.png", "Valore": 7},
+    {"Foto": f"{GITHUB_RAW_BASE}/{image_number}.png", "Valore": POINTS_BY_IMAGE[image_number]}
+    for image_number in range(1, 41)
 ]
 
 TOURNAMENTS = {
@@ -551,5 +558,3 @@ if st.session_state.active_hero_button == "Crea" or st.session_state.show_create
     st.session_state.custom_tournament_rows = custom_edited
 
 st.caption("Prototipo homepage - CUP OF THE ISLANDS")
-
-
