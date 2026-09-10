@@ -79,29 +79,22 @@ st.markdown(
         display: inline-block;
     }
 
-    /* Immagini delle creature: ridotte e centrate anche su schermi piccoli */
-    .creature-card [data-testid="stImage"] {
-        display: flex !important;
-        justify-content: center !important;
-        align-items: center !important;
-        width: 100% !important;
-        max-width: 100% !important;
-        margin: 0 auto !important;
+    /* Immagini delle creature: responsiva e centrata su Android */
+    .creature-image-wrap {
+        width: 100%;
+        text-align: center;
+        margin: 0 auto 8px auto;
     }
 
-    .creature-card img {
-        display: block !important;
+    .creature-image-wrap img {
+        display: inline-block !important;
         margin: 0 auto !important;
-        width: min(18vw, 80px) !important;
-        height: min(18vw, 80px) !important;
+        width: min(22vw, 80px) !important;
+        height: min(22vw, 80px) !important;
         max-width: 80px !important;
         max-height: 80px !important;
         object-fit: contain !important;
         border-radius: 10px !important;
-    }
-
-    .creature-card [data-testid="stHorizontalBlock"] {
-        justify-content: center !important;
     }
 
     div[data-testid="stImageFilter"] { display: flex !important; justify-content: center !important; } img { margin: 0 auto !important; display: block !important; }
@@ -257,9 +250,10 @@ else:
         
         if creatura["immagine"] is not None:
             try:
-                _, col_centro, _ = st.columns([1, 2, 1])
-                with col_centro:
-                    st.image(creatura["immagine"], width=80)
+                st.markdown(
+                    f'<div class="creature-image-wrap"><img src="{creatura["immagine"]}" alt="Creatura {creatura["id"]}" /></div>',
+                    unsafe_allow_html=True,
+                )
             except Exception:
                 st.write(f"🖼️ Creatura #{creatura['id']}")
         else:
