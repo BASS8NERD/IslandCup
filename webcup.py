@@ -78,6 +78,19 @@ st.markdown(
             font-weight: 600;
         }
 
+        div[data-testid="stHorizontalBlock"] > div > div > button {
+            background: linear-gradient(135deg, #ffd9b3, #ffb870) !important;
+            color: #5d2d00 !important;
+            border: 1px solid rgba(166, 100, 22, 0.25) !important;
+            border-radius: 999px !important;
+            padding: 0.45rem 0.9rem !important;
+            font-size: 0.80rem !important;
+            font-weight: 700 !important;
+            box-shadow: 0 6px 18px rgba(210, 123, 47, 0.22) !important;
+            min-width: auto !important;
+            width: auto !important;
+        }
+
         .glass {
             background: rgba(255,255,255,0.56);
             border: 1px solid rgba(13, 146, 167, 0.12);
@@ -157,22 +170,26 @@ st.markdown(
         <p>
             Organizza tornei, monitora i risultati e tieni sempre sotto controllo la classifica!
         </p>
-        <div class="pill-row">
-            <span class="pill">Tornei</span>
-            <span class="pill">Classifiche</span>
-            <span class="pill">Isole</span>
-            <span class="pill">Eventi</span>
-            <span class="pill" style="cursor:pointer;">Crea</span>
-            <span class="pill">Invita</span>
-            <span class="pill">Info</span>
-        </div>
     </div>
     """,
     unsafe_allow_html=True,
 )
 
-if st.button("Crea", key="toggle_create_menu", use_container_width=False):
-    st.session_state.show_create_menu = not st.session_state.show_create_menu
+hero_labels = ["Tornei", "Classifiche", "Isole", "Eventi", "Crea", "Invita", "Info"]
+hero_columns = st.columns(len(hero_labels))
+
+for col, label in zip(hero_columns, hero_labels):
+    with col:
+        clicked = st.button(label, key=f"hero_{label.lower()}", use_container_width=True)
+        if clicked and label == "Crea":
+            st.session_state.show_create_menu = not st.session_state.show_create_menu
+        elif clicked:
+            st.session_state.active_hero_button = label
+
+if "active_hero_button" not in st.session_state:
+    st.session_state.active_hero_button = "Tornei"
+
+st.caption(f"Sezione attiva: {st.session_state.active_hero_button}")
 
 cols = st.columns(4)
 metrics = [
@@ -252,18 +269,6 @@ if st.session_state.show_create_menu:
         unsafe_allow_html=True,
     )
 
-    option = st.radio(
-        "Tipo di inserimento",
-        ["Aggiungi foto", "Crea riga personalizzata"],
-        horizontal=True,
-        label_visibility="collapsed",
-    )
-
-    creature_name = st.text_input(
-        "Nome creatura",
-        placeholder="Es. Lince, Pipistrello, Anatra...",
-    )
-
     st.markdown(
         "<div style='margin-top: 1rem; color: #0c5964; font-weight: 700; font-size: 1.05rem;'>Valore in Punti per questa creatura:</div>",
         unsafe_allow_html=True,
@@ -292,21 +297,17 @@ if st.session_state.show_create_menu:
         st.image(uploaded_file, caption=uploaded_file.name, width=220)
 
     if st.button("Aggiungi alla tabella in basso", use_container_width=True):
-        if creature_name.strip() == "":
-            st.warning("Inserisci il nome della creatura prima di aggiungerla.")
-        else:
-            new_row = {
-                "Creatura": creature_name.strip(),
-                "Punti": int(st.session_state.creature_points),
-                "Foto": uploaded_file.name if uploaded_file is not None else "Nessuna foto",
-            }
-            st.session_state.creature_rows = pd.concat(
-                [st.session_state.creature_rows, pd.DataFrame([new_row])],
-                ignore_index=True,
-            )
-            st.success("Creatura aggiunta alla tabella!")
-            st.session_state.creature_points = 1
-            creature_name = ""
+        new_row = {
+            "Creatura": "Creatura personalizzata",
+            "Punti": int(st.session_state.creature_points),
+            "Foto": uploaded_file.name if uploaded_file is not None else "Nessuna foto",
+        }
+        st.session_state.creature_rows = pd.concat(
+            [st.session_state.creature_rows, pd.DataFrame([new_row])],
+            ignore_index=True,
+        )
+        st.success("Creatura aggiunta alla tabella!")
+        st.session_state.creature_points = 1
 
     st.markdown('<div class="section-title">Tabella creatura</div>', unsafe_allow_html=True)
     st.dataframe(st.session_state.creature_rows, use_container_width=True, hide_index=True)
