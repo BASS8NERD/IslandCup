@@ -231,9 +231,9 @@ else:
         
         if creatura["immagine"] is not None:
             try:                
-                col_sx, col_cx, col_dx = st.columns([2.5 , 1, 2.5])
+                col_sx, col_cx, col_dx = st.columns([2 , 1, 2])
                 with col_cx:
-                    st.image(creatura["immagine"], _width=80)
+                    st.image(creatura["immagine"], _width=70)
             except Exception:
                 st.write(f"🖼️ Creatura #{creatura['id']}")
         else:
