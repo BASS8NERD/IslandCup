@@ -92,8 +92,8 @@ st.markdown(
     .creature-card img {
         display: block !important;
         margin: 0 auto !important;
-        width: 80px !important;
-        height: 80px !important;
+        width: min(18vw, 80px) !important;
+        height: min(18vw, 80px) !important;
         max-width: 80px !important;
         max-height: 80px !important;
         object-fit: contain !important;
@@ -256,9 +256,9 @@ else:
         st.markdown(f'<div class="creature-card">', unsafe_allow_html=True)
         
         if creatura["immagine"] is not None:
-            try:                
-                col_sx, col_cx, col_dx = st.columns([3.5 , 1, 3.5])
-                with col_cx:
+            try:
+                _, col_centro, _ = st.columns([1, 2, 1])
+                with col_centro:
                     st.image(creatura["immagine"], width=80)
             except Exception:
                 st.write(f"🖼️ Creatura #{creatura['id']}")
