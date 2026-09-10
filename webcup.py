@@ -364,26 +364,20 @@ if st.session_state.active_hero_button == "Tornei":
     )
     st.session_state.selected_tournament = selected_tournament
 
-    st.markdown("<div style='margin-top: 1rem; color: #0c5964; font-weight: 700; font-size: 1.05rem;'>Partecipanti attivi</div>", unsafe_allow_html=True)
-    st.selectbox(
-        "Seleziona partecipanti",
-        [f"{slot.get('name', f'Giocatore {idx + 1}')}: {'attivo' if slot.get('selected', False) else 'disattivo'}" for idx, slot in enumerate(st.session_state.participant_slots)],
-        index=0,
-        label_visibility="collapsed",
-    )
-    for idx in range(12):
-        slot = st.session_state.participant_slots[idx]
-        checkbox_col, name_col = st.columns([0.3, 2.5])
-        with checkbox_col:
-            slot["selected"] = st.checkbox("", value=slot.get("selected", False), key=f"participant_selected_{idx}", label_visibility="collapsed")
-        with name_col:
-            slot["name"] = st.text_input(
-                "",
-                value=slot.get("name", f"Giocatore {idx + 1}"),
-                key=f"participant_name_{idx}",
-                placeholder=f"Partecipante {idx + 1}",
-                label_visibility="collapsed",
-            )
+    with st.expander("Partecipanti", expanded=False):
+        for idx in range(12):
+            slot = st.session_state.participant_slots[idx]
+            checkbox_col, name_col = st.columns([0.3, 2.5])
+            with checkbox_col:
+                slot["selected"] = st.checkbox("", value=slot.get("selected", False), key=f"participant_selected_{idx}", label_visibility="collapsed")
+            with name_col:
+                slot["name"] = st.text_input(
+                    "",
+                    value=slot.get("name", f"Giocatore {idx + 1}"),
+                    key=f"participant_name_{idx}",
+                    placeholder=f"Partecipante {idx + 1}",
+                    label_visibility="collapsed",
+                )
 
     active_participants = get_active_participants()
 
@@ -552,9 +546,24 @@ if st.session_state.active_hero_button == "Crea" or st.session_state.show_create
             "Quantità": st.column_config.NumberColumn("Quantità", min_value=0, max_value=999),
             "Totale": st.column_config.NumberColumn("Totale", format="%d"),
         },
-        height=380,
+        height=700,
     )
     custom_edited["Totale"] = custom_edited["Valore"] * custom_edited["Quantità"]
     st.session_state.custom_tournament_rows = custom_edited
+
+    with st.expander("Partecipanti", expanded=False):
+        for idx in range(12):
+            slot = st.session_state.participant_slots[idx]
+            checkbox_col, name_col = st.columns([0.3, 2.5])
+            with checkbox_col:
+                slot["selected"] = st.checkbox("", value=slot.get("selected", False), key=f"custom_participant_selected_{idx}", label_visibility="collapsed")
+            with name_col:
+                slot["name"] = st.text_input(
+                    "",
+                    value=slot.get("name", f"Giocatore {idx + 1}"),
+                    key=f"custom_participant_name_{idx}",
+                    placeholder=f"Partecipante {idx + 1}",
+                    label_visibility="collapsed",
+                )
 
 st.caption("Prototipo homepage - CUP OF THE ISLANDS")
