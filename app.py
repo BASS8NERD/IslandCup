@@ -127,6 +127,23 @@ st.markdown(
         color: #4a3728 !important;
     }
 
+    div[data-testid="stHorizontalBlock"] {
+        display: flex !important;
+        align-items: center !important;
+        width: 100% !important;
+    }
+
+    div[data-testid="stHorizontalBlock"] > div {
+        display: flex !important;
+        align-items: center !important;
+    }
+
+    [data-testid="stImage"] {
+        display: flex !important;
+        justify-content: center !important;
+        align-items: center !important;
+    }
+
     .creature-details {
         text-align: center;
         font-size: 0.9rem;
