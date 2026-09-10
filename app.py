@@ -86,6 +86,12 @@ st.markdown(
     <style>
     /* Sfondo e colori generali dell'isola */
         .stApp { background-color: #e0f7fa; }
+        .main .block-container {
+            max-width: 520px !important;
+            margin: 0 auto !important;
+            padding-left: 1rem !important;
+            padding-right: 1rem !important;
+        }
     h1, h2, h3, p, label, .stMarkdown, span, div { color: #4a3728 !important; }
     
     /* Riquadri dei menu espandibili */
