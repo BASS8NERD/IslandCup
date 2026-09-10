@@ -79,22 +79,48 @@ st.markdown(
         display: inline-block;
     }
 
-    /* Immagini delle creature: responsiva e centrata su Android */
-    .creature-image-wrap {
+    /* Card creature: immagine a sinistra, nome a destra, info sotto */
+    .creature-row {
+        display: flex;
+        align-items: center;
+        gap: 12px;
         width: 100%;
-        text-align: center;
-        margin: 0 auto 8px auto;
+        margin-bottom: 8px;
+    }
+
+    .creature-image-wrap {
+        flex: 0 0 auto;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 80px;
     }
 
     .creature-image-wrap img {
-        display: inline-block !important;
-        margin: 0 auto !important;
+        display: block !important;
         width: min(22vw, 80px) !important;
         height: min(22vw, 80px) !important;
         max-width: 80px !important;
         max-height: 80px !important;
         object-fit: contain !important;
         border-radius: 10px !important;
+    }
+
+    .creature-meta {
+        flex: 1;
+        text-align: left;
+        font-weight: 600;
+        line-height: 1.3;
+    }
+
+    .creature-meta .creature-name {
+        font-size: 0.95rem;
+        margin: 0;
+    }
+
+    .creature-details {
+        text-align: center;
+        margin-top: 6px;
     }
 
     div[data-testid="stImageFilter"] { display: flex !important; justify-content: center !important; } img { margin: 0 auto !important; display: block !important; }
@@ -251,18 +277,30 @@ else:
         if creatura["immagine"] is not None:
             try:
                 st.markdown(
-                    f'<div class="creature-image-wrap"><img src="{creatura["immagine"]}" alt="Creatura {creatura["id"]}" /></div>',
+                    f'''
+                    <div class="creature-row">
+                        <div class="creature-image-wrap">
+                            <img src="{creatura["immagine"]}" alt="Creatura {creatura["id"]}" />
+                        </div>
+                        <div class="creature-meta">
+                            <div class="creature-name">#{creatura["id"]} · {creatura["id"]}</div>
+                        </div>
+                    </div>
+                    ''',
                     unsafe_allow_html=True,
                 )
             except Exception:
                 st.write(f"🖼️ Creatura #{creatura['id']}")
         else:
-            st.write(f"✨ #{creatura['id']}")
-            
+            st.markdown(
+                f'<div class="creature-row"><div class="creature-meta"><div class="creature-name">#{creatura["id"]} · {creatura["id"]}</div></div></div>',
+                unsafe_allow_html=True,
+            )
+
         quantita_corrente = st.session_state.punteggi_giocatori[giocatore_utente][idx]
 
         totale_riga = creatura["punti"] * quantita_corrente
-        st.markdown(f"**Valore:** {creatura['punti']} Pt | **Totale:** {totale_riga} Pt")
+        st.markdown(f'<div class="creature-details"><strong>Valore:</strong> {creatura["punti"]} Pt | <strong>Totale:</strong> {totale_riga} Pt</div>', unsafe_allow_html=True)
         
         nuova_qta = st.number_input(
             f"Quantità per #{creatura['id']}",
