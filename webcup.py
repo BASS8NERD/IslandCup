@@ -256,13 +256,13 @@ with right:
     )
 
 if st.session_state.show_create_menu:
-    st.markdown('<div class="section-title">Crea nuova creatura</div>', unsafe_allow_html=True)
+    st.markdown('<div class="section-title">Crea Torneo</div>', unsafe_allow_html=True)
 
     st.markdown(
         """
         <div class="glass">
             <p style="color:#1f4f5d; font-weight:600; margin:0 0 0.7rem 0;">
-                Vuoi aggiungere a mano una foto o creare una riga personalizzata? Fallo qui:
+                Aggiungi una foto e personalizza i punti! Fallo qui:
             </p>
         </div>
         """,
@@ -270,7 +270,7 @@ if st.session_state.show_create_menu:
     )
 
     st.markdown(
-        "<div style='margin-top: 1rem; color: #0c5964; font-weight: 700; font-size: 1.05rem;'>Valore in Punti per questa creatura:</div>",
+        "<div style='margin-top: 1rem; color: #0c5964; font-weight: 700; font-size: 1.05rem;'>Valore Punti:</div>",
         unsafe_allow_html=True,
     )
 
