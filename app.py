@@ -276,26 +276,17 @@ else:
         
         if creatura["immagine"] is not None:
             try:
-                st.markdown(
-                    f'''
-                    <div class="creature-row">
-                        <div class="creature-image-wrap">
-                            <img src="{creatura["immagine"]}" alt="Creatura {creatura["id"]}" />
-                        </div>
-                        <div class="creature-meta">
-                            <div class="creature-name">#{creatura["id"]} · {creatura["id"]}</div>
-                        </div>
-                    </div>
-                    ''',
-                    unsafe_allow_html=True,
-                )
+                col_img, col_txt = st.columns([1, 3])
+                with col_img:
+                    st.image(creatura["immagine"], width=80)
+                with col_txt:
+                    st.markdown(f"### #{creatura['id']} · {creatura['id']}")
             except Exception:
                 st.write(f"🖼️ Creatura #{creatura['id']}")
         else:
-            st.markdown(
-                f'<div class="creature-row"><div class="creature-meta"><div class="creature-name">#{creatura["id"]} · {creatura["id"]}</div></div></div>',
-                unsafe_allow_html=True,
-            )
+            col_txt = st.columns([1, 3])[1]
+            with col_txt:
+                st.markdown(f"### #{creatura['id']} · {creatura['id']}")
 
         quantita_corrente = st.session_state.punteggi_giocatori[giocatore_utente][idx]
 
