@@ -118,8 +118,18 @@ st.markdown(
         margin: 0;
     }
 
+    .creature-title {
+        font-size: 0.95rem !important;
+        line-height: 1.2;
+        font-weight: 700;
+        text-align: left;
+        margin: 0;
+        color: #4a3728 !important;
+    }
+
     .creature-details {
         text-align: center;
+        font-size: 0.9rem;
         margin-top: 6px;
     }
 
@@ -315,13 +325,13 @@ else:
                 with col_img:
                     st.image(creatura["immagine"], width=80)
                 with col_txt:
-                    st.markdown(f"### #{creatura['id']} · {nome_creatura}")
+                    st.markdown(f"<div class='creature-title'>{nome_creatura}</div>", unsafe_allow_html=True)
             except Exception:
                 st.write(f"🖼️ {nome_creatura}")
         else:
             col_txt = st.columns([1, 3])[1]
             with col_txt:
-                st.markdown(f"### #{creatura['id']} · {nome_creatura}")
+                st.markdown(f"<div class='creature-title'>{nome_creatura}</div>", unsafe_allow_html=True)
 
         quantita_corrente = st.session_state.punteggi_giocatori[giocatore_utente][idx]
         totale_riga = creatura["punti"] * quantita_corrente
