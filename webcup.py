@@ -419,7 +419,7 @@ if st.session_state.active_hero_button == "Tornei":
     )
     st.session_state.selected_tournament = selected_tournament
 
-    with st.expander("Partecipanti", expanded=False):
+    with st.expander("Isolani", expanded=False):
         for idx in range(12):
             slot = st.session_state.participant_slots[idx]
             checkbox_col, name_col = st.columns([0.3, 2.5])
