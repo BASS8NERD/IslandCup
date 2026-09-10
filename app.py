@@ -203,8 +203,10 @@ st.markdown(
         line-height: 1.2;
         font-weight: 700;
         text-align: center;
-        margin: 0;
+        margin: 0 auto;
         color: #4a3728 !important;
+        display: inline-block;
+        width: 100%;
     }
 
     .creature-details {
