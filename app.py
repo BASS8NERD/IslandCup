@@ -39,20 +39,7 @@ st.markdown(
         box-shadow: 0px 4px 6px rgba(0,0,0,0.05);
     }        .creature-card [data-testid="stVerticalBlock"] {
         align-items: center !important;
-    }     .title-emoji {
-        font-size: min(7vw, 34px);
-        display: inline-block;
-    } 
-    
-    /* Incolla le nuove righe esattamente qui */
-    div[data-testid="stImage"] img {
-        margin: 0 auto !important;
-        display: block !important;
-        width: 65px !important;
-        height: auto !important;
     }
-    </style>
-
 
 
     /* Centra il testo del Valore */
