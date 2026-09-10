@@ -1,171 +1,204 @@
+import base64
+from pathlib import Path
+
 import streamlit as st
 
-# Configurazione della pagina ottimizzata per smartphone
+
+def to_data_uri_from_file(file_or_path):
+    if file_or_path is None:
+        return None
+
+    if hasattr(file_or_path, "read"):
+        raw = file_or_path.read()
+        filename = getattr(file_or_path, "name", "image")
+    else:
+        path = Path(file_or_path)
+        if not path.is_absolute():
+            path = Path(__file__).resolve().parent / path
+        if not path.exists():
+            return None
+        raw = path.read_bytes()
+        filename = path.name
+
+    if filename.lower().endswith(".png"):
+        mime = "image/png"
+    elif filename.lower().endswith((".jpg", ".jpeg")):
+        mime = "image/jpeg"
+    elif filename.lower().endswith(".webp"):
+        mime = "image/webp"
+    else:
+        mime = "image/png"
+
+    encoded = base64.b64encode(raw).decode("utf-8")
+    return f"data:{mime};base64,{encoded}"
+
+
+def resolve_image_source(value, creature_id):
+    if value is None:
+        return None
+
+    if hasattr(value, "read"):
+        return value
+
+    if isinstance(value, Path):
+        path = value if value.is_absolute() else Path(__file__).resolve().parent / value
+        return path if path.exists() else None
+
+    if isinstance(value, str):
+        raw_name = value.strip()
+        candidates = [raw_name]
+
+        if not raw_name.lower().endswith((".png", ".jpg", ".jpeg", ".webp")):
+            candidates.extend([
+                f"{raw_name}.png",
+                f"{raw_name}.jpg",
+                f"{raw_name}.jpeg",
+                f"{raw_name}.webp",
+                f"{creature_id}.png",
+                f"{creature_id}.jpg",
+                f"{creature_id}.jpeg",
+                f"{creature_id}.webp",
+            ])
+
+        for candidate in candidates:
+            path = Path(candidate)
+            if not path.is_absolute():
+                path = Path(__file__).resolve().parent / candidate
+            if path.exists():
+                return path
+
+        if isinstance(creature_id, int):
+            for pattern in [
+                f"*{creature_id}*.png",
+                f"*{creature_id}*.jpg",
+                f"*{creature_id}*.jpeg",
+                f"*{creature_id}*.webp",
+            ]:
+                matches = list(Path(__file__).resolve().parent.glob(pattern))
+                if matches:
+                    return matches[0]
+
+    return None
+
+
 st.set_page_config(page_title="Island Cup Tracker", page_icon="🏝️", layout="centered")
 
-# --- STILE GRAFICO APPOSITAMENTE STRUTTURATO PER CELLULARI ---
 st.markdown(
     """
     <style>
-    /* Sfondo e colori generali dell'isola */
-        .stApp { background-color: #e0f7fa; }
-    h1, h2, h3, p, label, .stMarkdown, span, div { color: #4a3728 !important; }
-    
-    /* Riquadri dei menu espandibili */
-    .stExpander, div[data-baseweb="select"] { 
-        background-color: #f4ebd9 !important; 
-        border-radius: 12px; 
-    }
-    
-    /* Pulsanti verdi grandi, facili da premere col pollice */
-    div.stButton > button {
-        background-color: #78b159 !important; 
-        color: white !important;
-        border: none !important; 
-        border-radius: 10px !important; 
-        font-weight: bold !important;
-        padding: 10px !important;
-        font-size: 1.1rem !important;
-    }
-    
-    /* Stile speciale per i riquadri delle singole creature marine */
-    .creature-card {
-        background-color: #f4ebd9;
-        border: 2px solid #e2d4b7;
-        border-radius: 15px;
-        padding: 12px;
-        margin-bottom: 15px;
-        text-align: center;
-        box-shadow: 0px 4px 6px rgba(0,0,0,0.05);
-    }        .creature-card [data-testid="stVerticalBlock"] {
-        align-items: center !important;
-    }
+        .stApp {
+            background-color: #e0f7fa;
+        }
 
+        h1, h2, h3, p, label, .stMarkdown, span, div {
+            color: #4a3728 !important;
+        }
 
-    /* Centra il testo del Valore */
-    div[data-testid="stMarkdownContainer"] {
-        text-align: center !important;
-    }
-    /* Centra il selettore numerico della Quantità */
-    div[data-testid="stNumberInput"] {
-        display: flex !important;
-        flex-direction: column !important;
-        align-items: center !important;
-    }
+        .stExpander, div[data-baseweb="select"] {
+            background-color: #f4ebd9 !important;
+            border-radius: 12px;
+        }
 
+        div.stButton > button {
+            background-color: #78b159 !important;
+            color: white !important;
+            border: none !important;
+            border-radius: 10px !important;
+            font-weight: bold !important;
+            padding: 10px !important;
+            font-size: 1.1rem !important;
+        }
 
-    /* Contenitore Flexbox per mantenere il titolo fluido, centrato e su una sola riga */
-    .title-container {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        gap: 8px;
-        width: 100%;
-        margin-bottom: 10px;
-    }
+        .page {
+            max-width: 440px;
+            margin: 0 auto;
+        }
 
-    .title-text {
-        font-family: 'Source Sans Pro', sans-serif;
-        font-weight: bold;
-        letter-spacing: 1px;
-        text-align: center;
-        white-space: nowrap;
-        /* Usa le unità vw per adattarsi fluidamente alla larghezza dello schermo */
-        font-size: min(6.5vw, 32px); 
-    }
+        .item {
+            margin: 12px 0;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(74, 55, 40, 0.12);
+        }
 
-    .title-emoji {
-        font-size: min(7vw, 34px);
-        display: inline-block;
-    }
+        .row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            width: 100%;
+            min-height: 72px;
+        }
 
-    /* Card creature: immagine a sinistra, nome a destra, info sotto */
-    .creature-row {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        width: 100%;
-        margin-bottom: 8px;
-    }
+        .img-wrap {
+            flex: 0 0 64px;
+            width: 64px;
+            height: 64px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 12px;
+            overflow: hidden;
+            background: #f4ebd9;
+        }
 
-    .creature-image-wrap {
-        flex: 0 0 auto;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        min-width: 80px;
-    }
+        .img-wrap img {
+            width: 64px;
+            height: 64px;
+            object-fit: contain;
+            display: block;
+            margin: 0;
+        }
 
-    .creature-image-wrap img {
-        display: block !important;
-        width: min(22vw, 80px) !important;
-        height: min(22vw, 80px) !important;
-        max-width: 80px !important;
-        max-height: 80px !important;
-        object-fit: contain !important;
-        border-radius: 10px !important;
-    }
+        .name {
+            flex: 1;
+            font-size: 0.95rem;
+            font-weight: 700;
+            line-height: 1.2;
+            text-align: left;
+            color: #4a3728;
+        }
 
-    .creature-meta {
-        flex: 1;
-        text-align: left;
-        font-weight: 600;
-        line-height: 1.3;
-    }
+        .bottom {
+            display: flex;
+            justify-content: center;
+            gap: 18px;
+            font-size: 0.8rem;
+            margin-top: 6px;
+            color: #4a3728;
+        }
 
-    .creature-meta .creature-name {
-        font-size: 0.95rem;
-        margin: 0;
-    }
+        div[data-testid="stNumberInput"] {
+            display: flex !important;
+            flex-direction: column !important;
+            align-items: center !important;
+        }
 
-    .creature-title {
-        font-size: 0.95rem !important;
-        line-height: 1.2;
-        font-weight: 700;
-        text-align: left;
-        margin: 0;
-        color: #4a3728 !important;
-    }
+        .title-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            width: 100%;
+            margin-bottom: 10px;
+        }
 
-    div[data-testid="stHorizontalBlock"] {
-        display: flex !important;
-        justify-content: center !important;
-        align-items: center !important;
-        gap: 10px !important;
-        width: 100% !important;
-    }
+        .title-text {
+            font-family: 'Source Sans Pro', sans-serif;
+            font-weight: bold;
+            letter-spacing: 1px;
+            text-align: center;
+            white-space: nowrap;
+            font-size: min(6.5vw, 32px);
+        }
 
-    div[data-testid="stHorizontalBlock"] > div {
-        display: flex !important;
-        align-items: center !important;
-        flex: 0 0 auto !important;
-    }
-
-    div[data-testid="stHorizontalBlock"] > div:last-child {
-        justify-content: flex-start !important;
-        text-align: left !important;
-    }
-
-    [data-testid="stImage"] {
-        display: flex !important;
-        justify-content: center !important;
-        align-items: center !important;
-    }
-
-    .creature-details {
-        text-align: center;
-        font-size: 0.9rem;
-        margin-top: 6px;
-    }
-
-    div[data-testid="stImageFilter"] { display: flex !important; justify-content: center !important; } img { margin: 0 auto !important; display: block !important; }
-
+        .title-emoji {
+            font-size: min(7vw, 34px);
+            display: inline-block;
+        }
     </style>
     """,
-    unsafe_allow_html=True
+    unsafe_allow_html=True,
 )
 
-# Inizializzazione variabili di sessione nel browser locale
 if "creature" not in st.session_state:
     st.session_state.creature = []
 if "nomi_giocatori" not in st.session_state:
@@ -177,13 +210,11 @@ if "giocatori_attivi" not in st.session_state:
 if "tipo_torneo_precedente" not in st.session_state:
     st.session_state.tipo_torneo_precedente = "🗺️ Scegli un torneo..."
 
-# Recuperiamo il tipo di torneo o usiamo quello predefinito per il titolo iniziale
 tipo_torneo_attuale = st.session_state.get("tipo_torneo_precedente", "🗺️ Scegli un torneo...")
 nome_torneo_pulito = tipo_torneo_attuale.split(" ", 1)[-1] if " " in tipo_torneo_attuale else tipo_torneo_attuale
 if nome_torneo_pulito == "Scegli un torneo...":
     nome_torneo_pulito = "ISLAND CUP"
 
-# --- TITOLO REATTIVO FLUIDO E SEMPRE CENTRATO ---
 st.markdown(
     f"""
     <div class="title-container">
@@ -191,21 +222,28 @@ st.markdown(
         <span class="title-text">{nome_torneo_pulito.upper()}</span>
         <span class="title-emoji">🌴</span>
     </div>
-    """, 
-    unsafe_allow_html=True
+    """,
+    unsafe_allow_html=True,
 )
 st.write("---")
 
-# --- PANNELLI DI CONFIGURAZIONE COMPATTI E SIMMETRICI CON LE NUOVE EMOTICON ---
-
-# 1. NUOVA ICONA: COPPA
 with st.expander("🏆 TORNEI ISOLANI"):
     st.write("Scegli quale competizione avviare:")
     tipo_torneo = st.selectbox(
         "Seleziona torneo:",
-        ["🗺️ Scegli un torneo...", "🌊 Torneo Creature Marine (40 Creature)", "🎣 Torneo di Pesca", "🦋 Torneo Insetti"],
+        [
+            "🗺️ Scegli un torneo...",
+            "🌊 Torneo Creature Marine (40 Creature)",
+            "🎣 Torneo di Pesca",
+            "🦋 Torneo Insetti",
+        ],
         label_visibility="collapsed",
-        index=["🗺️ Scegli un torneo...", "🌊 Torneo Creature Marine (40 Creature)", "🎣 Torneo di Pesca", "🦋 Torneo Insetti"].index(tipo_torneo_attuale)
+        index=[
+            "🗺️ Scegli un torneo...",
+            "🌊 Torneo Creature Marine (40 Creature)",
+            "🎣 Torneo di Pesca",
+            "🦋 Torneo Insetti",
+        ].index(tipo_torneo_attuale),
     )
 
 if tipo_torneo != st.session_state.tipo_torneo_precedente:
@@ -251,7 +289,7 @@ if tipo_torneo != st.session_state.tipo_torneo_precedente:
             {"id": 37, "nome": "Ananas Di Mare", "punti": 5, "immagine": "37.png"},
             {"id": 38, "nome": "Anguilla Di Giardino", "punti": 4, "immagine": "38.png"},
             {"id": 39, "nome": "Verme Piatto", "punti": 3, "immagine": "39.png"},
-            {"id": 40, "nome": "Cestello Di Venere", "punti": 7, "immagine": "40.png"}
+            {"id": 40, "nome": "Cestello Di Venere", "punti": 7, "immagine": "40.png"},
         ]
     elif tipo_torneo == "🎣 Torneo di Pesca":
         st.session_state.creature = [{"id": "P1", "nome": "Pesce 1", "punti": 3, "immagine": None}]
@@ -259,12 +297,12 @@ if tipo_torneo != st.session_state.tipo_torneo_precedente:
         st.session_state.creature = [{"id": "I1", "nome": "Insetto 1", "punti": 2, "immagine": None}]
     else:
         st.session_state.creature = []
-        
+
     for player_id in st.session_state.punteggi_giocatori:
         st.session_state.punteggi_giocatori[player_id] = [0] * len(st.session_state.creature)
+
     st.rerun()
 
-# 2. NUOVA ICONA: JOYPAD
 with st.expander("🎮 ISOLANI"):
     st.write("Spunta chi partecipa al torneo attuale e scrivi i loro nomi:")
     partecipanti_scelti = []
@@ -280,28 +318,26 @@ with st.expander("🎮 ISOLANI"):
                 st.session_state.nomi_giocatori[id_p] = nuovo_nome.strip()
     st.session_state.giocatori_attivi = partecipanti_scelti
 
-# 3. NUOVA ICONA: MARTELLO E CHIAVE INGLESE
 with st.expander("🛠️ TORNEO FAI DA TE"):
-    st.write("Vuoi aggiungere a mano una foto o creare una riga personalizzata? Fallo qui:")
-    punti_nuova_creatura = st.number_input("Valore in Punti per questa creatura:", min_value=0, max_value=100, value=2, key="nuovi_punti_c")
-    file_foto_nuovo = st.file_uploader("Sfoglia e Carica la Foto dal dispositivo:", type=["png", "jpg", "jpeg"], key="nuovo_upload_c")
-    
-    if st.button("✨ AGGIUNGI ALLA TABELLA IN BASSO", use_container_width=True):
+    st.write("Aggiungi una creatura manuale:")
+    punti_nuova_creatura = st.number_input("Valore in Punti:", min_value=0, max_value=100, value=2, key="nuovi_punti_c")
+    file_foto_nuovo = st.file_uploader("Foto:", type=["png", "jpg", "jpeg"], key="nuovo_upload_c")
+
+    if st.button("✨ AGGIUNGI ALLA TABELLA", use_container_width=True):
         nuovo_id = len(st.session_state.creature) + 1
         st.session_state.creature.append({
             "id": nuovo_id,
             "nome": f"Creatura {nuovo_id}",
             "punti": punti_nuova_creatura,
-            "immagine": file_foto_nuovo
+            "immagine": file_foto_nuovo,
         })
         for player_id in st.session_state.punteggi_giocatori:
             st.session_state.punteggi_giocatori[player_id].append(0)
-        st.success("✅ Nuova riga aggiunta con successo al tabellone!")
+        st.success("✅ Riga aggiunta!")
         st.rerun()
 
 st.write("---")
 
-# --- SCHERMATA PRINCIPALE ---
 if tipo_torneo == "🗺️ Scegli un torneo...":
     st.info("👋 Apri il pannello '🏆 TORNEI ISOLANI' in alto per iniziare!")
 elif not st.session_state.giocatori_attivi:
@@ -309,15 +345,15 @@ elif not st.session_state.giocatori_attivi:
 else:
     opzioni_menu = {id_p: st.session_state.nomi_giocatori[id_p] for id_p in st.session_state.giocatori_attivi}
     giocatore_utente = st.selectbox(
-        "📱 Di chi sono le catture che stai inserendo?", 
+        "📱 Di chi sono le catture che stai inserendo?",
         list(opzioni_menu.keys()),
         format_func=lambda x: opzioni_menu[x],
-        key="utente_locale"
+        key="utente_locale",
     )
-    
+
     nome_visualizzato = st.session_state.nomi_giocatori[giocatore_utente]
     st.write(f"### 🎣 Tabellone di: **{nome_visualizzato}**")
-    
+
     with st.container():
         st.subheader("🏆 Classifica Torneo")
         classifica = {}
@@ -326,54 +362,60 @@ else:
             totale_player = sum(st.session_state.creature[i]["punti"] * lista_qta[i] for i in range(len(st.session_state.creature)))
             nome_reale = st.session_state.nomi_giocatori[player_id]
             classifica[nome_reale] = (totale_player, player_id)
-            
+
         classifica_ordinata = sorted(classifica.items(), key=lambda x: x[1][0], reverse=True)
-        
+
         for i, (nome_reale, (punti_totali, player_id)) in enumerate(classifica_ordinata, 1):
             emoji = "🥇" if i == 1 else "🥈" if i == 2 else "🥉" if i == 3 else "👤"
             if player_id == giocatore_utente:
                 st.markdown(f"### 👉 {emoji} {i}° {nome_reale}: **{punti_totali} PT**")
             else:
                 st.markdown(f"### {emoji} {i}° {nome_reale}: {punti_totali} PT")
-                
+
     st.write("---")
     st.subheader("📝 Inserisci Catture")
-    
-   # Generazione a SCHEDE VERTICALI (Card)
+
+    st.markdown('<div class="page">', unsafe_allow_html=True)
+
     for idx, creatura in enumerate(st.session_state.creature):
-        st.markdown(f'<div class="creature-card">', unsafe_allow_html=True)
-        
         nome_creatura = creatura.get("nome", f"Creatura {creatura['id']}")
-        if creatura["immagine"] is not None:
-            try:
-                col_img, col_txt = st.columns([1, 3])
-                with col_img:
-                    st.image(creatura["immagine"], width=80)
-                with col_txt:
-                    st.markdown(f"<div class='creature-title'>{nome_creatura}</div>", unsafe_allow_html=True)
-            except Exception:
-                st.write(f"🖼️ {nome_creatura}")
-        else:
-            col_txt = st.columns([1, 3])[1]
-            with col_txt:
-                st.markdown(f"<div class='creature-title'>{nome_creatura}</div>", unsafe_allow_html=True)
+        image_source = resolve_image_source(creatura.get("immagine"), creatura.get("id"))
 
         quantita_corrente = st.session_state.punteggi_giocatori[giocatore_utente][idx]
         totale_riga = creatura["punti"] * quantita_corrente
+
+        img_html = ""
+        if image_source is not None:
+            image_data = to_data_uri_from_file(image_source)
+            if image_data:
+                img_html = f'<div class="img-wrap"><img src="{image_data}" alt="{nome_creatura}" /></div>'
+
         st.markdown(
-            f'<div class="creature-details"><strong>Valore:</strong> {creatura["punti"]} | <strong>Totale:</strong> {totale_riga}</div>',
+            f"""
+            <div class="item">
+                <div class="row">
+                    {img_html}
+                    <div class="name">{nome_creatura}</div>
+                </div>
+                <div class="bottom">
+                    <span>Valore: {creatura["punti"]}</span>
+                    <span>Totale: {totale_riga}</span>
+                </div>
+            </div>
+            """,
             unsafe_allow_html=True,
         )
-        
+
         nuova_qta = st.number_input(
             f"Quantità per {nome_creatura}",
             min_value=0,
             value=quantita_corrente,
             key=f"qta_{giocatore_utente}_{idx}",
-            label_visibility="collapsed"
+            label_visibility="collapsed",
         )
+
         if nuova_qta != quantita_corrente:
             st.session_state.punteggi_giocatori[giocatore_utente][idx] = nuova_qta
             st.rerun()
-            
-        st.markdown('</div>', unsafe_allow_html=True)
+
+    st.markdown("</div>", unsafe_allow_html=True)
