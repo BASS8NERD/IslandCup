@@ -231,13 +231,15 @@ else:
         
         if creatura["immagine"] is not None:
             try:                
-                col_sx, col_cx, col_dx = st.columns([3.5 , 1, 3.5])
-                with col_cx:
-                    st.image(creatura["immagine"], use_container_width=True)
+                st.markdown(
+                    f'<div style="display: flex; justify-content: center; width: 100%;"><img src="https://githubusercontent.com{creatura["immagine"]}" style="width: 65px; height: auto; display: block;"></div>', 
+                    unsafe_allow_html=True
+                )
             except Exception:
                 st.write(f"🖼️ Creatura #{creatura['id']}")
         else:
             st.write(f"✨ #{creatura['id']}")
+
             
         quantita_corrente = st.session_state.punteggi_giocatori[giocatore_utente][idx]
 
