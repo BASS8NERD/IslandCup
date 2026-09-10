@@ -145,10 +145,9 @@ st.markdown(
     """
     <div class="hero">
         <div class="eyebrow">🌊 CUP OF THE ISLANDS</div>
-        <h1>Il tuo torneo da sogno, in una dashboard tutta da vivere.</h1>
+        <h1>Il tuo torneo da sogno!</h1>
         <p>
-            Organizza tornei, monitora i risultati e tiene sempre sotto controllo la classifica con un'esperienza moderna,
-            chiara e piena di energia marina.
+            Organizza tornei, monitora i risultati e tieni sempre sotto controllo la classifica!
         </p>
         <div class="pill-row">
             <span class="pill">Tornei</span>
