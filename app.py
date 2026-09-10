@@ -86,6 +86,7 @@ st.markdown(
         align-items: center !important;
         width: 100% !important;
         max-width: 100% !important;
+        margin: 0 auto !important;
     }
 
     .creature-card img {
@@ -97,6 +98,10 @@ st.markdown(
         max-height: 80px !important;
         object-fit: contain !important;
         border-radius: 10px !important;
+    }
+
+    .creature-card [data-testid="stHorizontalBlock"] {
+        justify-content: center !important;
     }
 
     div[data-testid="stImageFilter"] { display: flex !important; justify-content: center !important; } img { margin: 0 auto !important; display: block !important; }
