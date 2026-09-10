@@ -5,6 +5,7 @@ st.set_page_config(page_title="Island Cup Tracker", page_icon="🏝️", layout=
 st.markdown(
     """
     <style>
+    div[data-testid="stImageFilter"] { display: flex !important; justify-content: center !important; }
     /* Centra e rimpicciolisce le immagini delle creature sullo smartphone */
     div[data-testid="stImage"] img {
         margin: 0 auto !important;
