@@ -176,19 +176,52 @@ with st.expander("🏆 TORNEI ISOLANI"):
 if tipo_torneo != st.session_state.tipo_torneo_precedente:
     st.session_state.tipo_torneo_precedente = tipo_torneo
     if tipo_torneo == "🌊 Torneo Creature Marine (40 Creature)":
-        punti_creature = {
-            1: 2, 2: 2, 3: 3, 4: 9, 5: 3, 6: 4, 7: 6, 8: 2, 9: 3, 10: 3,
-            11: 6, 12: 4, 13: 4, 14: 4, 15: 4, 16: 4, 17: 6, 18: 9, 19: 6, 20: 5,
-            21: 7, 22: 9, 23: 4, 24: 6, 25: 6, 26: 8, 27: 9, 28: 2, 29: 8, 30: 6,
-            31: 4, 32: 6, 33: 6, 34: 7, 35: 9, 36: 5, 37: 5, 38: 4, 39: 3, 40: 7
-        }
         st.session_state.creature = [
-            {"id": i, "punti": punti_creature[i], "immagine": f"{i}.png"} for i in range(1, 41)
+            {"id": 1, "nome": "Alga Wakame", "punti": 2, "immagine": "1.png"},
+            {"id": 2, "nome": "Vite Di Mare", "punti": 2, "immagine": "2.png"},
+            {"id": 3, "nome": "Cetriolo Di Mare", "punti": 3, "immagine": "3.png"},
+            {"id": 4, "nome": "Porcellino Di Mare", "punti": 9, "immagine": "4.png"},
+            {"id": 5, "nome": "Stella Marina", "punti": 3, "immagine": "5.png"},
+            {"id": 6, "nome": "Riccio Di Mare", "punti": 4, "immagine": "6.png"},
+            {"id": 7, "nome": "Riccio Matita", "punti": 6, "immagine": "7.png"},
+            {"id": 8, "nome": "Anemone Di Mare", "punti": 2, "immagine": "8.png"},
+            {"id": 9, "nome": "Medusa Aurelia", "punti": 3, "immagine": "9.png"},
+            {"id": 10, "nome": "Nudibranchi", "punti": 3, "immagine": "10.png"},
+            {"id": 11, "nome": "Ostrica Pinctada", "punti": 6, "immagine": "11.png"},
+            {"id": 12, "nome": "Cozza", "punti": 4, "immagine": "12.png"},
+            {"id": 13, "nome": "Ostrica", "punti": 4, "immagine": "13.png"},
+            {"id": 14, "nome": "Capasanta", "punti": 4, "immagine": "14.png"},
+            {"id": 15, "nome": "Buccino", "punti": 4, "immagine": "15.png"},
+            {"id": 16, "nome": "Lumaca Turbante", "punti": 4, "immagine": "16.png"},
+            {"id": 17, "nome": "Abalone", "punti": 6, "immagine": "17.png"},
+            {"id": 18, "nome": "Tridacna Gigante", "punti": 9, "immagine": "18.png"},
+            {"id": 19, "nome": "Nautilus", "punti": 6, "immagine": "19.png"},
+            {"id": 20, "nome": "Polpo", "punti": 5, "immagine": "20.png"},
+            {"id": 21, "nome": "Polpo Ombrello", "punti": 7, "immagine": "21.png"},
+            {"id": 22, "nome": "Calamaro Vampiro", "punti": 9, "immagine": "22.png"},
+            {"id": 23, "nome": "Calamaro Lucciola", "punti": 4, "immagine": "23.png"},
+            {"id": 24, "nome": "Granchio Gazami", "punti": 6, "immagine": "24.png"},
+            {"id": 25, "nome": "Granciporro", "punti": 6, "immagine": "25.png"},
+            {"id": 26, "nome": "Granchio Della Neve", "punti": 8, "immagine": "26.png"},
+            {"id": 27, "nome": "Granchio Gigante", "punti": 9, "immagine": "27.png"},
+            {"id": 28, "nome": "Dente Di Cane", "punti": 2, "immagine": "28.png"},
+            {"id": 29, "nome": "Granchio Gigante Del Giappone", "punti": 8, "immagine": "29.png"},
+            {"id": 30, "nome": "Gambero Black Tiger", "punti": 6, "immagine": "30.png"},
+            {"id": 31, "nome": "Gamberetto Boreale", "punti": 4, "immagine": "31.png"},
+            {"id": 32, "nome": "Gambero Mantide", "punti": 6, "immagine": "32.png"},
+            {"id": 33, "nome": "Aragosta Mediterranea", "punti": 6, "immagine": "33.png"},
+            {"id": 34, "nome": "Astice", "punti": 7, "immagine": "34.png"},
+            {"id": 35, "nome": "Isopode Gigante", "punti": 9, "immagine": "35.png"},
+            {"id": 36, "nome": "Granchio Ferro Di Cavallo", "punti": 5, "immagine": "36.png"},
+            {"id": 37, "nome": "Ananas Di Mare", "punti": 5, "immagine": "37.png"},
+            {"id": 38, "nome": "Anguilla Di Giardino", "punti": 4, "immagine": "38.png"},
+            {"id": 39, "nome": "Verme Piatto", "punti": 3, "immagine": "39.png"},
+            {"id": 40, "nome": "Cestello Di Venere", "punti": 7, "immagine": "40.png"}
         ]
     elif tipo_torneo == "🎣 Torneo di Pesca":
-        st.session_state.creature = [{"id": "P1", "punti": 3, "immagine": None}]
+        st.session_state.creature = [{"id": "P1", "nome": "Pesce 1", "punti": 3, "immagine": None}]
     elif tipo_torneo == "🦋 Torneo Insetti":
-        st.session_state.creature = [{"id": "I1", "punti": 2, "immagine": None}]
+        st.session_state.creature = [{"id": "I1", "nome": "Insetto 1", "punti": 2, "immagine": None}]
     else:
         st.session_state.creature = []
         
@@ -222,6 +255,7 @@ with st.expander("🛠️ TORNEO FAI DA TE"):
         nuovo_id = len(st.session_state.creature) + 1
         st.session_state.creature.append({
             "id": nuovo_id,
+            "nome": f"Creatura {nuovo_id}",
             "punti": punti_nuova_creatura,
             "immagine": file_foto_nuovo
         })
@@ -274,27 +308,30 @@ else:
     for idx, creatura in enumerate(st.session_state.creature):
         st.markdown(f'<div class="creature-card">', unsafe_allow_html=True)
         
+        nome_creatura = creatura.get("nome", f"Creatura {creatura['id']}")
         if creatura["immagine"] is not None:
             try:
                 col_img, col_txt = st.columns([1, 3])
                 with col_img:
                     st.image(creatura["immagine"], width=80)
                 with col_txt:
-                    st.markdown(f"### #{creatura['id']} · {creatura['id']}")
+                    st.markdown(f"### #{creatura['id']} · {nome_creatura}")
             except Exception:
-                st.write(f"🖼️ Creatura #{creatura['id']}")
+                st.write(f"🖼️ {nome_creatura}")
         else:
             col_txt = st.columns([1, 3])[1]
             with col_txt:
-                st.markdown(f"### #{creatura['id']} · {creatura['id']}")
+                st.markdown(f"### #{creatura['id']} · {nome_creatura}")
 
         quantita_corrente = st.session_state.punteggi_giocatori[giocatore_utente][idx]
-
         totale_riga = creatura["punti"] * quantita_corrente
-        st.markdown(f'<div class="creature-details"><strong>Valore:</strong> {creatura["punti"]} Pt | <strong>Totale:</strong> {totale_riga} Pt</div>', unsafe_allow_html=True)
+        st.markdown(
+            f'<div class="creature-details"><strong>Valore:</strong> {creatura["punti"]} | <strong>Totale:</strong> {totale_riga}</div>',
+            unsafe_allow_html=True,
+        )
         
         nuova_qta = st.number_input(
-            f"Quantità per #{creatura['id']}",
+            f"Quantità per {nome_creatura}",
             min_value=0,
             value=quantita_corrente,
             key=f"qta_{giocatore_utente}_{idx}",
