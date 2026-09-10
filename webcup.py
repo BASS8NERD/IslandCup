@@ -162,6 +162,7 @@ st.markdown(
             <span class="pill">Classifiche</span>
             <span class="pill">Isole</span>
             <span class="pill">Eventi</span>
+            <span class="pill" style="cursor:pointer;">Crea</span>
             <span class="pill">Invita</span>
             <span class="pill">Info</span>
         </div>
@@ -170,30 +171,7 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-st.markdown(
-    """
-    <style>
-        div.stButton > button {
-            background: rgba(255,255,255,0.14);
-            color: #ecfeff;
-            border: 1px solid rgba(255,255,255,0.22);
-            border-radius: 999px;
-            padding: 0.45rem 0.9rem;
-            font-size: 0.80rem;
-            font-weight: 600;
-            box-shadow: none;
-            margin-top: -0.65rem;
-            margin-bottom: 1rem;
-        }
-        div.stButton > button:hover {
-            background: rgba(255,255,255,0.22);
-        }
-    </style>
-    """,
-    unsafe_allow_html=True,
-)
-
-if st.button("Crea", key="toggle_create_menu"):
+if st.button("Crea", key="toggle_create_menu", use_container_width=False):
     st.session_state.show_create_menu = not st.session_state.show_create_menu
 
 cols = st.columns(4)
