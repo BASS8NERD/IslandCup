@@ -129,13 +129,21 @@ st.markdown(
 
     div[data-testid="stHorizontalBlock"] {
         display: flex !important;
+        justify-content: center !important;
         align-items: center !important;
+        gap: 10px !important;
         width: 100% !important;
     }
 
     div[data-testid="stHorizontalBlock"] > div {
         display: flex !important;
         align-items: center !important;
+        flex: 0 0 auto !important;
+    }
+
+    div[data-testid="stHorizontalBlock"] > div:last-child {
+        justify-content: flex-start !important;
+        text-align: left !important;
     }
 
     [data-testid="stImage"] {
