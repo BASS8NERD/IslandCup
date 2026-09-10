@@ -8,46 +8,46 @@ st.set_page_config(
 )
 
 MARINE_CREATURES = [
-    {"Creatura": "Polpo", "Foto": "🐙", "Valore": 10},
-    {"Creatura": "Pesce pagliaccio", "Foto": "🐠", "Valore": 12},
-    {"Creatura": "Tonno", "Foto": "🐟", "Valore": 15},
-    {"Creatura": "Gambero", "Foto": "🦐", "Valore": 18},
-    {"Creatura": "Granchio", "Foto": "🦀", "Valore": 20},
-    {"Creatura": "Medusa", "Foto": "🪼", "Valore": 22},
-    {"Creatura": "Delfino", "Foto": "🐬", "Valore": 25},
-    {"Creatura": "Murena", "Foto": "🐍", "Valore": 28},
-    {"Creatura": "Cavaliere di mare", "Foto": "🦑", "Valore": 30},
-    {"Creatura": "Squalo bianco", "Foto": "🦈", "Valore": 32},
-    {"Creatura": "Mazzancolla", "Foto": "🦐", "Valore": 18},
-    {"Creatura": "Riccio di mare", "Foto": "🌵", "Valore": 16},
-    {"Creatura": "Seppia", "Foto": "🦑", "Valore": 26},
-    {"Creatura": "Orata", "Foto": "🐟", "Valore": 12},
-    {"Creatura": "Gattufo di mare", "Foto": "🐡", "Valore": 17},
-    {"Creatura": "Anemone", "Foto": "🌊", "Valore": 14},
-    {"Creatura": "Piccola razza", "Foto": "🐠", "Valore": 11},
-    {"Creatura": "Manta", "Foto": "🦭", "Valore": 33},
-    {"Creatura": "Barbo", "Foto": "🐟", "Valore": 13},
-    {"Creatura": "Cefalo", "Foto": "🐡", "Valore": 19},
-    {"Creatura": "Tartaruga marina", "Foto": "🐢", "Valore": 35},
-    {"Creatura": "Calamaro", "Foto": "🦑", "Valore": 24},
-    {"Creatura": "Pesce luna", "Foto": "🐠", "Valore": 21},
-    {"Creatura": "Sardina", "Foto": "🐟", "Valore": 10},
-    {"Creatura": "Balena", "Foto": "🐋", "Valore": 40},
-    {"Creatura": "Foca", "Foto": "🦭", "Valore": 27},
-    {"Creatura": "Gabbiano marino", "Foto": "🐦", "Valore": 15},
-    {"Creatura": "Conchiglia", "Foto": "🐚", "Valore": 9},
-    {"Creatura": "Nautilo", "Foto": "🐙", "Valore": 23},
-    {"Creatura": "Cavalluccio marino", "Foto": "🐠", "Valore": 16},
-    {"Creatura": "Elicide", "Foto": "🐚", "Valore": 14},
-    {"Creatura": "Pesce palla", "Foto": "🐡", "Valore": 20},
-    {"Creatura": "Stella marina", "Foto": "⭐", "Valore": 13},
-    {"Creatura": "Pesce angelo", "Foto": "🐟", "Valore": 24},
-    {"Creatura": "Barracuda", "Foto": "🐠", "Valore": 29},
-    {"Creatura": "Corallo", "Foto": "🪸", "Valore": 12},
-    {"Creatura": "Canocchia", "Foto": "🌿", "Valore": 8},
-    {"Creatura": "Rombo", "Foto": "🐟", "Valore": 31},
-    {"Creatura": "Sogliola", "Foto": "🐠", "Valore": 18},
-    {"Creatura": "Squid", "Foto": "🦑", "Valore": 22},
+    {"Foto": "1.png", "Valore": 2},
+    {"Foto": "2.png", "Valore": 2},
+    {"Foto": "3.png", "Valore": 3},
+    {"Foto": "4.png", "Valore": 9},
+    {"Foto": "5.png", "Valore": 3},
+    {"Foto": "6.png", "Valore": 4},
+    {"Foto": "7.png", "Valore": 6},
+    {"Foto": "8.png", "Valore": 2},
+    {"Foto": "9.png", "Valore": 3},
+    {"Foto": "10.png", "Valore": 3},
+    {"Foto": "11.png", "Valore": 6},
+    {"Foto": "12.png", "Valore": 4},
+    {"Foto": "13.png", "Valore": 4},
+    {"Foto": "14.png", "Valore": 4},
+    {"Foto": "15.png", "Valore": 4},
+    {"Foto": "16.png", "Valore": 4},
+    {"Foto": "17.png", "Valore": 6},
+    {"Foto": "18.png", "Valore": 9},
+    {"Foto": "19.png", "Valore": 6},
+    {"Foto": "20.png", "Valore": 5},
+    {"Foto": "21.png", "Valore": 7},
+    {"Foto": "22.png", "Valore": 9},
+    {"Foto": "23.png", "Valore": 4},
+    {"Foto": "24.png", "Valore": 6},
+    {"Foto": "25.png", "Valore": 6},
+    {"Foto": "26.png", "Valore": 8},
+    {"Foto": "27.png", "Valore": 9},
+    {"Foto": "28.png", "Valore": 2},
+    {"Foto": "29.png", "Valore": 8},
+    {"Foto": "30.png", "Valore": 6},
+    {"Foto": "31.png", "Valore": 4},
+    {"Foto": "32.png", "Valore": 6},
+    {"Foto": "33.png", "Valore": 6},
+    {"Foto": "34.png", "Valore": 7},
+    {"Foto": "35.png", "Valore": 9},
+    {"Foto": "36.png", "Valore": 5},
+    {"Foto": "37.png", "Valore": 5},
+    {"Foto": "38.png", "Valore": 4},
+    {"Foto": "39.png", "Valore": 3},
+    {"Foto": "40.png", "Valore": 7},
 ]
 
 TOURNAMENTS = {
@@ -106,9 +106,9 @@ def get_active_participants():
 
 def build_capture_frame(tournament_name):
     rows = []
-    for item in TOURNAMENTS.get(tournament_name, []):
+    for index, item in enumerate(TOURNAMENTS.get(tournament_name, []), start=1):
         rows.append({
-            "Creatura": item.get("Creatura", "Creatura"),
+            "Creatura": item.get("Creatura", f"Creatura {index}"),
             "Foto": item.get("Foto", ""),
             "Valore": int(item.get("Valore", 0)),
             "Quantità": 0,
@@ -283,68 +283,68 @@ for col, label in zip(hero_columns, hero_labels):
         elif clicked:
             st.session_state.active_hero_button = label
 
-# Base panels
-cols = st.columns(4)
-metrics = [
-    ("24", "Tornei attivi"),
-    ("8.4k", "Partecipanti"),
-    ("96%", "Engagement"),
-    ("12", "Eventi in corso"),
-]
-for col, (value, label) in zip(cols, metrics):
-    with col:
-        st.markdown(
-            f'<div class="metric-card"><div class="value">{value}</div><div class="label">{label}</div></div>',
-            unsafe_allow_html=True,
-        )
+if st.session_state.active_hero_button != "Tornei" and st.session_state.active_hero_button != "Classifiche" and st.session_state.active_hero_button != "Eventi":
+    # Base panels shown only on home-like landing page
+    cols = st.columns(4)
+    metrics = [
+        ("24", "Tornei attivi"),
+        ("8.4k", "Partecipanti"),
+        ("96%", "Engagement"),
+        ("12", "Eventi in corso"),
+    ]
+    for col, (value, label) in zip(cols, metrics):
+        with col:
+            st.markdown(
+                f'<div class="metric-card"><div class="value">{value}</div><div class="label">{label}</div></div>',
+                unsafe_allow_html=True,
+            )
 
-st.markdown('<div class="section-title">Cosa puoi fare</div>', unsafe_allow_html=True)
-features = [
-    ("🏆", "Tornei dinamici", "Crea competizioni personalizzate, impostando regole, date e gruppi di partecipazione in pochi secondi."),
-    ("📊", "Classifiche live", "Segui i punteggi in tempo reale e scopri subito chi guida la classifica generale."),
-    ("🎯", "Gestione eventi", "Organizza sfide, premi e momenti speciali per coinvolgere tutta la community."),
-]
-feature_cols = st.columns(3)
-for col, (icon, title, text) in zip(feature_cols, features):
-    with col:
+    st.markdown('<div class="section-title">Cosa puoi fare</div>', unsafe_allow_html=True)
+    features = [
+        ("🏆", "Tornei dinamici", "Crea competizioni personalizzate, impostando regole, date e gruppi di partecipazione in pochi secondi."),
+        ("📊", "Classifiche live", "Segui i punteggi in tempo reale e scopri subito chi guida la classifica generale."),
+    ]
+    feature_cols = st.columns(2)
+    for col, (icon, title, text) in zip(feature_cols, features):
+        with col:
+            st.markdown(
+                f"""
+                <div class="feature-box">
+                    <span class="icon">{icon}</span>
+                    <h3>{title}</h3>
+                    <p>{text}</p>
+                </div>
+                """,
+                unsafe_allow_html=True,
+            )
+
+    st.markdown('<div class="section-title">Panoramica</div>', unsafe_allow_html=True)
+    left, right = st.columns([1.2, 0.8])
+    with left:
         st.markdown(
-            f"""
-            <div class="feature-box">
-                <span class="icon">{icon}</span>
-                <h3>{title}</h3>
-                <p>{text}</p>
+            """
+            <div class="glass">
+                <h3 style="color:#0c5964; margin-top:0;">La tua isola, in ordine</h3>
+                <p style="color:#3f5c63; line-height:1.7; margin:0;">
+                    Un sistema pensato per tenere organizzati tornei, classifiche e momenti speciali in un unico ambiente.
+                    Ogni sezione è progettata per essere chiara, veloce e adatta a chi vuole gestire tutto con pochi click.
+                </p>
             </div>
             """,
             unsafe_allow_html=True,
         )
-
-st.markdown('<div class="section-title">Panoramica</div>', unsafe_allow_html=True)
-left, right = st.columns([1.2, 0.8])
-with left:
-    st.markdown(
-        """
-        <div class="glass">
-            <h3 style="color:#0c5964; margin-top:0;">La tua isola, in ordine</h3>
-            <p style="color:#3f5c63; line-height:1.7; margin:0;">
-                Un sistema pensato per tenere organizzati tornei, classifiche e momenti speciali in un unico ambiente.
-                Ogni sezione è progettata per essere chiara, veloce e adatta a chi vuole gestire tutto con pochi click.
-            </p>
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
-with right:
-    st.markdown(
-        """
-        <div class="glass">
-            <h3 style="color:#0c5964; margin-top:0;">Stato</h3>
-            <p style="color:#3f5c63; margin:0 0 0.5rem 0;">✅ Sistema operativo</p>
-            <p style="color:#3f5c63; margin:0 0 0.5rem 0;">✅ Dashboard pronta</p>
-            <p style="color:#3f5c63; margin:0;">✅ Tema turchese attivo</p>
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
+    with right:
+        st.markdown(
+            """
+            <div class="glass">
+                <h3 style="color:#0c5964; margin-top:0;">Stato</h3>
+                <p style="color:#3f5c63; margin:0 0 0.5rem 0;">✅ Sistema operativo</p>
+                <p style="color:#3f5c63; margin:0 0 0.5rem 0;">✅ Dashboard pronta</p>
+                <p style="color:#3f5c63; margin:0;">✅ Tema turchese attivo</p>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
 
 if st.session_state.active_hero_button == "Tornei":
     st.markdown('<div class="section-title">Tornei disponibili</div>', unsafe_allow_html=True)
@@ -357,6 +357,12 @@ if st.session_state.active_hero_button == "Tornei":
     st.session_state.selected_tournament = selected_tournament
 
     st.markdown("<div style='margin-top: 1rem; color: #0c5964; font-weight: 700; font-size: 1.05rem;'>Partecipanti attivi</div>", unsafe_allow_html=True)
+    st.selectbox(
+        "Seleziona partecipanti",
+        [f"{slot.get('name', f'Giocatore {idx + 1}')}: {'attivo' if slot.get('selected', False) else 'disattivo'}" for idx, slot in enumerate(st.session_state.participant_slots)],
+        index=0,
+        label_visibility="collapsed",
+    )
     for idx in range(12):
         slot = st.session_state.participant_slots[idx]
         checkbox_col, name_col = st.columns([0.3, 2.5])
@@ -388,28 +394,29 @@ if st.session_state.active_hero_button == "Tornei":
 
         table = st.session_state.capture_data[selected_name].copy()
         table["Totale"] = table["Valore"] * table["Quantità"]
+        table = table[["Foto", "Valore", "Quantità", "Totale"]]
         edited = st.data_editor(
             table,
             use_container_width=True,
             hide_index=True,
-            disabled=["Creatura", "Foto", "Valore", "Totale"],
+            disabled=["Foto", "Valore", "Totale"],
             column_config={
-                "Creatura": st.column_config.TextColumn("Creatura", width="large"),
                 "Foto": st.column_config.TextColumn("Foto", width="small"),
                 "Valore": st.column_config.NumberColumn("Valore", format="%d"),
                 "Quantità": st.column_config.NumberColumn("Quantità", min_value=0, max_value=999),
                 "Totale": st.column_config.NumberColumn("Totale", format="%d"),
             },
+            height=420,
         )
         edited["Totale"] = edited["Valore"] * edited["Quantità"]
         st.session_state.capture_data[selected_name] = edited
 
         total_creature_count = int(edited["Quantità"].sum())
         total_points = int(edited["Totale"].sum())
-        score_cols = st.columns(2)
-        with score_cols[0]:
+        total_cols = st.columns(2)
+        with total_cols[0]:
             st.metric("Totale creature prese", total_creature_count)
-        with score_cols[1]:
+        with total_cols[1]:
             st.metric("Totale punti", total_points)
 
 elif st.session_state.active_hero_button == "Classifiche":
@@ -446,6 +453,10 @@ elif st.session_state.active_hero_button == "Classifiche":
                 "Totale punti": st.column_config.NumberColumn("Totale punti", format="%d"),
             },
         )
+
+elif st.session_state.active_hero_button == "Eventi":
+    st.markdown('<div class="section-title">Eventi</div>', unsafe_allow_html=True)
+    st.info("Qui potrai creare e gestire gli eventi del torneo.")
 
 if st.session_state.show_create_menu:
     st.markdown('<div class="section-title">Crea nuova creatura</div>', unsafe_allow_html=True)
