@@ -80,7 +80,6 @@ TOURNAMENTS = {
         {"Creatura": "Mix 3", "Foto": "🦋", "Valore": 24},
         {"Creatura": "Mix 4", "Foto": "🐟", "Valore": 32},
     ],
-    "Torneo Fai Da Te": [],
 }
 if "creature_points" not in st.session_state:
     st.session_state.creature_points = 1
