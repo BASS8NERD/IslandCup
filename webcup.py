@@ -330,9 +330,6 @@ st.markdown(
         div[data-testid="stDataFrame"] {
             overflow: hidden !important;
             max-height: 720px !important;
-            pointer-events: none !important;
-            touch-action: none !important;
-            user-select: none !important;
         }
 
         div[data-testid="stDataFrame"] > div {
@@ -501,18 +498,7 @@ if st.session_state.active_hero_button == "Tornei":
             custom_table["Totale"] = custom_table["Valore"] * custom_table["Quantità"]
             custom_table = custom_table[["Foto", "Valore", "Quantità", "Totale"]]
             st.session_state.custom_tournament_rows = custom_table
-            st.dataframe(
-                custom_table,
-                use_container_width=True,
-                hide_index=True,
-                height=720,
-                column_config={
-                    "Foto": st.column_config.ImageColumn("Foto", width="small"),
-                    "Valore": st.column_config.NumberColumn("Valore", format="%d"),
-                    "Quantità": st.column_config.NumberColumn("Quantità", min_value=0, max_value=999),
-                    "Totale": st.column_config.NumberColumn("Totale", format="%d"),
-                },
-            )
+            st.table(custom_table)
 
     with st.expander("Partecipanti", expanded=False):
         st.markdown(
@@ -553,17 +539,8 @@ if st.session_state.active_hero_button == "Tornei":
         table = table[["Foto", "Valore", "Quantità", "Totale"]]
         table["Totale"] = table["Valore"] * table["Quantità"]
         st.session_state.capture_data[selected_name] = table
-        st.dataframe(
-            table[["Foto", "Valore", "Quantità", "Totale"]],
-            use_container_width=True,
-            hide_index=True,
-            height=720,
-            column_config={
-                "Foto": st.column_config.ImageColumn("Foto", width="small"),
-                "Valore": st.column_config.NumberColumn("Valore", format="%d"),
-                "Quantità": st.column_config.NumberColumn("Quantità", min_value=0, max_value=999),
-                "Totale": st.column_config.NumberColumn("Totale", format="%d"),
-            },
+        st.table(
+            table[["Foto", "Valore", "Quantità", "Totale"]]
         )
 
         edited = st.session_state.capture_data[selected_name]
@@ -626,3 +603,4 @@ elif st.session_state.active_hero_button == "Eventi":
     st.info("Qui potrai creare e gestire gli eventi del torneo.")
 
 st.caption("Prototipo homepage - CUP OF THE ISLANDS")
+
