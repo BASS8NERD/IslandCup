@@ -328,12 +328,20 @@ st.markdown(
         }
 
         div[data-testid="stDataFrame"] {
-            overflow: hidden !important;
+            overflow-x: auto !important;
+            overflow-y: hidden !important;
             max-height: 720px !important;
+            width: 100% !important;
         }
 
         div[data-testid="stDataFrame"] > div {
-            overflow: hidden !important;
+            overflow-x: auto !important;
+        }
+
+        @media (max-width: 768px) {
+            div[data-testid="stDataFrame"] {
+                font-size: 0.82rem !important;
+            }
         }
     </style>
     """,
@@ -536,58 +544,42 @@ if st.session_state.active_hero_button == "Tornei":
 
         table = st.session_state.capture_data[selected_name].copy()
         table["Totale"] = table["Valore"] * table["Quantità"]
-        table = table[["Foto", "Valore", "Quantità", "Totale"]]
-        table["Totale"] = table["Valore"] * table["Quantità"]
-        st.session_state.capture_data[selected_name] = table
-        table = st.session_state.capture_data[selected_name].copy()
-        table["Totale"] = table["Valore"] * table["Quantità"]
-
-        header_cols = st.columns([1.4, 0.9, 0.9, 0.9])
-        headers = ["Foto", "Valore", "Quantità", "Totale"]
-        for col, header in zip(header_cols, headers):
-            with col:
-                st.markdown(
-                    f"<div style='text-align:center; font-weight:800; color:#0c5964; padding-bottom:0.4rem;'>{header}</div>",
-                    unsafe_allow_html=True,
-                )
-
-        for idx, row in table.iterrows():
-            cols = st.columns([1.4, 0.9, 0.9, 0.9])
-            with cols[0]:
-                photo = row["Foto"]
-                if isinstance(photo, str) and photo.startswith("http"):
-                    st.image(photo, width=52)
-                else:
-                    st.markdown(
-                        f"<div style='text-align:center; font-size:1.6rem;'>{photo}</div>",
-                        unsafe_allow_html=True,
-                    )
-            with cols[1]:
-                st.markdown(
-                    f"<div style='text-align:center; font-weight:700; color:#0d6d7b;'>{int(row['Valore'])}</div>",
-                    unsafe_allow_html=True,
-                )
-            with cols[2]:
-                qty_value = int(row["Quantità"]) if pd.notna(row["Quantità"]) else 0
-                new_qty = st.number_input(
-                    "",
+        edited = st.data_editor(
+            table[["Foto", "Valore", "Quantità", "Totale"]].copy(),
+            hide_index=True,
+            num_rows="fixed",
+            use_container_width=True,
+            disabled=["Totale"],
+            column_config={
+                "Foto": st.column_config.ImageColumn(
+                    "Foto",
+                    width="small",
+                    help="Miniatura dell'esemplare",
+                ),
+                "Valore": st.column_config.NumberColumn(
+                    "Valore",
                     min_value=0,
                     step=1,
-                    value=qty_value,
-                    key=f"qty_{selected_name}_{idx}_{st.session_state.selected_tournament}".replace(" ", "_"),
-                    label_visibility="collapsed",
-                )
-                table.at[idx, "Quantità"] = int(new_qty)
-                table.at[idx, "Totale"] = int(new_qty) * int(row["Valore"])
-            with cols[3]:
-                st.markdown(
-                    f"<div style='text-align:center; font-weight:700; color:#0d6d7b;'>{int(table.at[idx, 'Totale'])}</div>",
-                    unsafe_allow_html=True,
-                )
-
-        st.session_state.capture_data[selected_name] = table
-
-        edited = st.session_state.capture_data[selected_name]
+                    format="%d",
+                ),
+                "Quantità": st.column_config.NumberColumn(
+                    "Quantità",
+                    min_value=0,
+                    step=1,
+                    format="%d",
+                ),
+                "Totale": st.column_config.NumberColumn(
+                    "Totale",
+                    min_value=0,
+                    step=1,
+                    format="%d",
+                    disabled=True,
+                ),
+            },
+            key=f"editor_{selected_name}_{st.session_state.selected_tournament}".replace(" ", "_"),
+        )
+        edited["Totale"] = edited["Valore"] * edited["Quantità"]
+        st.session_state.capture_data[selected_name] = edited
 
         total_creature_count = int(edited["Quantità"].sum())
         total_points = int(edited["Totale"].sum())
