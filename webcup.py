@@ -148,6 +148,53 @@ def make_custom_rows_from_uploaded(uploaded_files, points):
     return pd.DataFrame(rows, columns=["Foto", "Valore", "Quantità", "Totale"])
 
 
+def render_html_table(df, columns=None):
+    if df is None or df.empty:
+        st.info("Nessun dato da mostrare.")
+        return
+
+    display_df = df.copy()
+    if columns is not None:
+        display_df = display_df[columns]
+
+    display_df = display_df.fillna("")
+
+    def format_cell(value):
+        if isinstance(value, str):
+            cleaned = value.strip()
+            if cleaned.startswith("http://") or cleaned.startswith("https://"):
+                return f'<img src="{cleaned}" alt="foto" style="width: 52px; height: 52px; object-fit: cover; border-radius: 10px; display: block;" />'
+            if cleaned.startswith("data:image"):
+                return f'<img src="{cleaned}" alt="foto" style="width: 52px; height: 52px; object-fit: cover; border-radius: 10px; display: block;" />'
+            if cleaned in {"🐠", "🐡", "🐟", "🦐", "🦋", "🐝", "🪲", "🦗"}:
+                return f'<div style="font-size: 1.8rem; text-align: center;">{cleaned}</div>'
+            return str(cleaned)
+        if isinstance(value, (int, float)):
+            return str(int(value)) if float(value).is_integer() else str(value)
+        return str(value)
+
+    table_columns = list(display_df.columns)
+    thead = "".join(f"<th>{column}</th>" for column in table_columns)
+    rows_html = []
+    for _, row in display_df.iterrows():
+        cells = "".join(f"<td>{format_cell(row[column])}</td>" for column in table_columns)
+        rows_html.append(f"<tr>{cells}</tr>")
+
+    html = f"""
+    <div class="table-shell">
+        <table class="custom-html-table">
+            <thead>
+                <tr>{thead}</tr>
+            </thead>
+            <tbody>
+                {''.join(rows_html)}
+            </tbody>
+        </table>
+    </div>
+    """
+    st.markdown(html, unsafe_allow_html=True)
+
+
 if st.session_state.selected_tournament != st.session_state.last_tournament:
     for participant in get_active_participants():
         st.session_state.capture_data[participant] = build_capture_frame(st.session_state.selected_tournament)
@@ -327,40 +374,56 @@ st.markdown(
             background: transparent !important;
         }
 
-        div[data-testid="stDataFrame"],
-        div[data-testid="stTable"] {
-            overflow-x: hidden !important;
-            overflow-y: visible !important;
-            max-height: none !important;
-            height: auto !important;
+        .table-shell {
             width: 100% !important;
-            max-width: 100% !important;
-            min-width: 0 !important;
-            box-sizing: border-box !important;
-        }
-
-        div[data-testid="stDataFrame"] > div,
-        div[data-testid="stTable"] > div {
             overflow: visible !important;
-            min-width: 0 !important;
-            width: 100% !important;
-            max-width: 100% !important;
-            max-height: none !important;
-            height: auto !important;
+            margin-top: 0.75rem;
         }
 
-        div[data-testid="stDataFrame"] > div > table,
-        div[data-testid="stTable"] > table {
+        .custom-html-table {
             width: 100% !important;
-            table-layout: fixed !important;
-            max-height: none !important;
-            height: auto !important;
+            border-collapse: collapse !important;
+            table-layout: auto !important;
+            background: rgba(255,255,255,0.72) !important;
+            border: 1px solid rgba(12, 135, 154, 0.18) !important;
+            border-radius: 14px !important;
+            overflow: hidden !important;
+        }
+
+        .custom-html-table th,
+        .custom-html-table td {
+            padding: 0.65rem 0.8rem !important;
+            border-bottom: 1px solid rgba(12, 135, 154, 0.12) !important;
+            text-align: left !important;
+            vertical-align: middle !important;
+            white-space: normal !important;
+            color: #1d4c56 !important;
+        }
+
+        .custom-html-table th {
+            background: rgba(214, 247, 250, 0.9) !important;
+            color: #0c5964 !important;
+            font-weight: 800 !important;
+            font-size: 0.82rem !important;
+        }
+
+        .custom-html-table td {
+            font-size: 0.85rem !important;
+        }
+
+        .custom-html-table img {
+            display: block !important;
+            width: 52px !important;
+            height: 52px !important;
+            object-fit: cover !important;
+            border-radius: 10px !important;
         }
 
         @media (max-width: 768px) {
-            div[data-testid="stDataFrame"],
-            div[data-testid="stTable"] {
-                font-size: 0.82rem !important;
+            .custom-html-table th,
+            .custom-html-table td {
+                padding: 0.5rem 0.45rem !important;
+                font-size: 0.72rem !important;
             }
         }
     </style>
@@ -511,7 +574,7 @@ if st.session_state.active_hero_button == "Tornei":
             custom_table["Totale"] = custom_table["Valore"] * custom_table["Quantità"]
             custom_table = custom_table[["Foto", "Valore", "Quantità", "Totale"]]
             st.session_state.custom_tournament_rows = custom_table
-            st.table(custom_table)
+            render_html_table(custom_table, ["Foto", "Valore", "Quantità", "Totale"])
 
     with st.expander("Partecipanti", expanded=False):
         st.markdown(
@@ -549,42 +612,10 @@ if st.session_state.active_hero_button == "Tornei":
 
         table = st.session_state.capture_data[selected_name].copy()
         table["Totale"] = table["Valore"] * table["Quantità"]
-        edited = st.data_editor(
-            table[["Foto", "Valore", "Quantità", "Totale"]].copy(),
-            hide_index=True,
-            num_rows="fixed",
-            use_container_width=True,
-            disabled=["Totale"],
-            column_config={
-                "Foto": st.column_config.ImageColumn(
-                    "Foto",
-                    width="small",
-                    help="Miniatura dell'esemplare",
-                ),
-                "Valore": st.column_config.NumberColumn(
-                    "Valore",
-                    min_value=0,
-                    step=1,
-                    format="%d",
-                ),
-                "Quantità": st.column_config.NumberColumn(
-                    "Quantità",
-                    min_value=0,
-                    step=1,
-                    format="%d",
-                ),
-                "Totale": st.column_config.NumberColumn(
-                    "Totale",
-                    min_value=0,
-                    step=1,
-                    format="%d",
-                    disabled=True,
-                ),
-            },
-            key=f"editor_{selected_name}_{st.session_state.selected_tournament}".replace(" ", "_"),
-        )
-        edited["Totale"] = edited["Valore"] * edited["Quantità"]
+        edited = table[["Foto", "Valore", "Quantità", "Totale"]].copy()
         st.session_state.capture_data[selected_name] = edited
+
+        render_html_table(edited, ["Foto", "Valore", "Quantità", "Totale"])
 
         total_creature_count = int(edited["Quantità"].sum())
         total_points = int(edited["Totale"].sum())
@@ -635,7 +666,7 @@ elif st.session_state.active_hero_button == "Classifiche":
         leaderboard.insert(0, "Posizione", range(1, len(leaderboard) + 1))
         leaderboard_display = leaderboard[["Posizione", "Nome partecipante", "Quantità", "Totale punti"]].copy()
         leaderboard_display["Totale punti"] = leaderboard_display["Totale punti"].map(int)
-        st.table(leaderboard_display)
+        render_html_table(leaderboard_display, ["Posizione", "Nome partecipante", "Quantità", "Totale punti"])
 
 elif st.session_state.active_hero_button == "Eventi":
     st.markdown('<div class="section-title">Eventi</div>', unsafe_allow_html=True)
