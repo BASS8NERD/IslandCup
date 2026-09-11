@@ -539,9 +539,41 @@ if st.session_state.active_hero_button == "Tornei":
         table = table[["Foto", "Valore", "Quantità", "Totale"]]
         table["Totale"] = table["Valore"] * table["Quantità"]
         st.session_state.capture_data[selected_name] = table
-        st.table(
-            table[["Foto", "Valore", "Quantità", "Totale"]]
-        )
+        header_cols = st.columns([1.3, 1.0, 0.8, 0.9])
+        headers = ["Foto", "Valore", "Quantità", "Totale"]
+        for col, header in zip(header_cols, headers):
+            with col:
+                st.markdown(
+                    f"<div style='text-align:center; font-weight:800; color:#0c5964; padding-bottom:0.4rem;'>{header}</div>",
+                    unsafe_allow_html=True,
+                )
+
+        for _, row in table.iterrows():
+            cols = st.columns([1.3, 1.0, 0.8, 0.9])
+            with cols[0]:
+                photo = row["Foto"]
+                if isinstance(photo, str) and photo.startswith("http"):
+                    st.image(photo, width=54)
+                else:
+                    st.markdown(
+                        f"<div style='text-align:center; font-size:1.6rem;'>{photo}</div>",
+                        unsafe_allow_html=True,
+                    )
+            with cols[1]:
+                st.markdown(
+                    f"<div style='text-align:center; font-weight:700; color:#0d6d7b;'>{int(row['Valore'])}</div>",
+                    unsafe_allow_html=True,
+                )
+            with cols[2]:
+                st.markdown(
+                    f"<div style='text-align:center; font-weight:700; color:#0d6d7b;'>{int(row['Quantità'])}</div>",
+                    unsafe_allow_html=True,
+                )
+            with cols[3]:
+                st.markdown(
+                    f"<div style='text-align:center; font-weight:700; color:#0d6d7b;'>{int(row['Totale'])}</div>",
+                    unsafe_allow_html=True,
+                )
 
         edited = st.session_state.capture_data[selected_name]
 
@@ -592,11 +624,9 @@ elif st.session_state.active_hero_button == "Classifiche":
         leaderboard = pd.DataFrame(leaderboard_rows)
         leaderboard = leaderboard.sort_values(["Totale punti", "Quantità"], ascending=[False, False]).reset_index(drop=True)
         leaderboard.insert(0, "Posizione", range(1, len(leaderboard) + 1))
-        st.table(
-            leaderboard[["Posizione", "Nome partecipante", "Quantità", "Totale punti"]].assign(
-                **{"Totale punti": leaderboard["Totale punti"].map(int)}
-            )
-        )
+        leaderboard_display = leaderboard[["Posizione", "Nome partecipante", "Quantità", "Totale punti"]].copy()
+        leaderboard_display["Totale punti"] = leaderboard_display["Totale punti"].map(int)
+        st.table(leaderboard_display)
 
 elif st.session_state.active_hero_button == "Eventi":
     st.markdown('<div class="section-title">Eventi</div>', unsafe_allow_html=True)
