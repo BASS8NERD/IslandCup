@@ -328,16 +328,14 @@ st.markdown(
         }
 
         div[data-testid="stDataFrame"] {
-            overflow: visible !important;
-            max-height: none !important;
-            height: auto !important;
+            overflow-x: auto !important;
+            overflow-y: hidden !important;
+            max-height: 720px !important;
             width: 100% !important;
         }
 
         div[data-testid="stDataFrame"] > div {
-            overflow: visible !important;
-            max-height: none !important;
-            height: auto !important;
+            overflow-x: auto !important;
         }
 
         @media (max-width: 768px) {
