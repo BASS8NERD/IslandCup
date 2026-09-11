@@ -264,7 +264,208 @@ INSECT_CREATURES = [
     {"Creatura": "Insetto 80", "Foto": f"{GITHUB_RAW_BASE}/200.png", "Valore": 10},
 ]
 
-MIX_CREATURES = MARINE_CREATURES + FISHING_CREATURES + INSECT_CREATURES
+MIX_CREATURES = [
+    {"Creatura": "Mix 1", "Foto": f"{GITHUB_RAW_BASE}/201.png", "Valore": 10},
+    {"Creatura": "Mix 2", "Foto": f"{GITHUB_RAW_BASE}/202.png", "Valore": 10},
+    {"Creatura": "Mix 3", "Foto": f"{GITHUB_RAW_BASE}/203.png", "Valore": 10},
+    {"Creatura": "Mix 4", "Foto": f"{GITHUB_RAW_BASE}/204.png", "Valore": 10},
+    {"Creatura": "Mix 5", "Foto": f"{GITHUB_RAW_BASE}/205.png", "Valore": 10},
+    {"Creatura": "Mix 6", "Foto": f"{GITHUB_RAW_BASE}/206.png", "Valore": 10},
+    {"Creatura": "Mix 7", "Foto": f"{GITHUB_RAW_BASE}/207.png", "Valore": 10},
+    {"Creatura": "Mix 8", "Foto": f"{GITHUB_RAW_BASE}/208.png", "Valore": 10},
+    {"Creatura": "Mix 9", "Foto": f"{GITHUB_RAW_BASE}/209.png", "Valore": 10},
+    {"Creatura": "Mix 10", "Foto": f"{GITHUB_RAW_BASE}/210.png", "Valore": 10},
+    {"Creatura": "Mix 11", "Foto": f"{GITHUB_RAW_BASE}/211.png", "Valore": 10},
+    {"Creatura": "Mix 12", "Foto": f"{GITHUB_RAW_BASE}/212.png", "Valore": 10},
+    {"Creatura": "Mix 13", "Foto": f"{GITHUB_RAW_BASE}/213.png", "Valore": 10},
+    {"Creatura": "Mix 14", "Foto": f"{GITHUB_RAW_BASE}/214.png", "Valore": 10},
+    {"Creatura": "Mix 15", "Foto": f"{GITHUB_RAW_BASE}/215.png", "Valore": 10},
+    {"Creatura": "Mix 16", "Foto": f"{GITHUB_RAW_BASE}/216.png", "Valore": 10},
+    {"Creatura": "Mix 17", "Foto": f"{GITHUB_RAW_BASE}/217.png", "Valore": 10},
+    {"Creatura": "Mix 18", "Foto": f"{GITHUB_RAW_BASE}/218.png", "Valore": 10},
+    {"Creatura": "Mix 19", "Foto": f"{GITHUB_RAW_BASE}/219.png", "Valore": 10},
+    {"Creatura": "Mix 20", "Foto": f"{GITHUB_RAW_BASE}/220.png", "Valore": 10},
+    {"Creatura": "Mix 21", "Foto": f"{GITHUB_RAW_BASE}/221.png", "Valore": 10},
+    {"Creatura": "Mix 22", "Foto": f"{GITHUB_RAW_BASE}/222.png", "Valore": 10},
+    {"Creatura": "Mix 23", "Foto": f"{GITHUB_RAW_BASE}/223.png", "Valore": 10},
+    {"Creatura": "Mix 24", "Foto": f"{GITHUB_RAW_BASE}/224.png", "Valore": 10},
+    {"Creatura": "Mix 25", "Foto": f"{GITHUB_RAW_BASE}/225.png", "Valore": 10},
+    {"Creatura": "Mix 26", "Foto": f"{GITHUB_RAW_BASE}/226.png", "Valore": 10},
+    {"Creatura": "Mix 27", "Foto": f"{GITHUB_RAW_BASE}/227.png", "Valore": 10},
+    {"Creatura": "Mix 28", "Foto": f"{GITHUB_RAW_BASE}/228.png", "Valore": 10},
+    {"Creatura": "Mix 29", "Foto": f"{GITHUB_RAW_BASE}/229.png", "Valore": 10},
+    {"Creatura": "Mix 30", "Foto": f"{GITHUB_RAW_BASE}/230.png", "Valore": 10},
+    {"Creatura": "Mix 31", "Foto": f"{GITHUB_RAW_BASE}/231.png", "Valore": 10},
+    {"Creatura": "Mix 32", "Foto": f"{GITHUB_RAW_BASE}/232.png", "Valore": 10},
+    {"Creatura": "Mix 33", "Foto": f"{GITHUB_RAW_BASE}/233.png", "Valore": 10},
+    {"Creatura": "Mix 34", "Foto": f"{GITHUB_RAW_BASE}/234.png", "Valore": 10},
+    {"Creatura": "Mix 35", "Foto": f"{GITHUB_RAW_BASE}/235.png", "Valore": 10},
+    {"Creatura": "Mix 36", "Foto": f"{GITHUB_RAW_BASE}/236.png", "Valore": 10},
+    {"Creatura": "Mix 37", "Foto": f"{GITHUB_RAW_BASE}/237.png", "Valore": 10},
+    {"Creatura": "Mix 38", "Foto": f"{GITHUB_RAW_BASE}/238.png", "Valore": 10},
+    {"Creatura": "Mix 39", "Foto": f"{GITHUB_RAW_BASE}/239.png", "Valore": 10},
+    {"Creatura": "Mix 40", "Foto": f"{GITHUB_RAW_BASE}/240.png", "Valore": 10},
+    {"Creatura": "Mix 41", "Foto": f"{GITHUB_RAW_BASE}/241.png", "Valore": 10},
+    {"Creatura": "Mix 42", "Foto": f"{GITHUB_RAW_BASE}/242.png", "Valore": 10},
+    {"Creatura": "Mix 43", "Foto": f"{GITHUB_RAW_BASE}/243.png", "Valore": 10},
+    {"Creatura": "Mix 44", "Foto": f"{GITHUB_RAW_BASE}/244.png", "Valore": 10},
+    {"Creatura": "Mix 45", "Foto": f"{GITHUB_RAW_BASE}/245.png", "Valore": 10},
+    {"Creatura": "Mix 46", "Foto": f"{GITHUB_RAW_BASE}/246.png", "Valore": 10},
+    {"Creatura": "Mix 47", "Foto": f"{GITHUB_RAW_BASE}/247.png", "Valore": 10},
+    {"Creatura": "Mix 48", "Foto": f"{GITHUB_RAW_BASE}/248.png", "Valore": 10},
+    {"Creatura": "Mix 49", "Foto": f"{GITHUB_RAW_BASE}/249.png", "Valore": 10},
+    {"Creatura": "Mix 50", "Foto": f"{GITHUB_RAW_BASE}/250.png", "Valore": 10},
+    {"Creatura": "Mix 51", "Foto": f"{GITHUB_RAW_BASE}/251.png", "Valore": 10},
+    {"Creatura": "Mix 52", "Foto": f"{GITHUB_RAW_BASE}/252.png", "Valore": 10},
+    {"Creatura": "Mix 53", "Foto": f"{GITHUB_RAW_BASE}/253.png", "Valore": 10},
+    {"Creatura": "Mix 54", "Foto": f"{GITHUB_RAW_BASE}/254.png", "Valore": 10},
+    {"Creatura": "Mix 55", "Foto": f"{GITHUB_RAW_BASE}/255.png", "Valore": 10},
+    {"Creatura": "Mix 56", "Foto": f"{GITHUB_RAW_BASE}/256.png", "Valore": 10},
+    {"Creatura": "Mix 57", "Foto": f"{GITHUB_RAW_BASE}/257.png", "Valore": 10},
+    {"Creatura": "Mix 58", "Foto": f"{GITHUB_RAW_BASE}/258.png", "Valore": 10},
+    {"Creatura": "Mix 59", "Foto": f"{GITHUB_RAW_BASE}/259.png", "Valore": 10},
+    {"Creatura": "Mix 60", "Foto": f"{GITHUB_RAW_BASE}/260.png", "Valore": 10},
+    {"Creatura": "Mix 61", "Foto": f"{GITHUB_RAW_BASE}/261.png", "Valore": 10},
+    {"Creatura": "Mix 62", "Foto": f"{GITHUB_RAW_BASE}/262.png", "Valore": 10},
+    {"Creatura": "Mix 63", "Foto": f"{GITHUB_RAW_BASE}/263.png", "Valore": 10},
+    {"Creatura": "Mix 64", "Foto": f"{GITHUB_RAW_BASE}/264.png", "Valore": 10},
+    {"Creatura": "Mix 65", "Foto": f"{GITHUB_RAW_BASE}/265.png", "Valore": 10},
+    {"Creatura": "Mix 66", "Foto": f"{GITHUB_RAW_BASE}/266.png", "Valore": 10},
+    {"Creatura": "Mix 67", "Foto": f"{GITHUB_RAW_BASE}/267.png", "Valore": 10},
+    {"Creatura": "Mix 68", "Foto": f"{GITHUB_RAW_BASE}/268.png", "Valore": 10},
+    {"Creatura": "Mix 69", "Foto": f"{GITHUB_RAW_BASE}/269.png", "Valore": 10},
+    {"Creatura": "Mix 70", "Foto": f"{GITHUB_RAW_BASE}/270.png", "Valore": 10},
+    {"Creatura": "Mix 71", "Foto": f"{GITHUB_RAW_BASE}/271.png", "Valore": 10},
+    {"Creatura": "Mix 72", "Foto": f"{GITHUB_RAW_BASE}/272.png", "Valore": 10},
+    {"Creatura": "Mix 73", "Foto": f"{GITHUB_RAW_BASE}/273.png", "Valore": 10},
+    {"Creatura": "Mix 74", "Foto": f"{GITHUB_RAW_BASE}/274.png", "Valore": 10},
+    {"Creatura": "Mix 75", "Foto": f"{GITHUB_RAW_BASE}/275.png", "Valore": 10},
+    {"Creatura": "Mix 76", "Foto": f"{GITHUB_RAW_BASE}/276.png", "Valore": 10},
+    {"Creatura": "Mix 77", "Foto": f"{GITHUB_RAW_BASE}/277.png", "Valore": 10},
+    {"Creatura": "Mix 78", "Foto": f"{GITHUB_RAW_BASE}/278.png", "Valore": 10},
+    {"Creatura": "Mix 79", "Foto": f"{GITHUB_RAW_BASE}/279.png", "Valore": 10},
+    {"Creatura": "Mix 80", "Foto": f"{GITHUB_RAW_BASE}/280.png", "Valore": 10},
+    {"Creatura": "Mix 81", "Foto": f"{GITHUB_RAW_BASE}/281.png", "Valore": 10},
+    {"Creatura": "Mix 82", "Foto": f"{GITHUB_RAW_BASE}/282.png", "Valore": 10},
+    {"Creatura": "Mix 83", "Foto": f"{GITHUB_RAW_BASE}/283.png", "Valore": 10},
+    {"Creatura": "Mix 84", "Foto": f"{GITHUB_RAW_BASE}/284.png", "Valore": 10},
+    {"Creatura": "Mix 85", "Foto": f"{GITHUB_RAW_BASE}/285.png", "Valore": 10},
+    {"Creatura": "Mix 86", "Foto": f"{GITHUB_RAW_BASE}/286.png", "Valore": 10},
+    {"Creatura": "Mix 87", "Foto": f"{GITHUB_RAW_BASE}/287.png", "Valore": 10},
+    {"Creatura": "Mix 88", "Foto": f"{GITHUB_RAW_BASE}/288.png", "Valore": 10},
+    {"Creatura": "Mix 89", "Foto": f"{GITHUB_RAW_BASE}/289.png", "Valore": 10},
+    {"Creatura": "Mix 90", "Foto": f"{GITHUB_RAW_BASE}/290.png", "Valore": 10},
+    {"Creatura": "Mix 91", "Foto": f"{GITHUB_RAW_BASE}/291.png", "Valore": 10},
+    {"Creatura": "Mix 92", "Foto": f"{GITHUB_RAW_BASE}/292.png", "Valore": 10},
+    {"Creatura": "Mix 93", "Foto": f"{GITHUB_RAW_BASE}/293.png", "Valore": 10},
+    {"Creatura": "Mix 94", "Foto": f"{GITHUB_RAW_BASE}/294.png", "Valore": 10},
+    {"Creatura": "Mix 95", "Foto": f"{GITHUB_RAW_BASE}/295.png", "Valore": 10},
+    {"Creatura": "Mix 96", "Foto": f"{GITHUB_RAW_BASE}/296.png", "Valore": 10},
+    {"Creatura": "Mix 97", "Foto": f"{GITHUB_RAW_BASE}/297.png", "Valore": 10},
+    {"Creatura": "Mix 98", "Foto": f"{GITHUB_RAW_BASE}/298.png", "Valore": 10},
+    {"Creatura": "Mix 99", "Foto": f"{GITHUB_RAW_BASE}/299.png", "Valore": 10},
+    {"Creatura": "Mix 100", "Foto": f"{GITHUB_RAW_BASE}/300.png", "Valore": 10},
+    {"Creatura": "Mix 101", "Foto": f"{GITHUB_RAW_BASE}/301.png", "Valore": 10},
+    {"Creatura": "Mix 102", "Foto": f"{GITHUB_RAW_BASE}/302.png", "Valore": 10},
+    {"Creatura": "Mix 103", "Foto": f"{GITHUB_RAW_BASE}/303.png", "Valore": 10},
+    {"Creatura": "Mix 104", "Foto": f"{GITHUB_RAW_BASE}/304.png", "Valore": 10},
+    {"Creatura": "Mix 105", "Foto": f"{GITHUB_RAW_BASE}/305.png", "Valore": 10},
+    {"Creatura": "Mix 106", "Foto": f"{GITHUB_RAW_BASE}/306.png", "Valore": 10},
+    {"Creatura": "Mix 107", "Foto": f"{GITHUB_RAW_BASE}/307.png", "Valore": 10},
+    {"Creatura": "Mix 108", "Foto": f"{GITHUB_RAW_BASE}/308.png", "Valore": 10},
+    {"Creatura": "Mix 109", "Foto": f"{GITHUB_RAW_BASE}/309.png", "Valore": 10},
+    {"Creatura": "Mix 110", "Foto": f"{GITHUB_RAW_BASE}/310.png", "Valore": 10},
+    {"Creatura": "Mix 111", "Foto": f"{GITHUB_RAW_BASE}/311.png", "Valore": 10},
+    {"Creatura": "Mix 112", "Foto": f"{GITHUB_RAW_BASE}/312.png", "Valore": 10},
+    {"Creatura": "Mix 113", "Foto": f"{GITHUB_RAW_BASE}/313.png", "Valore": 10},
+    {"Creatura": "Mix 114", "Foto": f"{GITHUB_RAW_BASE}/314.png", "Valore": 10},
+    {"Creatura": "Mix 115", "Foto": f"{GITHUB_RAW_BASE}/315.png", "Valore": 10},
+    {"Creatura": "Mix 116", "Foto": f"{GITHUB_RAW_BASE}/316.png", "Valore": 10},
+    {"Creatura": "Mix 117", "Foto": f"{GITHUB_RAW_BASE}/317.png", "Valore": 10},
+    {"Creatura": "Mix 118", "Foto": f"{GITHUB_RAW_BASE}/318.png", "Valore": 10},
+    {"Creatura": "Mix 119", "Foto": f"{GITHUB_RAW_BASE}/319.png", "Valore": 10},
+    {"Creatura": "Mix 120", "Foto": f"{GITHUB_RAW_BASE}/320.png", "Valore": 10},
+    {"Creatura": "Mix 121", "Foto": f"{GITHUB_RAW_BASE}/321.png", "Valore": 10},
+    {"Creatura": "Mix 122", "Foto": f"{GITHUB_RAW_BASE}/322.png", "Valore": 10},
+    {"Creatura": "Mix 123", "Foto": f"{GITHUB_RAW_BASE}/323.png", "Valore": 10},
+    {"Creatura": "Mix 124", "Foto": f"{GITHUB_RAW_BASE}/324.png", "Valore": 10},
+    {"Creatura": "Mix 125", "Foto": f"{GITHUB_RAW_BASE}/325.png", "Valore": 10},
+    {"Creatura": "Mix 126", "Foto": f"{GITHUB_RAW_BASE}/326.png", "Valore": 10},
+    {"Creatura": "Mix 127", "Foto": f"{GITHUB_RAW_BASE}/327.png", "Valore": 10},
+    {"Creatura": "Mix 128", "Foto": f"{GITHUB_RAW_BASE}/328.png", "Valore": 10},
+    {"Creatura": "Mix 129", "Foto": f"{GITHUB_RAW_BASE}/329.png", "Valore": 10},
+    {"Creatura": "Mix 130", "Foto": f"{GITHUB_RAW_BASE}/330.png", "Valore": 10},
+    {"Creatura": "Mix 131", "Foto": f"{GITHUB_RAW_BASE}/331.png", "Valore": 10},
+    {"Creatura": "Mix 132", "Foto": f"{GITHUB_RAW_BASE}/332.png", "Valore": 10},
+    {"Creatura": "Mix 133", "Foto": f"{GITHUB_RAW_BASE}/333.png", "Valore": 10},
+    {"Creatura": "Mix 134", "Foto": f"{GITHUB_RAW_BASE}/334.png", "Valore": 10},
+    {"Creatura": "Mix 135", "Foto": f"{GITHUB_RAW_BASE}/335.png", "Valore": 10},
+    {"Creatura": "Mix 136", "Foto": f"{GITHUB_RAW_BASE}/336.png", "Valore": 10},
+    {"Creatura": "Mix 137", "Foto": f"{GITHUB_RAW_BASE}/337.png", "Valore": 10},
+    {"Creatura": "Mix 138", "Foto": f"{GITHUB_RAW_BASE}/338.png", "Valore": 10},
+    {"Creatura": "Mix 139", "Foto": f"{GITHUB_RAW_BASE}/339.png", "Valore": 10},
+    {"Creatura": "Mix 140", "Foto": f"{GITHUB_RAW_BASE}/340.png", "Valore": 10},
+    {"Creatura": "Mix 141", "Foto": f"{GITHUB_RAW_BASE}/341.png", "Valore": 10},
+    {"Creatura": "Mix 142", "Foto": f"{GITHUB_RAW_BASE}/342.png", "Valore": 10},
+    {"Creatura": "Mix 143", "Foto": f"{GITHUB_RAW_BASE}/343.png", "Valore": 10},
+    {"Creatura": "Mix 144", "Foto": f"{GITHUB_RAW_BASE}/344.png", "Valore": 10},
+    {"Creatura": "Mix 145", "Foto": f"{GITHUB_RAW_BASE}/345.png", "Valore": 10},
+    {"Creatura": "Mix 146", "Foto": f"{GITHUB_RAW_BASE}/346.png", "Valore": 10},
+    {"Creatura": "Mix 147", "Foto": f"{GITHUB_RAW_BASE}/347.png", "Valore": 10},
+    {"Creatura": "Mix 148", "Foto": f"{GITHUB_RAW_BASE}/348.png", "Valore": 10},
+    {"Creatura": "Mix 149", "Foto": f"{GITHUB_RAW_BASE}/349.png", "Valore": 10},
+    {"Creatura": "Mix 150", "Foto": f"{GITHUB_RAW_BASE}/350.png", "Valore": 10},
+    {"Creatura": "Mix 151", "Foto": f"{GITHUB_RAW_BASE}/351.png", "Valore": 10},
+    {"Creatura": "Mix 152", "Foto": f"{GITHUB_RAW_BASE}/352.png", "Valore": 10},
+    {"Creatura": "Mix 153", "Foto": f"{GITHUB_RAW_BASE}/353.png", "Valore": 10},
+    {"Creatura": "Mix 154", "Foto": f"{GITHUB_RAW_BASE}/354.png", "Valore": 10},
+    {"Creatura": "Mix 155", "Foto": f"{GITHUB_RAW_BASE}/355.png", "Valore": 10},
+    {"Creatura": "Mix 156", "Foto": f"{GITHUB_RAW_BASE}/356.png", "Valore": 10},
+    {"Creatura": "Mix 157", "Foto": f"{GITHUB_RAW_BASE}/357.png", "Valore": 10},
+    {"Creatura": "Mix 158", "Foto": f"{GITHUB_RAW_BASE}/358.png", "Valore": 10},
+    {"Creatura": "Mix 159", "Foto": f"{GITHUB_RAW_BASE}/359.png", "Valore": 10},
+    {"Creatura": "Mix 160", "Foto": f"{GITHUB_RAW_BASE}/360.png", "Valore": 10},
+    {"Creatura": "Mix 161", "Foto": f"{GITHUB_RAW_BASE}/361.png", "Valore": 10},
+    {"Creatura": "Mix 162", "Foto": f"{GITHUB_RAW_BASE}/362.png", "Valore": 10},
+    {"Creatura": "Mix 163", "Foto": f"{GITHUB_RAW_BASE}/363.png", "Valore": 10},
+    {"Creatura": "Mix 164", "Foto": f"{GITHUB_RAW_BASE}/364.png", "Valore": 10},
+    {"Creatura": "Mix 165", "Foto": f"{GITHUB_RAW_BASE}/365.png", "Valore": 10},
+    {"Creatura": "Mix 166", "Foto": f"{GITHUB_RAW_BASE}/366.png", "Valore": 10},
+    {"Creatura": "Mix 167", "Foto": f"{GITHUB_RAW_BASE}/367.png", "Valore": 10},
+    {"Creatura": "Mix 168", "Foto": f"{GITHUB_RAW_BASE}/368.png", "Valore": 10},
+    {"Creatura": "Mix 169", "Foto": f"{GITHUB_RAW_BASE}/369.png", "Valore": 10},
+    {"Creatura": "Mix 170", "Foto": f"{GITHUB_RAW_BASE}/370.png", "Valore": 10},
+    {"Creatura": "Mix 171", "Foto": f"{GITHUB_RAW_BASE}/371.png", "Valore": 10},
+    {"Creatura": "Mix 172", "Foto": f"{GITHUB_RAW_BASE}/372.png", "Valore": 10},
+    {"Creatura": "Mix 173", "Foto": f"{GITHUB_RAW_BASE}/373.png", "Valore": 10},
+    {"Creatura": "Mix 174", "Foto": f"{GITHUB_RAW_BASE}/374.png", "Valore": 10},
+    {"Creatura": "Mix 175", "Foto": f"{GITHUB_RAW_BASE}/375.png", "Valore": 10},
+    {"Creatura": "Mix 176", "Foto": f"{GITHUB_RAW_BASE}/376.png", "Valore": 10},
+    {"Creatura": "Mix 177", "Foto": f"{GITHUB_RAW_BASE}/377.png", "Valore": 10},
+    {"Creatura": "Mix 178", "Foto": f"{GITHUB_RAW_BASE}/378.png", "Valore": 10},
+    {"Creatura": "Mix 179", "Foto": f"{GITHUB_RAW_BASE}/379.png", "Valore": 10},
+    {"Creatura": "Mix 180", "Foto": f"{GITHUB_RAW_BASE}/380.png", "Valore": 10},
+    {"Creatura": "Mix 181", "Foto": f"{GITHUB_RAW_BASE}/381.png", "Valore": 10},
+    {"Creatura": "Mix 182", "Foto": f"{GITHUB_RAW_BASE}/382.png", "Valore": 10},
+    {"Creatura": "Mix 183", "Foto": f"{GITHUB_RAW_BASE}/383.png", "Valore": 10},
+    {"Creatura": "Mix 184", "Foto": f"{GITHUB_RAW_BASE}/384.png", "Valore": 10},
+    {"Creatura": "Mix 185", "Foto": f"{GITHUB_RAW_BASE}/385.png", "Valore": 10},
+    {"Creatura": "Mix 186", "Foto": f"{GITHUB_RAW_BASE}/386.png", "Valore": 10},
+    {"Creatura": "Mix 187", "Foto": f"{GITHUB_RAW_BASE}/387.png", "Valore": 10},
+    {"Creatura": "Mix 188", "Foto": f"{GITHUB_RAW_BASE}/388.png", "Valore": 10},
+    {"Creatura": "Mix 189", "Foto": f"{GITHUB_RAW_BASE}/389.png", "Valore": 10},
+    {"Creatura": "Mix 190", "Foto": f"{GITHUB_RAW_BASE}/390.png", "Valore": 10},
+    {"Creatura": "Mix 191", "Foto": f"{GITHUB_RAW_BASE}/391.png", "Valore": 10},
+    {"Creatura": "Mix 192", "Foto": f"{GITHUB_RAW_BASE}/392.png", "Valore": 10},
+    {"Creatura": "Mix 193", "Foto": f"{GITHUB_RAW_BASE}/393.png", "Valore": 10},
+    {"Creatura": "Mix 194", "Foto": f"{GITHUB_RAW_BASE}/394.png", "Valore": 10},
+    {"Creatura": "Mix 195", "Foto": f"{GITHUB_RAW_BASE}/395.png", "Valore": 10},
+    {"Creatura": "Mix 196", "Foto": f"{GITHUB_RAW_BASE}/396.png", "Valore": 10},
+    {"Creatura": "Mix 197", "Foto": f"{GITHUB_RAW_BASE}/397.png", "Valore": 10},
+    {"Creatura": "Mix 198", "Foto": f"{GITHUB_RAW_BASE}/398.png", "Valore": 10},
+    {"Creatura": "Mix 199", "Foto": f"{GITHUB_RAW_BASE}/399.png", "Valore": 10},
+    {"Creatura": "Mix 200", "Foto": f"{GITHUB_RAW_BASE}/400.png", "Valore": 10},
+]
 
 TOURNAMENTS = {
     "Torneo Creature Marine": MARINE_CREATURES,
@@ -510,6 +711,8 @@ st.markdown(
             display: flex;
             align-items: center;
             gap: 0.8rem;
+            width: 100%;
+            min-height: 72px;
             background: rgba(255,255,255,0.76);
             border: 1px solid rgba(12, 135, 154, 0.12);
             border-radius: 16px;
@@ -519,40 +722,56 @@ st.markdown(
         }
 
         .custom-item-card img {
-            width: 54px;
-            height: 54px;
+            width: 58px;
+            height: 58px;
             object-fit: cover;
             border-radius: 12px;
             border: 1px solid rgba(12, 135, 154, 0.15);
             background: #f0fbfc;
+            flex-shrink: 0;
         }
 
         .custom-item-meta {
             display: flex;
             flex-direction: column;
+            justify-content: center;
             gap: 0.18rem;
             color: #0e5a66;
             font-size: 0.82rem;
             font-weight: 700;
+            min-width: 0;
+            line-height: 1.25;
+        }
+
+        .custom-item-meta .name {
+            font-size: 0.9rem;
+            font-weight: 800;
+            color: #0d5964;
+            white-space: normal;
+            word-break: break-word;
         }
 
         .custom-item-meta span {
             color: #447d8a;
             font-size: 0.74rem;
-            font-weight: 600;
+            font-weight: 700;
         }
 
         .mini-total {
             display: flex;
             align-items: center;
             justify-content: center;
-            min-height: 54px;
+            min-height: 58px;
             border-radius: 12px;
             background: linear-gradient(180deg, rgba(218,248,250,0.95), rgba(184,237,242,0.85));
             border: 1px solid rgba(12, 135, 154, 0.12);
             font-size: 1.2rem;
             font-weight: 800;
             color: #0d6d7b;
+            width: 100%;
+        }
+
+        .compact-number {
             width: 100%;
         }
 
@@ -778,25 +997,8 @@ if st.session_state.active_hero_button == "Tornei":
         for idx, row in table.iterrows():
             quantity = int(row["Quantità"])
             quantity_key = f"qty_{selected_name}_{st.session_state.selected_tournament}_{idx}".replace(" ", "_")
-            qty_col, total_col = st.columns([1, 1])
+            photo_col, meta_col, qty_col, total_col = st.columns([1.2, 3.2, 1.4, 1.1])
 
-            with qty_col:
-                q_value = st.number_input(
-                    "Quantità",
-                    min_value=0,
-                    step=1,
-                    value=quantity,
-                    key=quantity_key,
-                    label_visibility="collapsed",
-                )
-                table.at[idx, "Quantità"] = int(q_value)
-
-            with total_col:
-                total_value = int(row["Valore"] * q_value)
-                table.at[idx, "Totale"] = total_value
-                st.markdown(f"<div class=\"mini-total\">{total_value}</div>", unsafe_allow_html=True)
-
-            photo_col, meta_col = st.columns([1, 3])
             with photo_col:
                 if str(row["Foto"]).startswith("http"):
                     st.markdown(
@@ -814,13 +1016,29 @@ if st.session_state.active_hero_button == "Tornei":
                     f"""
                     <div class="custom-item-card">
                         <div class="custom-item-meta">
-                            <div>{row['Creatura']}</div>
+                            <div class="name">{row['Creatura']}</div>
                             <span>Valore: {int(row['Valore'])}</span>
                         </div>
                     </div>
                     """,
                     unsafe_allow_html=True,
                 )
+
+            with qty_col:
+                q_value = st.number_input(
+                    "Quantità",
+                    min_value=0,
+                    step=1,
+                    value=quantity,
+                    key=quantity_key,
+                    label_visibility="collapsed",
+                )
+                table.at[idx, "Quantità"] = int(q_value)
+
+            with total_col:
+                total_value = int(row["Valore"] * q_value)
+                table.at[idx, "Totale"] = total_value
+                st.markdown(f"<div class=\"mini-total\">{total_value}</div>", unsafe_allow_html=True)
 
         st.session_state.capture_data[selected_name] = table
 
