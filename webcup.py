@@ -370,21 +370,6 @@ for col, label in zip(hero_columns, hero_labels):
         if clicked:
             st.session_state.active_hero_button = label
 
-if not st.session_state.active_hero_button or st.session_state.active_hero_button in ["Isole", "Invita"]:
-    cols = st.columns(4)
-    metrics = [
-        ("24", "Tornei attivi"),
-        ("8.4k", "Partecipanti"),
-        ("96%", "Engagement"),
-        ("12", "Eventi in corso"),
-    ]
-    for col, (value, label) in zip(cols, metrics):
-        with col:
-            st.markdown(
-                f'<div class="metric-card"><div class="value">{value}</div><div class="label">{label}</div></div>',
-                unsafe_allow_html=True,
-            )
-
 if st.session_state.active_hero_button == "Info":
     st.markdown('<div class="section-title">Cosa puoi fare</div>', unsafe_allow_html=True)
     features = [
@@ -634,6 +619,19 @@ elif st.session_state.active_hero_button == "Classifiche":
 
 elif st.session_state.active_hero_button == "Eventi":
     st.markdown('<div class="section-title">Eventi</div>', unsafe_allow_html=True)
+    cols = st.columns(4)
+    metrics = [
+        ("24", "Tornei attivi"),
+        ("8.4k", "Partecipanti"),
+        ("96%", "Engagement"),
+        ("12", "Eventi in corso"),
+    ]
+    for col, (value, label) in zip(cols, metrics):
+        with col:
+            st.markdown(
+                f'<div class="metric-card"><div class="value">{value}</div><div class="label">{label}</div></div>',
+                unsafe_allow_html=True,
+            )
     st.info("Qui potrai creare e gestire gli eventi del torneo.")
 
 st.caption("Prototipo homepage - CUP OF THE ISLANDS")
