@@ -208,11 +208,110 @@ if st.session_state.selected_participant not in get_active_participants():
     active_participants = get_active_participants()
     st.session_state.selected_participant = active_participants[0] if active_participants else ""
 
+def render_html_table(df, columns=None):
+    if df is None or df.empty:
+        st.info("Nessun dato disponibile.")
+        return
+
+    if columns is None:
+        columns = list(df.columns)
+
+    def format_cell(value):
+        if value is None or pd.isna(value):
+            return ""
+        text = str(value)
+        if text.startswith(("http://", "https://", "data:image/")):
+            return f'<img src="{text}" alt="Foto" class="tournament-img" />'
+        if text in {"🐠", "🐡", "🐟", "🦐", "🦋", "🐝", "🪲", "🦗"}:
+            return text
+        return text
+
+    rows_html = []
+    for _, row in df[columns].iterrows():
+        cells = []
+        for col in columns:
+            value = row[col]
+            cell_value = format_cell(value) if col == "Foto" else format_cell(value)
+            cells.append(f"<td>{cell_value}</td>")
+        rows_html.append("<tr>" + "".join(cells) + "</tr>")
+
+    headers = "".join(f"<th>{col}</th>" for col in columns)
+    table_html = (
+        "<div class='tournament-html-wrap'>"
+        "<table class='tournament-html-table'>"
+        f"<thead><tr>{headers}</tr></thead>"
+        f"<tbody>{''.join(rows_html)}</tbody>"
+        "</table></div>"
+    )
+    st.markdown(table_html, unsafe_allow_html=True)
+
+
 st.markdown(
     """
     <style>
         .main {
             background: linear-gradient(180deg, #dffdfb 0%, #d7f7f8 30%, #f3fdfd 100%);
+        }
+
+        .tournament-html-wrap {
+            width: 100%;
+            max-width: 100%;
+            overflow: hidden;
+            margin-top: 0.8rem;
+        }
+
+        .tournament-html-table {
+            width: 100%;
+            border-collapse: collapse;
+            table-layout: fixed;
+            background: rgba(255,255,255,0.72);
+            border: 1px solid rgba(12, 135, 154, 0.18);
+            border-radius: 14px;
+            overflow: hidden;
+        }
+
+        .tournament-html-table th,
+        .tournament-html-table td {
+            padding: 0.55rem 0.6rem;
+            border-bottom: 1px solid rgba(12, 135, 154, 0.12);
+            text-align: center;
+            vertical-align: middle;
+            color: #1d5662;
+            font-size: 0.88rem;
+            word-break: break-word;
+        }
+
+        .tournament-html-table th {
+            background: rgba(198, 240, 246, 0.72);
+            color: #0d5d6d;
+            font-weight: 700;
+        }
+
+        .tournament-html-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .tournament-img {
+            display: block;
+            margin: 0 auto;
+            width: 52px;
+            height: 52px;
+            object-fit: cover;
+            border-radius: 10px;
+            border: 1px solid rgba(12, 135, 154, 0.18);
+        }
+
+        @media (max-width: 768px) {
+            .tournament-html-table th,
+            .tournament-html-table td {
+                padding: 0.45rem 0.4rem;
+                font-size: 0.72rem;
+            }
+
+            .tournament-img {
+                width: 40px;
+                height: 40px;
+            }
         }
 
         .hero {
@@ -719,3 +818,4 @@ elif st.session_state.active_hero_button == "Eventi":
     st.info("Qui potrai creare e gestire gli eventi del torneo.")
 
 st.caption("Prototipo homepage - CUP OF THE ISLANDS")
+
