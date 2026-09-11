@@ -330,7 +330,7 @@ st.markdown(
         div[data-testid="stDataFrame"],
         div[data-testid="stTable"] {
             overflow-x: hidden !important;
-            overflow-y: hidden !important;
+            overflow-y: visible !important;
             max-height: none !important;
             height: auto !important;
             width: 100% !important;
@@ -341,16 +341,19 @@ st.markdown(
 
         div[data-testid="stDataFrame"] > div,
         div[data-testid="stTable"] > div {
-            overflow: hidden !important;
+            overflow: visible !important;
             min-width: 0 !important;
             width: 100% !important;
             max-width: 100% !important;
+            max-height: none !important;
+            height: auto !important;
         }
 
         div[data-testid="stDataFrame"] > div > table,
         div[data-testid="stTable"] > table {
             width: 100% !important;
             table-layout: fixed !important;
+            max-height: none !important;
         }
 
         @media (max-width: 768px) {
