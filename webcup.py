@@ -330,21 +330,29 @@ st.markdown(
         div[data-testid="stDataFrame"],
         div[data-testid="stTable"] {
             overflow-x: auto !important;
-            overflow-y: visible !important;
+            overflow-y: hidden !important;
             max-height: none !important;
             height: auto !important;
             width: 100% !important;
+            max-width: 100% !important;
+            min-width: 0 !important;
+            box-sizing: border-box !important;
+            scrollbar-gutter: stable both-edges !important;
         }
 
         div[data-testid="stDataFrame"] > div,
         div[data-testid="stTable"] > div {
             overflow: visible !important;
+            min-width: 0 !important;
+            width: max-content !important;
+            max-width: 100% !important;
         }
 
         @media (max-width: 768px) {
             div[data-testid="stDataFrame"],
             div[data-testid="stTable"] {
                 font-size: 0.82rem !important;
+                scrollbar-gutter: stable !important;
             }
         }
     </style>
