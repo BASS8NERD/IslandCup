@@ -131,11 +131,11 @@ def build_capture_frame(tournament_name):
 
 def make_image_cell(uploaded_file):
     if uploaded_file is None:
-        return "Nessuna foto"
+        return ""
     try:
-        return Image.open(io.BytesIO(uploaded_file.getvalue()))
+        return uploaded_file.getvalue()
     except Exception:
-        return uploaded_file.name
+        return str(uploaded_file)
 
 
 def make_custom_rows_from_uploaded(uploaded_files, points):
@@ -317,6 +317,27 @@ st.markdown(
             margin-top: 0.4rem;
             letter-spacing: 0.02em;
         }
+
+        div[data-testid="stExpander"] {
+            border: 1px solid rgba(12, 135, 154, 0.18) !important;
+            border-radius: 18px !important;
+            background: rgba(255,255,255,0.60) !important;
+            box-shadow: 0 12px 24px rgba(20, 111, 130, 0.06) !important;
+            overflow: hidden !important;
+        }
+
+        div[data-testid="stExpander"] > div {
+            background: transparent !important;
+        }
+
+        div[data-testid="stDataFrame"] {
+            overflow: hidden !important;
+            max-height: 720px !important;
+        }
+
+        div[data-testid="stDataFrame"] > div {
+            overflow: hidden !important;
+        }
     </style>
     """,
     unsafe_allow_html=True,
@@ -419,16 +440,20 @@ if st.session_state.active_hero_button == "Tornei":
     )
     st.session_state.selected_tournament = selected_tournament
 
-    with st.expander("Isolani", expanded=False):
+    with st.expander("Partecipanti", expanded=False):
+        st.markdown(
+            "<div style='padding: 0.25rem 0 0.75rem 0; color: #1d5662; font-weight: 700;'>Seleziona i partecipanti attivi</div>",
+            unsafe_allow_html=True,
+        )
         for idx in range(12):
             slot = st.session_state.participant_slots[idx]
-            checkbox_col, name_col = st.columns([0.3, 2.5])
+            checkbox_col, name_col = st.columns([0.35, 2.6])
             with checkbox_col:
                 slot["selected"] = st.checkbox("", value=slot.get("selected", False), key=f"participant_selected_{idx}", label_visibility="collapsed")
             with name_col:
                 slot["name"] = st.text_input(
                     "",
-                    value=slot.get("name", f"Giocatore {idx + 1}"),
+                    value=slot.get("name", ""),
                     key=f"participant_name_{idx}",
                     placeholder=f"Partecipante {idx + 1}",
                     label_visibility="collapsed",
@@ -452,21 +477,22 @@ if st.session_state.active_hero_button == "Tornei":
         table = st.session_state.capture_data[selected_name].copy()
         table["Totale"] = table["Valore"] * table["Quantità"]
         table = table[["Foto", "Valore", "Quantità", "Totale"]]
-        edited = st.data_editor(
-            table,
+        table["Totale"] = table["Valore"] * table["Quantità"]
+        st.session_state.capture_data[selected_name] = table
+        st.dataframe(
+            table[["Foto", "Valore", "Quantità", "Totale"]],
             use_container_width=True,
             hide_index=True,
-            disabled=["Foto", "Valore", "Totale"],
+            height=720,
             column_config={
                 "Foto": st.column_config.ImageColumn("Foto", width="small"),
                 "Valore": st.column_config.NumberColumn("Valore", format="%d"),
                 "Quantità": st.column_config.NumberColumn("Quantità", min_value=0, max_value=999),
                 "Totale": st.column_config.NumberColumn("Totale", format="%d"),
             },
-            height=900,
         )
-        edited["Totale"] = edited["Valore"] * edited["Quantità"]
-        st.session_state.capture_data[selected_name] = edited
+
+        edited = st.session_state.capture_data[selected_name]
 
         total_creature_count = int(edited["Quantità"].sum())
         total_points = int(edited["Totale"].sum())
@@ -532,7 +558,7 @@ elif st.session_state.active_hero_button == "Eventi":
     st.info("Qui potrai creare e gestire gli eventi del torneo.")
 
 if st.session_state.active_hero_button == "Crea" or st.session_state.show_create_menu:
-    st.markdown('<div class="section-title">Torneo Personalizzato!</div>', unsafe_allow_html=True)
+    st.markdown('<div class="section-title">Crea nuovo torneo</div>', unsafe_allow_html=True)
     st.markdown(
         """
         <div class="glass">
@@ -586,9 +612,13 @@ if st.session_state.active_hero_button == "Crea" or st.session_state.show_create
             st.session_state.creature_points = 1
 
     with st.expander("Partecipanti", expanded=False):
+        st.markdown(
+            "<div style='padding: 0.25rem 0 0.75rem 0; color: #1d5662; font-weight: 700;'>Seleziona i parteciapnti attivi</div>",
+            unsafe_allow_html=True,
+        )
         for idx in range(12):
             slot = st.session_state.participant_slots[idx]
-            checkbox_col, name_col = st.columns([0.3, 2.5])
+            checkbox_col, name_col = st.columns([0.35, 2.6])
             with checkbox_col:
                 slot["selected"] = st.checkbox("", value=slot.get("selected", False), key=f"custom_participant_selected_{idx}", label_visibility="collapsed")
             with name_col:
@@ -604,21 +634,18 @@ if st.session_state.active_hero_button == "Crea" or st.session_state.show_create
     if not custom_table.empty:
         custom_table["Totale"] = custom_table["Valore"] * custom_table["Quantità"]
         custom_table = custom_table[["Foto", "Valore", "Quantità", "Totale"]]
-        custom_edited = st.data_editor(
+        st.session_state.custom_tournament_rows = custom_table
+        st.dataframe(
             custom_table,
             use_container_width=True,
             hide_index=True,
-            disabled=["Foto", "Valore", "Totale"],
+            height=720,
             column_config={
                 "Foto": st.column_config.ImageColumn("Foto", width="small"),
                 "Valore": st.column_config.NumberColumn("Valore", format="%d"),
                 "Quantità": st.column_config.NumberColumn("Quantità", min_value=0, max_value=999),
                 "Totale": st.column_config.NumberColumn("Totale", format="%d"),
             },
-            height=1800,
-            num_rows="dynamic",
         )
-        custom_edited["Totale"] = custom_edited["Valore"] * custom_edited["Quantità"]
-        st.session_state.custom_tournament_rows = custom_edited
 
 st.caption("Prototipo homepage - CUP OF THE ISLANDS")
