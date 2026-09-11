@@ -315,6 +315,56 @@ st.markdown(
             letter-spacing: 0.02em;
         }
 
+        .custom-item-card {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            background: rgba(255,255,255,0.76);
+            border: 1px solid rgba(12, 135, 154, 0.12);
+            border-radius: 16px;
+            padding: 0.65rem 0.8rem;
+            margin-bottom: 0.65rem;
+            box-shadow: 0 8px 20px rgba(18, 123, 140, 0.05);
+        }
+
+        .custom-item-card img {
+            width: 54px;
+            height: 54px;
+            object-fit: cover;
+            border-radius: 12px;
+            border: 1px solid rgba(12, 135, 154, 0.15);
+            background: #f0fbfc;
+        }
+
+        .custom-item-meta {
+            display: flex;
+            flex-direction: column;
+            gap: 0.18rem;
+            color: #0e5a66;
+            font-size: 0.82rem;
+            font-weight: 700;
+        }
+
+        .custom-item-meta span {
+            color: #447d8a;
+            font-size: 0.74rem;
+            font-weight: 600;
+        }
+
+        .mini-total {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 54px;
+            border-radius: 12px;
+            background: linear-gradient(180deg, rgba(218,248,250,0.95), rgba(184,237,242,0.85));
+            border: 1px solid rgba(12, 135, 154, 0.12);
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: #0d6d7b;
+            width: 100%;
+        }
+
         div[data-testid="stExpander"] {
             border: 1px solid rgba(12, 135, 154, 0.18) !important;
             border-radius: 18px !important;
@@ -533,45 +583,58 @@ if st.session_state.active_hero_button == "Tornei":
 
         table = st.session_state.capture_data[selected_name].copy()
         table["Totale"] = table["Valore"] * table["Quantità"]
-        edited = st.data_editor(
-            table[["Foto", "Valore", "Quantità", "Totale"]].copy(),
-            hide_index=True,
-            num_rows="fixed",
-            use_container_width=True,
-            disabled=["Totale"],
-            column_config={
-                "Foto": st.column_config.ImageColumn(
-                    "Foto",
-                    width="small",
-                    help="Miniatura dell'esemplare",
-                ),
-                "Valore": st.column_config.NumberColumn(
-                    "Valore",
-                    min_value=0,
-                    step=1,
-                    format="%d",
-                ),
-                "Quantità": st.column_config.NumberColumn(
+
+        for idx, row in table.iterrows():
+            quantity = int(row["Quantità"])
+            quantity_key = f"qty_{selected_name}_{st.session_state.selected_tournament}_{idx}".replace(" ", "_")
+            qty_col, total_col = st.columns([1, 1])
+
+            with qty_col:
+                q_value = st.number_input(
                     "Quantità",
                     min_value=0,
                     step=1,
-                    format="%d",
-                ),
-                "Totale": st.column_config.NumberColumn(
-                    "Totale",
-                    min_value=0,
-                    step=1,
-                    format="%d",
-                    disabled=True,
-                ),
-            },
-            key=f"editor_{selected_name}_{st.session_state.selected_tournament}".replace(" ", "_"),
-        )
-        edited["Totale"] = edited["Valore"] * edited["Quantità"]
-        st.session_state.capture_data[selected_name] = edited
+                    value=quantity,
+                    key=quantity_key,
+                    label_visibility="collapsed",
+                )
+                table.at[idx, "Quantità"] = int(q_value)
 
-        total_creature_count = int(edited["Quantità"].sum())
-        total_points = int(edited["Totale"].sum())
+            with total_col:
+                total_value = int(row["Valore"] * q_value)
+                table.at[idx, "Totale"] = total_value
+                st.markdown(f"<div class=\"mini-total\">{total_value}</div>", unsafe_allow_html=True)
+
+            photo_col, meta_col = st.columns([1, 3])
+            with photo_col:
+                if str(row["Foto"]).startswith("http"):
+                    st.markdown(
+                        f"<div class=\"custom-item-card\"><img src=\"{row['Foto']}\" alt=\"{row['Creatura']}\" /></div>",
+                        unsafe_allow_html=True,
+                    )
+                else:
+                    st.markdown(
+                        f"<div class=\"custom-item-card\">{row['Foto']}</div>",
+                        unsafe_allow_html=True,
+                    )
+
+            with meta_col:
+                st.markdown(
+                    f"""
+                    <div class="custom-item-card">
+                        <div class="custom-item-meta">
+                            <div>{row['Creatura']}</div>
+                            <span>Valore: {int(row['Valore'])}</span>
+                        </div>
+                    </div>
+                    """,
+                    unsafe_allow_html=True,
+                )
+
+        st.session_state.capture_data[selected_name] = table
+
+        total_creature_count = int(table["Quantità"].sum())
+        total_points = int(table["Totale"].sum())
         qty_col, total_col = st.columns(2)
         with qty_col:
             st.markdown(
