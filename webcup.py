@@ -339,8 +339,6 @@ st.markdown(
         div[data-testid="stDataFrame"] > div,
         div[data-testid="stTable"] > div {
             overflow: visible !important;
-            max-height: none !important;
-            height: auto !important;
         }
 
         @media (max-width: 768px) {
