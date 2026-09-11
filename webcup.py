@@ -574,7 +574,24 @@ if st.session_state.active_hero_button == "Tornei":
             custom_table["Totale"] = custom_table["Valore"] * custom_table["Quantità"]
             custom_table = custom_table[["Foto", "Valore", "Quantità", "Totale"]]
             st.session_state.custom_tournament_rows = custom_table
-            render_html_table(custom_table, ["Foto", "Valore", "Quantità", "Totale"])
+
+            edited_custom = st.data_editor(
+                custom_table,
+                use_container_width=True,
+                hide_index=True,
+                disabled=["Foto", "Valore", "Totale"],
+                column_config={
+                    "Foto": st.column_config.TextColumn("Foto", width="medium"),
+                    "Valore": st.column_config.NumberColumn("Valore", disabled=True, format="%d"),
+                    "Quantità": st.column_config.NumberColumn("Quantità", min_value=0, step=1, format="%d"),
+                    "Totale": st.column_config.NumberColumn("Totale", disabled=True, format="%d"),
+                },
+                num_rows="fixed",
+                key="custom_tournament_editor",
+            )
+            edited_custom["Totale"] = edited_custom["Valore"] * edited_custom["Quantità"]
+            st.session_state.custom_tournament_rows = edited_custom[["Foto", "Valore", "Quantità", "Totale"]]
+            render_html_table(st.session_state.custom_tournament_rows, ["Foto", "Valore", "Quantità", "Totale"])
 
     with st.expander("Partecipanti", expanded=False):
         st.markdown(
@@ -612,10 +629,26 @@ if st.session_state.active_hero_button == "Tornei":
 
         table = st.session_state.capture_data[selected_name].copy()
         table["Totale"] = table["Valore"] * table["Quantità"]
-        edited = table[["Foto", "Valore", "Quantità", "Totale"]].copy()
-        st.session_state.capture_data[selected_name] = edited
+        table = table[["Foto", "Valore", "Quantità", "Totale"]].copy()
 
-        render_html_table(edited, ["Foto", "Valore", "Quantità", "Totale"])
+        edited = st.data_editor(
+            table,
+            use_container_width=True,
+            hide_index=True,
+            disabled=["Foto", "Valore", "Totale"],
+            column_config={
+                "Foto": st.column_config.TextColumn("Foto", width="medium"),
+                "Valore": st.column_config.NumberColumn("Valore", disabled=True, format="%d"),
+                "Quantità": st.column_config.NumberColumn("Quantità", min_value=0, step=1, format="%d"),
+                "Totale": st.column_config.NumberColumn("Totale", disabled=True, format="%d"),
+            },
+            num_rows="fixed",
+            key=f"capture_editor_{selected_name}",
+        )
+        edited["Totale"] = edited["Valore"] * edited["Quantità"]
+        st.session_state.capture_data[selected_name] = edited[["Foto", "Valore", "Quantità", "Totale"]]
+
+        render_html_table(st.session_state.capture_data[selected_name], ["Foto", "Valore", "Quantità", "Totale"])
 
         total_creature_count = int(edited["Quantità"].sum())
         total_points = int(edited["Totale"].sum())
