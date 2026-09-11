@@ -328,16 +328,14 @@ st.markdown(
         }
 
         div[data-testid="stDataFrame"] {
-            overflow: visible !important;
-            max-height: none !important;
-            height: auto !important;
+            overflow-x: auto !important;
+            overflow-y: hidden !important;
+            max-height: 720px !important;
             width: 100% !important;
         }
 
         div[data-testid="stDataFrame"] > div {
-            overflow: visible !important;
-            max-height: none !important;
-            height: auto !important;
+            overflow-x: auto !important;
         }
 
         @media (max-width: 768px) {
@@ -546,13 +544,11 @@ if st.session_state.active_hero_button == "Tornei":
 
         table = st.session_state.capture_data[selected_name].copy()
         table["Totale"] = table["Valore"] * table["Quantità"]
-        table_height = max(420, min(1200, len(table) * 34 + 80))
         edited = st.data_editor(
             table[["Foto", "Valore", "Quantità", "Totale"]].copy(),
             hide_index=True,
             num_rows="fixed",
             use_container_width=True,
-            height=table_height,
             disabled=["Totale"],
             column_config={
                 "Foto": st.column_config.ImageColumn(
