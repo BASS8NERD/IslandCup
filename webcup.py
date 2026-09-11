@@ -98,14 +98,18 @@ MARINE_CREATURES = [
     {"Creatura": "CESTELLO DI VENERE", "Foto": f"{GITHUB_RAW_BASE}/40.png", "Valore": 7},
 ]
 
+FISHING_CREATURES = [
+    {
+        "Creatura": f"Pesce {image_number - 40}",
+        "Foto": f"{GITHUB_RAW_BASE}/{image_number}.png",
+        "Valore": 2 + ((image_number - 41) % 9),
+    }
+    for image_number in range(41, 121)
+]
+
 TOURNAMENTS = {
     "Torneo Creature Marine": MARINE_CREATURES,
-    "Torneo Di Pesca": [
-        {"Creatura": "Pesce 1", "Foto": "🐠", "Valore": 12},
-        {"Creatura": "Pesce 2", "Foto": "🐡", "Valore": 18},
-        {"Creatura": "Pesce 3", "Foto": "🐟", "Valore": 25},
-        {"Creatura": "Pesce 4", "Foto": "🦐", "Valore": 35},
-    ],
+    "Torneo Di Pesca": FISHING_CREATURES,
     "Torneo Caccia all'insetto": [
         {"Creatura": "Insetto 1", "Foto": "🦋", "Valore": 15},
         {"Creatura": "Insetto 2", "Foto": "🐝", "Valore": 22},
