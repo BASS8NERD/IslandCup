@@ -532,7 +532,7 @@ elif st.session_state.active_hero_button == "Eventi":
     st.info("Qui potrai creare e gestire gli eventi del torneo.")
 
 if st.session_state.active_hero_button == "Crea" or st.session_state.show_create_menu:
-    st.markdown('<div class="section-title">Crea nuovo torneo</div>', unsafe_allow_html=True)
+    st.markdown('<div class="section-title">Torneo Personalizzato!</div>', unsafe_allow_html=True)
     st.markdown(
         """
         <div class="glass">
