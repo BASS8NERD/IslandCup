@@ -539,7 +539,10 @@ if st.session_state.active_hero_button == "Tornei":
         table = table[["Foto", "Valore", "Quantità", "Totale"]]
         table["Totale"] = table["Valore"] * table["Quantità"]
         st.session_state.capture_data[selected_name] = table
-        header_cols = st.columns([1.3, 1.0, 0.8, 0.9])
+        table = st.session_state.capture_data[selected_name].copy()
+        table["Totale"] = table["Valore"] * table["Quantità"]
+
+        header_cols = st.columns([1.4, 0.9, 0.9, 0.9])
         headers = ["Foto", "Valore", "Quantità", "Totale"]
         for col, header in zip(header_cols, headers):
             with col:
@@ -549,11 +552,11 @@ if st.session_state.active_hero_button == "Tornei":
                 )
 
         for idx, row in table.iterrows():
-            cols = st.columns([1.3, 1.0, 0.8, 0.9])
+            cols = st.columns([1.4, 0.9, 0.9, 0.9])
             with cols[0]:
                 photo = row["Foto"]
                 if isinstance(photo, str) and photo.startswith("http"):
-                    st.image(photo, width=54)
+                    st.image(photo, width=52)
                 else:
                     st.markdown(
                         f"<div style='text-align:center; font-size:1.6rem;'>{photo}</div>",
