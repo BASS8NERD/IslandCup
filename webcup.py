@@ -639,7 +639,7 @@ if st.session_state.active_hero_button == "Tornei":
 
         with st.expander("Partecipanti", expanded=False):
             st.markdown(
-                "<div style='padding: 0.25rem 0 0.75rem 0; color: #1d5662; font-weight: 700;'>Seleziona i partecipanti attivi</div>",
+                "<div style='padding: 0.25rem 0 0.75rem 0; color: #1d5662; font-weight: 700;'>Seleziona i ISOLANI attivi</div>",
                 unsafe_allow_html=True,
             )
             for idx in range(12):
@@ -665,7 +665,7 @@ if st.session_state.active_hero_button == "Tornei":
 
     with st.expander("Partecipanti", expanded=False):
         st.markdown(
-            "<div style='padding: 0.25rem 0 0.75rem 0; color: #1d5662; font-weight: 700;'>Seleziona i partecipanti attivi</div>",
+            "<div style='padding: 0.25rem 0 0.75rem 0; color: #1d5662; font-weight: 700;'>Seleziona i ISOLANI attivi</div>",
             unsafe_allow_html=True,
         )
         for idx in range(12):
