@@ -548,7 +548,7 @@ if st.session_state.active_hero_button == "Tornei":
                     unsafe_allow_html=True,
                 )
 
-        for _, row in table.iterrows():
+        for idx, row in table.iterrows():
             cols = st.columns([1.3, 1.0, 0.8, 0.9])
             with cols[0]:
                 photo = row["Foto"]
@@ -565,15 +565,24 @@ if st.session_state.active_hero_button == "Tornei":
                     unsafe_allow_html=True,
                 )
             with cols[2]:
-                st.markdown(
-                    f"<div style='text-align:center; font-weight:700; color:#0d6d7b;'>{int(row['Quantità'])}</div>",
-                    unsafe_allow_html=True,
+                qty_value = int(row["Quantità"]) if pd.notna(row["Quantità"]) else 0
+                new_qty = st.number_input(
+                    "",
+                    min_value=0,
+                    step=1,
+                    value=qty_value,
+                    key=f"qty_{selected_name}_{idx}_{st.session_state.selected_tournament}".replace(" ", "_"),
+                    label_visibility="collapsed",
                 )
+                table.at[idx, "Quantità"] = int(new_qty)
+                table.at[idx, "Totale"] = int(new_qty) * int(row["Valore"])
             with cols[3]:
                 st.markdown(
-                    f"<div style='text-align:center; font-weight:700; color:#0d6d7b;'>{int(row['Totale'])}</div>",
+                    f"<div style='text-align:center; font-weight:700; color:#0d6d7b;'>{int(table.at[idx, 'Totale'])}</div>",
                     unsafe_allow_html=True,
                 )
+
+        st.session_state.capture_data[selected_name] = table
 
         edited = st.session_state.capture_data[selected_name]
 
