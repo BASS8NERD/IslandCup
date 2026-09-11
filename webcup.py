@@ -56,8 +56,46 @@ POINTS_BY_IMAGE = {
 }
 
 MARINE_CREATURES = [
-    {"Foto": f"{GITHUB_RAW_BASE}/{image_number}.png", "Valore": POINTS_BY_IMAGE[image_number]}
-    for image_number in range(1, 41)
+    {"Creatura": "ALGA WAKAME", "Foto": f"{GITHUB_RAW_BASE}/1.png", "Valore": 2},
+    {"Creatura": "VITE DI MARE", "Foto": f"{GITHUB_RAW_BASE}/2.png", "Valore": 2},
+    {"Creatura": "CETRIOLO DI MARE", "Foto": f"{GITHUB_RAW_BASE}/3.png", "Valore": 3},
+    {"Creatura": "PORCELLINO DI MARE", "Foto": f"{GITHUB_RAW_BASE}/4.png", "Valore": 9},
+    {"Creatura": "STELLA MARINA", "Foto": f"{GITHUB_RAW_BASE}/5.png", "Valore": 3},
+    {"Creatura": "RICCIO DI MARE", "Foto": f"{GITHUB_RAW_BASE}/6.png", "Valore": 4},
+    {"Creatura": "RICCIO MATITA", "Foto": f"{GITHUB_RAW_BASE}/7.png", "Valore": 6},
+    {"Creatura": "ANEMONE DI MARE", "Foto": f"{GITHUB_RAW_BASE}/8.png", "Valore": 2},
+    {"Creatura": "MEDUSA AURELIA", "Foto": f"{GITHUB_RAW_BASE}/9.png", "Valore": 3},
+    {"Creatura": "NUDIBRANCHI", "Foto": f"{GITHUB_RAW_BASE}/10.png", "Valore": 3},
+    {"Creatura": "OSTRICA PINCTADA", "Foto": f"{GITHUB_RAW_BASE}/11.png", "Valore": 6},
+    {"Creatura": "COZZA", "Foto": f"{GITHUB_RAW_BASE}/12.png", "Valore": 4},
+    {"Creatura": "OSTRICA", "Foto": f"{GITHUB_RAW_BASE}/13.png", "Valore": 4},
+    {"Creatura": "CAPASANTA", "Foto": f"{GITHUB_RAW_BASE}/14.png", "Valore": 4},
+    {"Creatura": "BUCCINO", "Foto": f"{GITHUB_RAW_BASE}/15.png", "Valore": 4},
+    {"Creatura": "LUMACA TURBANTE", "Foto": f"{GITHUB_RAW_BASE}/16.png", "Valore": 4},
+    {"Creatura": "ABALONE", "Foto": f"{GITHUB_RAW_BASE}/17.png", "Valore": 6},
+    {"Creatura": "TRIDACNA GIGANTE", "Foto": f"{GITHUB_RAW_BASE}/18.png", "Valore": 9},
+    {"Creatura": "NAUTILUS", "Foto": f"{GITHUB_RAW_BASE}/19.png", "Valore": 6},
+    {"Creatura": "POLPO", "Foto": f"{GITHUB_RAW_BASE}/20.png", "Valore": 5},
+    {"Creatura": "POLPO OMBRELLO", "Foto": f"{GITHUB_RAW_BASE}/21.png", "Valore": 7},
+    {"Creatura": "CALAMARO VAMPIRO", "Foto": f"{GITHUB_RAW_BASE}/22.png", "Valore": 9},
+    {"Creatura": "CALAMARO LUCCIOLA", "Foto": f"{GITHUB_RAW_BASE}/23.png", "Valore": 4},
+    {"Creatura": "GRANCHIO GAZAMI", "Foto": f"{GITHUB_RAW_BASE}/24.png", "Valore": 6},
+    {"Creatura": "GRANCIPORRO", "Foto": f"{GITHUB_RAW_BASE}/25.png", "Valore": 6},
+    {"Creatura": "GRANCHIO DELLA NEVE", "Foto": f"{GITHUB_RAW_BASE}/26.png", "Valore": 8},
+    {"Creatura": "GRANCHIO GIGANTE", "Foto": f"{GITHUB_RAW_BASE}/27.png", "Valore": 9},
+    {"Creatura": "DENTE DI CANE", "Foto": f"{GITHUB_RAW_BASE}/28.png", "Valore": 2},
+    {"Creatura": "GRANCHIO GIG. DEL GIAPPONE", "Foto": f"{GITHUB_RAW_BASE}/29.png", "Valore": 8},
+    {"Creatura": "GAMBERO BLACK TIGER", "Foto": f"{GITHUB_RAW_BASE}/30.png", "Valore": 6},
+    {"Creatura": "GAMBERETTO BOREALE", "Foto": f"{GITHUB_RAW_BASE}/31.png", "Valore": 4},
+    {"Creatura": "GAMBERO MANTIDE", "Foto": f"{GITHUB_RAW_BASE}/32.png", "Valore": 6},
+    {"Creatura": "ARAGOSTA MEDITERRANEA", "Foto": f"{GITHUB_RAW_BASE}/33.png", "Valore": 6},
+    {"Creatura": "ASTICE", "Foto": f"{GITHUB_RAW_BASE}/34.png", "Valore": 7},
+    {"Creatura": "ISOPODE GIGANTE", "Foto": f"{GITHUB_RAW_BASE}/35.png", "Valore": 9},
+    {"Creatura": "GRANCHIO FERRO DI CAVALLO", "Foto": f"{GITHUB_RAW_BASE}/36.png", "Valore": 5},
+    {"Creatura": "ANANAS DI MARE", "Foto": f"{GITHUB_RAW_BASE}/37.png", "Valore": 5},
+    {"Creatura": "ANGUILLA DI GIARDINO", "Foto": f"{GITHUB_RAW_BASE}/38.png", "Valore": 4},
+    {"Creatura": "VERME PIATTO", "Foto": f"{GITHUB_RAW_BASE}/39.png", "Valore": 3},
+    {"Creatura": "CESTELLO DI VENERE", "Foto": f"{GITHUB_RAW_BASE}/40.png", "Valore": 7},
 ]
 
 TOURNAMENTS = {
