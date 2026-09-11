@@ -80,10 +80,8 @@ TOURNAMENTS = {
         {"Creatura": "Mix 3", "Foto": "🦋", "Valore": 24},
         {"Creatura": "Mix 4", "Foto": "🐟", "Valore": 32},
     ],
+    "Torneo Fai Da Te": [],
 }
-
-if "show_create_menu" not in st.session_state:
-    st.session_state.show_create_menu = False
 if "creature_points" not in st.session_state:
     st.session_state.creature_points = 1
 if "creature_rows" not in st.session_state:
@@ -356,16 +354,13 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-hero_labels = ["Tornei", "Classifiche", "Isole", "Eventi", "Crea", "Invita", "Info"]
+hero_labels = ["Tornei", "Classifiche", "Isole", "Eventi", "Invita", "Info"]
 hero_columns = st.columns(len(hero_labels))
 
 for col, label in zip(hero_columns, hero_labels):
     with col:
         clicked = st.button(label, key=f"hero_{label.lower()}", use_container_width=True)
-        if clicked and label == "Crea":
-            st.session_state.show_create_menu = not st.session_state.show_create_menu
-            st.session_state.active_hero_button = "Crea"
-        elif clicked:
+        if clicked:
             st.session_state.active_hero_button = label
 
 if not st.session_state.active_hero_button or st.session_state.active_hero_button in ["Isole", "Info", "Invita"]:
@@ -436,9 +431,99 @@ if st.session_state.active_hero_button == "Tornei":
     selected_tournament = st.selectbox(
         "Seleziona un torneo",
         tournament_list,
-        index=tournament_list.index(st.session_state.selected_tournament),
+        index=tournament_list.index(st.session_state.selected_tournament) if st.session_state.selected_tournament in tournament_list else 0,
     )
     st.session_state.selected_tournament = selected_tournament
+
+    if selected_tournament == "Torneo Fai Da Te":
+        st.markdown(
+            """
+            <div class="glass">
+                <p style="color:#1f4f5d; font-weight:600; margin:0 0 0.7rem 0;">
+                    Carica immagini, imposta il valore e scegli chi partecipa al torneo personalizzato.
+                </p>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+
+        uploaded_files = st.file_uploader(
+            "Carica foto PNG o JPEG",
+            type=["png", "jpg", "jpeg"],
+            accept_multiple_files=True,
+            help="Puoi caricare più immagini e aggiungerle alla tabella del torneo.",
+        )
+
+        if uploaded_files:
+            for uploaded_file in uploaded_files:
+                if uploaded_file is not None:
+                    st.image(uploaded_file, caption=uploaded_file.name, width=120)
+
+        points_title = "<div style='margin-top: 1rem; color: #0c5964; font-weight: 700; font-size: 1.05rem;'>Valore Punti:</div>"
+        st.markdown(points_title, unsafe_allow_html=True)
+
+        points_col1, points_col2, points_col3 = st.columns([1, 2, 1])
+        with points_col1:
+            if st.button("-", key="custom_decrease_points", use_container_width=True):
+                st.session_state.creature_points = max(0, st.session_state.creature_points - 1)
+        with points_col2:
+            st.markdown(
+                f"<div style='text-align:center; padding: 0.7rem 0; border-radius: 12px; background: rgba(255,255,255,0.7); border: 1px solid rgba(12,135,154,0.15); font-size: 2rem; font-weight: 800; color: #0c5964;'>{st.session_state.creature_points}</div>",
+                unsafe_allow_html=True,
+            )
+        with points_col3:
+            if st.button("+", key="custom_increase_points", use_container_width=True):
+                st.session_state.creature_points = st.session_state.creature_points + 1
+
+        if uploaded_files and st.session_state.creature_points > 0 and st.session_state.custom_tournament_rows.empty:
+            st.session_state.custom_tournament_rows = make_custom_rows_from_uploaded(uploaded_files, st.session_state.creature_points)
+
+        if st.button("Aggiungi alla tabella in basso", use_container_width=True):
+            new_rows = make_custom_rows_from_uploaded(uploaded_files, st.session_state.creature_points)
+            if not new_rows.empty:
+                st.session_state.custom_tournament_rows = pd.concat(
+                    [st.session_state.custom_tournament_rows, new_rows],
+                    ignore_index=True,
+                )
+                st.success("Immagini aggiunte alla tabella del torneo personalizzato!")
+                st.session_state.creature_points = 1
+
+        with st.expander("Partecipanti", expanded=False):
+            st.markdown(
+                "<div style='padding: 0.25rem 0 0.75rem 0; color: #1d5662; font-weight: 700;'>Seleziona i partecipanti attivi</div>",
+                unsafe_allow_html=True,
+            )
+            for idx in range(12):
+                slot = st.session_state.participant_slots[idx]
+                checkbox_col, name_col = st.columns([0.35, 2.6])
+                with checkbox_col:
+                    slot["selected"] = st.checkbox("", value=slot.get("selected", False), key=f"custom_participant_selected_{idx}", label_visibility="collapsed")
+                with name_col:
+                    slot["name"] = st.text_input(
+                        "",
+                        value=slot.get("name", ""),
+                        key=f"custom_participant_name_{idx}",
+                        placeholder=f"Partecipante {idx + 1}",
+                        label_visibility="collapsed",
+                    )
+
+        custom_table = st.session_state.custom_tournament_rows.copy()
+        if not custom_table.empty:
+            custom_table["Totale"] = custom_table["Valore"] * custom_table["Quantità"]
+            custom_table = custom_table[["Foto", "Valore", "Quantità", "Totale"]]
+            st.session_state.custom_tournament_rows = custom_table
+            st.dataframe(
+                custom_table,
+                use_container_width=True,
+                hide_index=True,
+                height=720,
+                column_config={
+                    "Foto": st.column_config.ImageColumn("Foto", width="small"),
+                    "Valore": st.column_config.NumberColumn("Valore", format="%d"),
+                    "Quantità": st.column_config.NumberColumn("Quantità", min_value=0, max_value=999),
+                    "Totale": st.column_config.NumberColumn("Totale", format="%d"),
+                },
+            )
 
     with st.expander("Partecipanti", expanded=False):
         st.markdown(
@@ -556,96 +641,5 @@ elif st.session_state.active_hero_button == "Classifiche":
 elif st.session_state.active_hero_button == "Eventi":
     st.markdown('<div class="section-title">Eventi</div>', unsafe_allow_html=True)
     st.info("Qui potrai creare e gestire gli eventi del torneo.")
-
-if st.session_state.active_hero_button == "Crea" or st.session_state.show_create_menu:
-    st.markdown('<div class="section-title">Crea nuovo torneo</div>', unsafe_allow_html=True)
-    st.markdown(
-        """
-        <div class="glass">
-            <p style="color:#1f4f5d; font-weight:600; margin:0 0 0.7rem 0;">
-                Carica immagini, imposta il valore e scegli chi partecipa al torneo personalizzato.
-            </p>
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
-
-    uploaded_files = st.file_uploader(
-        "Carica foto PNG o JPEG",
-        type=["png", "jpg", "jpeg"],
-        accept_multiple_files=True,
-        help="Puoi caricare più immagini e aggiungerle alla tabella del torneo.",
-    )
-
-    if uploaded_files:
-        for uploaded_file in uploaded_files:
-            if uploaded_file is not None:
-                st.image(uploaded_file, caption=uploaded_file.name, width=120)
-
-    points_title = "<div style='margin-top: 1rem; color: #0c5964; font-weight: 700; font-size: 1.05rem;'>Valore Punti:</div>"
-    st.markdown(points_title, unsafe_allow_html=True)
-
-    points_col1, points_col2, points_col3 = st.columns([1, 2, 1])
-    with points_col1:
-        if st.button("-", key="custom_decrease_points", use_container_width=True):
-            st.session_state.creature_points = max(0, st.session_state.creature_points - 1)
-    with points_col2:
-        st.markdown(
-            f"<div style='text-align:center; padding: 0.7rem 0; border-radius: 12px; background: rgba(255,255,255,0.7); border: 1px solid rgba(12,135,154,0.15); font-size: 2rem; font-weight: 800; color: #0c5964;'>{st.session_state.creature_points}</div>",
-            unsafe_allow_html=True,
-        )
-    with points_col3:
-        if st.button("+", key="custom_increase_points", use_container_width=True):
-            st.session_state.creature_points = st.session_state.creature_points + 1
-
-    if uploaded_files and st.session_state.creature_points > 0 and st.session_state.custom_tournament_rows.empty:
-        st.session_state.custom_tournament_rows = make_custom_rows_from_uploaded(uploaded_files, st.session_state.creature_points)
-
-    if st.button("Aggiungi alla tabella in basso", use_container_width=True):
-        new_rows = make_custom_rows_from_uploaded(uploaded_files, st.session_state.creature_points)
-        if not new_rows.empty:
-            st.session_state.custom_tournament_rows = pd.concat(
-                [st.session_state.custom_tournament_rows, new_rows],
-                ignore_index=True,
-            )
-            st.success("Immagini aggiunte alla tabella del torneo personalizzato!")
-            st.session_state.creature_points = 1
-
-    with st.expander("Partecipanti", expanded=False):
-        st.markdown(
-            "<div style='padding: 0.25rem 0 0.75rem 0; color: #1d5662; font-weight: 700;'>Seleziona i parteciapnti attivi</div>",
-            unsafe_allow_html=True,
-        )
-        for idx in range(12):
-            slot = st.session_state.participant_slots[idx]
-            checkbox_col, name_col = st.columns([0.35, 2.6])
-            with checkbox_col:
-                slot["selected"] = st.checkbox("", value=slot.get("selected", False), key=f"custom_participant_selected_{idx}", label_visibility="collapsed")
-            with name_col:
-                slot["name"] = st.text_input(
-                    "",
-                    value=slot.get("name", ""),
-                    key=f"custom_participant_name_{idx}",
-                    placeholder=f"Partecipante {idx + 1}",
-                    label_visibility="collapsed",
-                )
-
-    custom_table = st.session_state.custom_tournament_rows.copy()
-    if not custom_table.empty:
-        custom_table["Totale"] = custom_table["Valore"] * custom_table["Quantità"]
-        custom_table = custom_table[["Foto", "Valore", "Quantità", "Totale"]]
-        st.session_state.custom_tournament_rows = custom_table
-        st.dataframe(
-            custom_table,
-            use_container_width=True,
-            hide_index=True,
-            height=720,
-            column_config={
-                "Foto": st.column_config.ImageColumn("Foto", width="small"),
-                "Valore": st.column_config.NumberColumn("Valore", format="%d"),
-                "Quantità": st.column_config.NumberColumn("Quantità", min_value=0, max_value=999),
-                "Totale": st.column_config.NumberColumn("Totale", format="%d"),
-            },
-        )
 
 st.caption("Prototipo homepage - CUP OF THE ISLANDS")
