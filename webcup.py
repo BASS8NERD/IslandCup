@@ -327,19 +327,25 @@ st.markdown(
             background: transparent !important;
         }
 
-        div[data-testid="stDataFrame"] {
+        div[data-testid="stDataFrame"],
+        div[data-testid="stTable"] {
             overflow-x: auto !important;
-            overflow-y: hidden !important;
-            max-height: 720px !important;
+            overflow-y: visible !important;
+            max-height: none !important;
+            height: auto !important;
             width: 100% !important;
         }
 
-        div[data-testid="stDataFrame"] > div {
-            overflow-x: auto !important;
+        div[data-testid="stDataFrame"] > div,
+        div[data-testid="stTable"] > div {
+            overflow: visible !important;
+            max-height: none !important;
+            height: auto !important;
         }
 
         @media (max-width: 768px) {
-            div[data-testid="stDataFrame"] {
+            div[data-testid="stDataFrame"],
+            div[data-testid="stTable"] {
                 font-size: 0.82rem !important;
             }
         }
