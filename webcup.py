@@ -603,4 +603,3 @@ elif st.session_state.active_hero_button == "Eventi":
     st.info("Qui potrai creare e gestire gli eventi del torneo.")
 
 st.caption("Prototipo homepage - CUP OF THE ISLANDS")
-
