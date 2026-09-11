@@ -330,6 +330,9 @@ st.markdown(
         div[data-testid="stDataFrame"] {
             overflow: hidden !important;
             max-height: 720px !important;
+            pointer-events: none !important;
+            touch-action: none !important;
+            user-select: none !important;
         }
 
         div[data-testid="stDataFrame"] > div {
@@ -362,7 +365,7 @@ for col, label in zip(hero_columns, hero_labels):
         if clicked:
             st.session_state.active_hero_button = label
 
-if not st.session_state.active_hero_button or st.session_state.active_hero_button in ["Isole", "Info", "Invita"]:
+if not st.session_state.active_hero_button or st.session_state.active_hero_button in ["Isole", "Invita"]:
     cols = st.columns(4)
     metrics = [
         ("24", "Tornei attivi"),
@@ -377,6 +380,7 @@ if not st.session_state.active_hero_button or st.session_state.active_hero_butto
                 unsafe_allow_html=True,
             )
 
+if st.session_state.active_hero_button == "Info":
     st.markdown('<div class="section-title">Cosa puoi fare</div>', unsafe_allow_html=True)
     features = [
         ("🏆", "Tornei dinamici", "Crea competizioni personalizzate, impostando regole, date e gruppi di partecipazione in pochi secondi."),
@@ -397,32 +401,18 @@ if not st.session_state.active_hero_button or st.session_state.active_hero_butto
             )
 
     st.markdown('<div class="section-title">Panoramica</div>', unsafe_allow_html=True)
-    left, right = st.columns([1.2, 0.8])
-    with left:
-        st.markdown(
-            """
-            <div class="glass">
-                <h3 style="color:#0c5964; margin-top:0;">La tua isola, in ordine</h3>
-                <p style="color:#3f5c63; line-height:1.7; margin:0;">
-                    Un sistema pensato per tenere organizzati tornei, classifiche e momenti speciali in un unico ambiente.
-                    Ogni sezione è progettata per essere chiara, veloce e adatta a chi vuole gestire tutto con pochi click.
-                </p>
-            </div>
-            """,
-            unsafe_allow_html=True,
-        )
-    with right:
-        st.markdown(
-            """
-            <div class="glass">
-                <h3 style="color:#0c5964; margin-top:0;">Stato</h3>
-                <p style="color:#3f5c63; margin:0 0 0.5rem 0;">✅ Sistema operativo</p>
-                <p style="color:#3f5c63; margin:0 0 0.5rem 0;">✅ Dashboard pronta</p>
-                <p style="color:#3f5c63; margin:0;">✅ Tema turchese attivo</p>
-            </div>
-            """,
-            unsafe_allow_html=True,
-        )
+    st.markdown(
+        """
+        <div class="glass">
+            <h3 style="color:#0c5964; margin-top:0;">La tua isola, in ordine</h3>
+            <p style="color:#3f5c63; line-height:1.7; margin:0;">
+                Un sistema pensato per tenere organizzati tornei, classifiche e momenti speciali in un unico ambiente.
+                Ogni sezione è progettata per essere chiara, veloce e adatta a chi vuole gestire tutto con pochi click.
+            </p>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
 
 if st.session_state.active_hero_button == "Tornei":
     st.markdown('<div class="section-title">Tornei disponibili</div>', unsafe_allow_html=True)
@@ -625,16 +615,10 @@ elif st.session_state.active_hero_button == "Classifiche":
         leaderboard = pd.DataFrame(leaderboard_rows)
         leaderboard = leaderboard.sort_values(["Totale punti", "Quantità"], ascending=[False, False]).reset_index(drop=True)
         leaderboard.insert(0, "Posizione", range(1, len(leaderboard) + 1))
-        st.dataframe(
-            leaderboard[["Posizione", "Nome partecipante", "Quantità", "Totale punti"]],
-            use_container_width=True,
-            hide_index=True,
-            column_config={
-                "Posizione": st.column_config.NumberColumn("Posizione", format="%d"),
-                "Nome partecipante": st.column_config.TextColumn("Nome partecipante"),
-                "Quantità": st.column_config.NumberColumn("Quantità", format="%d"),
-                "Totale punti": st.column_config.NumberColumn("Totale punti", format="%d"),
-            },
+        st.table(
+            leaderboard[["Posizione", "Nome partecipante", "Quantità", "Totale punti"]].assign(
+                **{"Totale punti": leaderboard["Totale punti"].map(int)}
+            )
         )
 
 elif st.session_state.active_hero_button == "Eventi":
