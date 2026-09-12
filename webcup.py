@@ -781,8 +781,8 @@ st.markdown(
         }
 
         div[data-testid="stNumberInput"] > div {
-            background: linear-gradient(180deg, rgba(255, 247, 188, 0.95), rgba(255, 214, 64, 0.85)) !important;
-            border: 1px solid rgba(191, 146, 0, 0.45) !important;
+            background: linear-gradient(180deg, #ffe66b, #f5c400) !important;
+            border: 1px solid rgba(150, 110, 0, 0.6) !important;
             border-radius: 12px !important;
             box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.25) !important;
         }
