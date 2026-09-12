@@ -682,11 +682,11 @@ st.markdown(
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            background: linear-gradient(180deg, rgba(255,255,255,0.8), rgba(210,247,250,0.8));
-            border: 1px solid rgba(12, 135, 154, 0.14);
+            background: linear-gradient(180deg, rgba(255,248,196,0.95), rgba(245,232,150,0.9));
+            border: 1px solid rgba(181, 157, 36, 0.18);
             border-radius: 18px;
             padding: 1rem 0.75rem;
-            box-shadow: 0 10px 22px rgba(18, 123, 140, 0.08);
+            box-shadow: 0 10px 22px rgba(177, 158, 57, 0.09);
             margin-top: 1rem;
             min-height: 120px;
             text-align: center;
@@ -695,13 +695,13 @@ st.markdown(
         .score-box .value {
             font-size: 2.1rem;
             font-weight: 800;
-            color: #0d6d7b;
+            color: #7b5b12;
             line-height: 1.1;
         }
 
         .score-box .label {
             font-size: 0.82rem;
-            color: #285863;
+            color: #634f14;
             font-weight: 700;
             margin-top: 0.4rem;
             letter-spacing: 0.02em;
@@ -774,6 +774,41 @@ st.markdown(
 
         .compact-number {
             width: 100%;
+        }
+
+        .quantity-block {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 52px;
+            width: 100%;
+            border-radius: 12px;
+            background: linear-gradient(180deg, rgba(214,248,224,0.95), rgba(184,236,197,0.92));
+            border: 1px solid rgba(64, 156, 99, 0.18);
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.35);
+            color: #265d3f;
+            font-size: 1.15rem;
+            font-weight: 800;
+        }
+
+        .quantity-control button {
+            background: linear-gradient(180deg, rgba(220,247,227,1), rgba(184,233,195,1)) !important;
+            color: #235a3d !important;
+            border: 1px solid rgba(78, 146, 95, 0.2) !important;
+            border-radius: 12px !important;
+            font-weight: 800 !important;
+            min-height: 46px !important;
+        }
+
+        div[data-testid="stSelectbox"] > div {
+            background: linear-gradient(180deg, rgba(255,235,233,0.96), rgba(252,218,214,0.92)) !important;
+            border: 1px solid rgba(211, 122, 117, 0.38) !important;
+            border-radius: 12px !important;
+            box-shadow: 0 8px 20px rgba(192, 110, 100, 0.06) !important;
+        }
+
+        div[data-testid="stSelectbox"] label {
+            color: #7c3f3d !important;
         }
 
         div[data-testid="stNumberInput"] {
@@ -1002,6 +1037,10 @@ if st.session_state.active_hero_button == "Tornei":
         for idx, row in table.iterrows():
             quantity = int(row["Quantità"])
             quantity_key = f"qty_{selected_name}_{st.session_state.selected_tournament}_{idx}".replace(" ", "_")
+            if quantity_key not in st.session_state:
+                st.session_state[quantity_key] = quantity
+
+            q_value = int(st.session_state.get(quantity_key, quantity))
             info_col, controls_col = st.columns([4.5, 1.8])
 
             with info_col:
@@ -1019,16 +1058,22 @@ if st.session_state.active_hero_button == "Tornei":
                 )
 
             with controls_col:
-                q_value = st.number_input(
-                    "Q",
-                    min_value=0,
-                    step=1,
-                    value=quantity,
-                    key=quantity_key,
-                    label_visibility="collapsed",
-                )
-                table.at[idx, "Quantità"] = int(q_value)
+                minus_col, value_col, plus_col = st.columns([1, 1.2, 1])
 
+                with minus_col:
+                    if st.button("-", key=f"minus_{quantity_key}", use_container_width=True):
+                        q_value = max(0, q_value - 1)
+                        st.session_state[quantity_key] = q_value
+
+                with value_col:
+                    st.markdown(f"<div class='quantity-block'>{q_value}</div>", unsafe_allow_html=True)
+
+                with plus_col:
+                    if st.button("+", key=f"plus_{quantity_key}", use_container_width=True):
+                        q_value = q_value + 1
+                        st.session_state[quantity_key] = q_value
+
+                table.at[idx, "Quantità"] = int(q_value)
                 total_value = int(row["Valore"] * q_value)
                 table.at[idx, "Totale"] = total_value
                 st.markdown(f"<div class=\"mini-total\">{total_value}</div>", unsafe_allow_html=True)
