@@ -772,6 +772,58 @@ st.markdown(
             margin-top: 0.35rem;
         }
 
+        .leaderboard-table {
+            width: 100%;
+            border-collapse: collapse;
+            border-spacing: 0;
+            margin-top: 0.8rem;
+            background: rgba(255,255,255,0.7);
+            border-radius: 18px;
+            overflow: hidden;
+            box-shadow: 0 12px 28px rgba(15, 118, 140, 0.08);
+        }
+
+        .leaderboard-table th,
+        .leaderboard-table td {
+            text-align: center !important;
+            vertical-align: middle !important;
+            padding: 0.8rem 0.75rem !important;
+            border-bottom: 1px solid rgba(12, 135, 154, 0.12) !important;
+            color: #0d5964 !important;
+            font-weight: 700 !important;
+        }
+
+        .leaderboard-table th {
+            background: linear-gradient(135deg, #1e88e5 0%, #5bb6ff 100%) !important;
+            color: #ffffff !important;
+            font-size: 0.9rem;
+            letter-spacing: 0.02em;
+            border-bottom: 1px solid rgba(15, 98, 120, 0.18) !important;
+        }
+
+        .leaderboard-table td:first-child {
+            font-weight: 800 !important;
+        }
+
+        .leaderboard-table tr:nth-child(1) td,
+        .leaderboard-table tr:nth-child(1) th { background: rgba(255, 214, 122, 0.18); }
+        .leaderboard-table tr:nth-child(2) td,
+        .leaderboard-table tr:nth-child(2) th { background: rgba(224, 232, 239, 0.20); }
+        .leaderboard-table tr:nth-child(3) td,
+        .leaderboard-table tr:nth-child(3) th { background: rgba(209, 154, 108, 0.18); }
+
+        .leaderboard-medal {
+            font-size: 1.5rem;
+            display: inline-block;
+            line-height: 1;
+            vertical-align: middle;
+        }
+
+        .leaderboard-table td:first-child {
+            font-weight: 800 !important;
+            letter-spacing: 0.02em;
+        }
+
         .compact-number {
             width: 100%;
         }
@@ -1084,7 +1136,29 @@ elif st.session_state.active_hero_button == "Classifiche":
         leaderboard.insert(0, "Posizione", range(1, len(leaderboard) + 1))
         leaderboard_display = leaderboard[["Posizione", "Nome partecipante", "Quantità", "Totale punti"]].copy()
         leaderboard_display["Totale punti"] = leaderboard_display["Totale punti"].map(int)
-        st.table(leaderboard_display)
+
+        medal_map = {1: "🥇", 2: "🥈", 3: "🥉"}
+        leaderboard_display["Posizione"] = leaderboard_display["Posizione"].map(
+            lambda pos: f"<span class='leaderboard-medal'>{medal_map.get(pos, '')}</span>" if pos in medal_map else str(pos)
+        )
+
+        header_html = "".join(f"<th>{col}</th>" for col in leaderboard_display.columns)
+        rows_html = []
+        for _, row in leaderboard_display.iterrows():
+            cells = "".join(f"<td>{value}</td>" for value in row.tolist())
+            rows_html.append(f"<tr>{cells}</tr>")
+
+        leaderboard_display_html = f"""
+        <table class="leaderboard-table">
+            <thead>
+                <tr>{header_html}</tr>
+            </thead>
+            <tbody>
+                {''.join(rows_html)}
+            </tbody>
+        </table>
+        """
+        st.markdown(leaderboard_display_html, unsafe_allow_html=True)
 
 elif st.session_state.active_hero_button == "Eventi":
     st.markdown('<div class="section-title">Eventi</div>', unsafe_allow_html=True)
