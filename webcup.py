@@ -776,59 +776,6 @@ st.markdown(
             width: 100%;
         }
 
-        .quantity-shell {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 100%;
-            min-height: 46px;
-            border-radius: 10px;
-            background: linear-gradient(180deg, rgba(220,247,227,0.96), rgba(188,232,202,0.93));
-            border: 1px solid rgba(76, 151, 98, 0.18);
-            box-shadow: inset 0 1px 0 rgba(255,255,255,0.42);
-        }
-
-        .quantity-center {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            min-width: 44px;
-            min-height: 38px;
-            border-radius: 9px;
-            background: rgba(255,255,255,0.35);
-            color: #244f38;
-            font-weight: 800;
-            font-size: 1.05rem;
-            text-align: center;
-        }
-
-        .quantity-shell button,
-        div[data-testid="stButton"] button {
-            min-width: 36px !important;
-            min-height: 36px !important;
-            border-radius: 10px !important;
-            background: linear-gradient(180deg, rgba(236,250,238,1), rgba(195,236,201,1)) !important;
-            border: 1px solid rgba(88, 146, 94, 0.22) !important;
-            color: #255d3e !important;
-            font-weight: 800 !important;
-            font-size: 1rem !important;
-            box-shadow: none !important;
-        }
-
-        div[data-baseweb="select"] > div {
-            background: linear-gradient(180deg, rgba(255,235,232,0.96), rgba(248,214,209,0.92)) !important;
-            border: 1px solid rgba(196, 110, 104, 0.35) !important;
-            border-radius: 12px !important;
-            box-shadow: 0 8px 20px rgba(190, 107, 97, 0.08) !important;
-        }
-
-        button[role="combobox"] {
-            background: linear-gradient(180deg, rgba(255,237,234,1), rgba(247,210,204,1)) !important;
-            border: 1px solid rgba(190, 109, 101, 0.28) !important;
-            color: #6d2d2b !important;
-            border-radius: 10px !important;
-        }
-
         div[data-testid="stNumberInput"] {
             width: 100% !important;
         }
@@ -1055,10 +1002,6 @@ if st.session_state.active_hero_button == "Tornei":
         for idx, row in table.iterrows():
             quantity = int(row["Quantità"])
             quantity_key = f"qty_{selected_name}_{st.session_state.selected_tournament}_{idx}".replace(" ", "_")
-            if quantity_key not in st.session_state:
-                st.session_state[quantity_key] = quantity
-
-            q_value = int(st.session_state.get(quantity_key, quantity))
             info_col, controls_col = st.columns([4.5, 1.8])
 
             with info_col:
@@ -1076,25 +1019,16 @@ if st.session_state.active_hero_button == "Tornei":
                 )
 
             with controls_col:
-                minus_col, value_col, plus_col = st.columns([1, 1.25, 1])
-
-                with minus_col:
-                    if st.button("-", key=f"minus_{quantity_key}", use_container_width=True):
-                        q_value = max(0, q_value - 1)
-                        st.session_state[quantity_key] = q_value
-
-                with value_col:
-                    st.markdown(
-                        f"<div class='quantity-shell'><div class='quantity-center'>{q_value}</div></div>",
-                        unsafe_allow_html=True,
-                    )
-
-                with plus_col:
-                    if st.button("+", key=f"plus_{quantity_key}", use_container_width=True):
-                        q_value = q_value + 1
-                        st.session_state[quantity_key] = q_value
-
+                q_value = st.number_input(
+                    "Q",
+                    min_value=0,
+                    step=1,
+                    value=quantity,
+                    key=quantity_key,
+                    label_visibility="collapsed",
+                )
                 table.at[idx, "Quantità"] = int(q_value)
+
                 total_value = int(row["Valore"] * q_value)
                 table.at[idx, "Totale"] = total_value
                 st.markdown(f"<div class=\"mini-total\">{total_value}</div>", unsafe_allow_html=True)
