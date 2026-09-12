@@ -470,7 +470,7 @@ MIX_CREATURES = [
 TOURNAMENTS = {
     "Torneo Creature Marine": MARINE_CREATURES,
     "Torneo Di Pesca": FISHING_CREATURES,
-    "Torneo Caccia all'insetto": INSECT_CREATURES,
+    "Torneo Caccia All'Insetto": INSECT_CREATURES,
     "Torneo Mix": MIX_CREATURES,
 }
 if "creature_points" not in st.session_state:
