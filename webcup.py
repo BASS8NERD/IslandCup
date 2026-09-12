@@ -780,53 +780,52 @@ st.markdown(
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 0.35rem;
             width: 100%;
-            min-height: 52px;
-            border-radius: 12px;
-            background: linear-gradient(180deg, rgba(220,247,227,0.96), rgba(190,234,202,0.92));
-            border: 1px solid rgba(75, 156, 111, 0.18);
-            padding: 0.2rem;
-            box-shadow: inset 0 1px 0 rgba(255,255,255,0.45);
+            min-height: 46px;
+            border-radius: 10px;
+            background: linear-gradient(180deg, rgba(220,247,227,0.96), rgba(188,232,202,0.93));
+            border: 1px solid rgba(76, 151, 98, 0.18);
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.42);
         }
 
-        .quantity-shell .quantity-center {
+        .quantity-center {
             display: flex;
             align-items: center;
             justify-content: center;
             min-width: 44px;
-            min-height: 42px;
-            border-radius: 10px;
-            background: rgba(255,255,255,0.38);
-            color: #264f38;
+            min-height: 38px;
+            border-radius: 9px;
+            background: rgba(255,255,255,0.35);
+            color: #244f38;
             font-weight: 800;
             font-size: 1.05rem;
             text-align: center;
         }
 
-        .quantity-shell button {
-            min-width: 38px !important;
-            min-height: 38px !important;
+        .quantity-shell button,
+        div[data-testid="stButton"] button {
+            min-width: 36px !important;
+            min-height: 36px !important;
             border-radius: 10px !important;
-            background: linear-gradient(180deg, rgba(236,250,237,1), rgba(194,235,201,1)) !important;
-            border: 1px solid rgba(86, 147, 95, 0.22) !important;
-            color: #245b3d !important;
+            background: linear-gradient(180deg, rgba(236,250,238,1), rgba(195,236,201,1)) !important;
+            border: 1px solid rgba(88, 146, 94, 0.22) !important;
+            color: #255d3e !important;
             font-weight: 800 !important;
             font-size: 1rem !important;
             box-shadow: none !important;
         }
 
         div[data-baseweb="select"] > div {
-            background: linear-gradient(180deg, rgba(255,234,231,0.96), rgba(247,214,208,0.92)) !important;
-            border: 1px solid rgba(192, 110, 100, 0.35) !important;
+            background: linear-gradient(180deg, rgba(255,235,232,0.96), rgba(248,214,209,0.92)) !important;
+            border: 1px solid rgba(196, 110, 104, 0.35) !important;
             border-radius: 12px !important;
-            box-shadow: 0 8px 18px rgba(191, 97, 90, 0.07) !important;
+            box-shadow: 0 8px 20px rgba(190, 107, 97, 0.08) !important;
         }
 
         button[role="combobox"] {
-            background: linear-gradient(180deg, rgba(255,236,233,1), rgba(247,209,204,1)) !important;
-            border: 1px solid rgba(181, 103, 96, 0.30) !important;
-            color: #6a2d2b !important;
+            background: linear-gradient(180deg, rgba(255,237,234,1), rgba(247,210,204,1)) !important;
+            border: 1px solid rgba(190, 109, 101, 0.28) !important;
+            color: #6d2d2b !important;
             border-radius: 10px !important;
         }
 
@@ -1077,7 +1076,7 @@ if st.session_state.active_hero_button == "Tornei":
                 )
 
             with controls_col:
-                minus_col, value_col, plus_col = st.columns([1, 1.3, 1])
+                minus_col, value_col, plus_col = st.columns([1, 1.25, 1])
 
                 with minus_col:
                     if st.button("-", key=f"minus_{quantity_key}", use_container_width=True):
