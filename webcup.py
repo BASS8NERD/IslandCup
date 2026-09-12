@@ -824,6 +824,65 @@ st.markdown(
             letter-spacing: 0.02em;
         }
 
+        @media (max-width: 640px) {
+            .leaderboard-table {
+                border: 0 !important;
+                background: transparent !important;
+                box-shadow: none !important;
+                border-collapse: separate !important;
+                border-spacing: 0 0.7rem !important;
+            }
+
+            .leaderboard-table thead {
+                display: none !important;
+            }
+
+            .leaderboard-table tbody,
+            .leaderboard-table tr,
+            .leaderboard-table td {
+                display: block !important;
+                width: 100% !important;
+                box-sizing: border-box !important;
+            }
+
+            .leaderboard-table tr {
+                background: rgba(255,255,255,0.82) !important;
+                border: 1px solid rgba(12, 135, 154, 0.12) !important;
+                border-radius: 16px !important;
+                overflow: hidden !important;
+                box-shadow: 0 10px 20px rgba(15, 118, 140, 0.06) !important;
+            }
+
+            .leaderboard-table td {
+                display: flex !important;
+                justify-content: space-between !important;
+                align-items: center !important;
+                gap: 0.8rem !important;
+                text-align: right !important;
+                padding: 0.7rem 0.9rem !important;
+                border-bottom: 1px solid rgba(12, 135, 154, 0.10) !important;
+            }
+
+            .leaderboard-table td:last-child {
+                border-bottom: none !important;
+            }
+
+            .leaderboard-table td::before {
+                content: attr(data-label);
+                font-size: 0.72rem;
+                letter-spacing: 0.04em;
+                text-transform: uppercase;
+                color: #3b727d !important;
+                font-weight: 800 !important;
+                flex: 1 1 40%;
+                text-align: left;
+            }
+
+            .leaderboard-table td:first-child {
+                background: rgba(255, 214, 122, 0.12) !important;
+            }
+        }
+
         .compact-number {
             width: 100%;
         }
@@ -1145,18 +1204,23 @@ elif st.session_state.active_hero_button == "Classifiche":
         header_html = "".join(f"<th>{col}</th>" for col in leaderboard_display.columns)
         rows_html = []
         for _, row in leaderboard_display.iterrows():
-            cells = "".join(f"<td>{value}</td>" for value in row.tolist())
+            cells = "".join(
+                f"<td data-label='{col}'>{value}</td>"
+                for col, value in zip(leaderboard_display.columns, row.tolist())
+            )
             rows_html.append(f"<tr>{cells}</tr>")
 
         leaderboard_display_html = f"""
-        <table class="leaderboard-table">
-            <thead>
-                <tr>{header_html}</tr>
-            </thead>
-            <tbody>
-                {''.join(rows_html)}
-            </tbody>
-        </table>
+        <div class="leaderboard-shell">
+            <table class="leaderboard-table">
+                <thead>
+                    <tr>{header_html}</tr>
+                </thead>
+                <tbody>
+                    {''.join(rows_html)}
+                </tbody>
+            </table>
+        </div>
         """
         st.markdown(leaderboard_display_html, unsafe_allow_html=True)
 
