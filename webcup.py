@@ -780,6 +780,19 @@ st.markdown(
             width: 100% !important;
         }
 
+        div[data-testid="stNumberInput"] > div {
+            background: linear-gradient(180deg, rgba(255, 247, 188, 0.95), rgba(255, 214, 64, 0.85)) !important;
+            border: 1px solid rgba(191, 146, 0, 0.45) !important;
+            border-radius: 12px !important;
+            box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.25) !important;
+        }
+
+        div[data-testid="stNumberInput"] input {
+            background: transparent !important;
+            color: #5c4300 !important;
+            font-weight: 700 !important;
+        }
+
         div[data-testid="stExpander"] {
             border: 1px solid rgba(12, 135, 154, 0.18) !important;
             border-radius: 18px !important;
