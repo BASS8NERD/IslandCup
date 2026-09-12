@@ -682,11 +682,11 @@ st.markdown(
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            background: linear-gradient(180deg, rgba(255,248,196,0.95), rgba(245,232,150,0.9));
-            border: 1px solid rgba(181, 157, 36, 0.18);
+            background: linear-gradient(180deg, rgba(255,255,255,0.8), rgba(210,247,250,0.8));
+            border: 1px solid rgba(12, 135, 154, 0.14);
             border-radius: 18px;
             padding: 1rem 0.75rem;
-            box-shadow: 0 10px 22px rgba(177, 158, 57, 0.09);
+            box-shadow: 0 10px 22px rgba(18, 123, 140, 0.08);
             margin-top: 1rem;
             min-height: 120px;
             text-align: center;
@@ -695,13 +695,13 @@ st.markdown(
         .score-box .value {
             font-size: 2.1rem;
             font-weight: 800;
-            color: #7b5b12;
+            color: #0d6d7b;
             line-height: 1.1;
         }
 
         .score-box .label {
             font-size: 0.82rem;
-            color: #634f14;
+            color: #285863;
             font-weight: 700;
             margin-top: 0.4rem;
             letter-spacing: 0.02em;
@@ -776,39 +776,58 @@ st.markdown(
             width: 100%;
         }
 
-        .quantity-block {
+        .quantity-shell {
             display: flex;
             align-items: center;
             justify-content: center;
-            min-height: 52px;
+            gap: 0.35rem;
             width: 100%;
+            min-height: 52px;
             border-radius: 12px;
-            background: linear-gradient(180deg, rgba(214,248,224,0.95), rgba(184,236,197,0.92));
-            border: 1px solid rgba(64, 156, 99, 0.18);
-            box-shadow: inset 0 1px 0 rgba(255,255,255,0.35);
-            color: #265d3f;
-            font-size: 1.15rem;
+            background: linear-gradient(180deg, rgba(220,247,227,0.96), rgba(190,234,202,0.92));
+            border: 1px solid rgba(75, 156, 111, 0.18);
+            padding: 0.2rem;
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.45);
+        }
+
+        .quantity-shell .quantity-center {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 44px;
+            min-height: 42px;
+            border-radius: 10px;
+            background: rgba(255,255,255,0.38);
+            color: #264f38;
             font-weight: 800;
+            font-size: 1.05rem;
+            text-align: center;
         }
 
-        .quantity-control button {
-            background: linear-gradient(180deg, rgba(220,247,227,1), rgba(184,233,195,1)) !important;
-            color: #235a3d !important;
-            border: 1px solid rgba(78, 146, 95, 0.2) !important;
-            border-radius: 12px !important;
+        .quantity-shell button {
+            min-width: 38px !important;
+            min-height: 38px !important;
+            border-radius: 10px !important;
+            background: linear-gradient(180deg, rgba(236,250,237,1), rgba(194,235,201,1)) !important;
+            border: 1px solid rgba(86, 147, 95, 0.22) !important;
+            color: #245b3d !important;
             font-weight: 800 !important;
-            min-height: 46px !important;
+            font-size: 1rem !important;
+            box-shadow: none !important;
         }
 
-        div[data-testid="stSelectbox"] > div {
-            background: linear-gradient(180deg, rgba(255,235,233,0.96), rgba(252,218,214,0.92)) !important;
-            border: 1px solid rgba(211, 122, 117, 0.38) !important;
+        div[data-baseweb="select"] > div {
+            background: linear-gradient(180deg, rgba(255,234,231,0.96), rgba(247,214,208,0.92)) !important;
+            border: 1px solid rgba(192, 110, 100, 0.35) !important;
             border-radius: 12px !important;
-            box-shadow: 0 8px 20px rgba(192, 110, 100, 0.06) !important;
+            box-shadow: 0 8px 18px rgba(191, 97, 90, 0.07) !important;
         }
 
-        div[data-testid="stSelectbox"] label {
-            color: #7c3f3d !important;
+        button[role="combobox"] {
+            background: linear-gradient(180deg, rgba(255,236,233,1), rgba(247,209,204,1)) !important;
+            border: 1px solid rgba(181, 103, 96, 0.30) !important;
+            color: #6a2d2b !important;
+            border-radius: 10px !important;
         }
 
         div[data-testid="stNumberInput"] {
@@ -1058,7 +1077,7 @@ if st.session_state.active_hero_button == "Tornei":
                 )
 
             with controls_col:
-                minus_col, value_col, plus_col = st.columns([1, 1.2, 1])
+                minus_col, value_col, plus_col = st.columns([1, 1.3, 1])
 
                 with minus_col:
                     if st.button("-", key=f"minus_{quantity_key}", use_container_width=True):
@@ -1066,7 +1085,10 @@ if st.session_state.active_hero_button == "Tornei":
                         st.session_state[quantity_key] = q_value
 
                 with value_col:
-                    st.markdown(f"<div class='quantity-block'>{q_value}</div>", unsafe_allow_html=True)
+                    st.markdown(
+                        f"<div class='quantity-shell'><div class='quantity-center'>{q_value}</div></div>",
+                        unsafe_allow_html=True,
+                    )
 
                 with plus_col:
                     if st.button("+", key=f"plus_{quantity_key}", use_container_width=True):
