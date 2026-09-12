@@ -799,29 +799,10 @@ st.markdown(
             font-size: 0.9rem;
             letter-spacing: 0.02em;
             border-bottom: 1px solid rgba(15, 98, 120, 0.18) !important;
-            text-transform: uppercase;
         }
 
         .leaderboard-table td:first-child {
             font-weight: 800 !important;
-        }
-
-        div[data-testid="stNumberInput"] {
-            width: 100% !important;
-            margin: 0 auto;
-        }
-
-        div[data-testid="stNumberInput"] label {
-            color: #0d5964 !important;
-            font-size: 0.82rem !important;
-            font-weight: 700 !important;
-        }
-
-        div[data-testid="stNumberInput"] > div {
-            background: rgba(255,255,255,0.82) !important;
-            border: 1px solid rgba(12, 135, 154, 0.18) !important;
-            border-radius: 12px !important;
-            box-shadow: 0 8px 18px rgba(15, 118, 140, 0.06) !important;
         }
 
         .leaderboard-table tr:nth-child(1) td,
@@ -878,24 +859,9 @@ st.markdown(
         }
 
         @media (max-width: 768px) {
-            .leaderboard-table th {
-                font-size: 0.7rem !important;
-                letter-spacing: 0.04em !important;
-                padding: 0.58rem 0.42rem !important;
-            }
-
-            .leaderboard-table td {
-                font-size: 0.76rem !important;
-                padding: 0.62rem 0.42rem !important;
-            }
-
             div[data-testid="stDataFrame"],
             div[data-testid="stTable"] {
                 font-size: 0.82rem !important;
-            }
-
-            div[data-testid="stNumberInput"] label {
-                font-size: 0.75rem !important;
             }
         }
     </style>
