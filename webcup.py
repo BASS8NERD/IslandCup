@@ -761,18 +761,23 @@ st.markdown(
             display: flex;
             align-items: center;
             justify-content: center;
-            min-height: 58px;
+            min-height: 54px;
             border-radius: 12px;
             background: linear-gradient(180deg, rgba(218,248,250,0.95), rgba(184,237,242,0.85));
             border: 1px solid rgba(12, 135, 154, 0.12);
-            font-size: 1.2rem;
+            font-size: 1.05rem;
             font-weight: 800;
             color: #0d6d7b;
             width: 100%;
+            margin-top: 0.35rem;
         }
 
         .compact-number {
             width: 100%;
+        }
+
+        div[data-testid="stNumberInput"] {
+            width: 100% !important;
         }
 
         div[data-testid="stExpander"] {
@@ -997,24 +1002,13 @@ if st.session_state.active_hero_button == "Tornei":
         for idx, row in table.iterrows():
             quantity = int(row["Quantità"])
             quantity_key = f"qty_{selected_name}_{st.session_state.selected_tournament}_{idx}".replace(" ", "_")
-            photo_col, meta_col, qty_col, total_col = st.columns([1.2, 3.2, 1.4, 1.1])
+            info_col, controls_col = st.columns([4.5, 1.8])
 
-            with photo_col:
-                if str(row["Foto"]).startswith("http"):
-                    st.markdown(
-                        f"<div class=\"custom-item-card\"><img src=\"{row['Foto']}\" alt=\"{row['Creatura']}\" /></div>",
-                        unsafe_allow_html=True,
-                    )
-                else:
-                    st.markdown(
-                        f"<div class=\"custom-item-card\">{row['Foto']}</div>",
-                        unsafe_allow_html=True,
-                    )
-
-            with meta_col:
+            with info_col:
                 st.markdown(
                     f"""
                     <div class="custom-item-card">
+                        <img src="{row['Foto']}" alt="{row['Creatura']}" />
                         <div class="custom-item-meta">
                             <div class="name">{row['Creatura']}</div>
                             <span>Valore: {int(row['Valore'])}</span>
@@ -1024,9 +1018,9 @@ if st.session_state.active_hero_button == "Tornei":
                     unsafe_allow_html=True,
                 )
 
-            with qty_col:
+            with controls_col:
                 q_value = st.number_input(
-                    "Quantità",
+                    "Q",
                     min_value=0,
                     step=1,
                     value=quantity,
@@ -1035,7 +1029,6 @@ if st.session_state.active_hero_button == "Tornei":
                 )
                 table.at[idx, "Quantità"] = int(q_value)
 
-            with total_col:
                 total_value = int(row["Valore"] * q_value)
                 table.at[idx, "Totale"] = total_value
                 st.markdown(f"<div class=\"mini-total\">{total_value}</div>", unsafe_allow_html=True)
