@@ -812,9 +812,15 @@ st.markdown(
         .leaderboard-table tr:nth-child(3) th { background: rgba(209, 154, 108, 0.18); }
 
         .leaderboard-medal {
-            font-size: 1.4rem;
+            font-size: 1.5rem;
             display: inline-block;
-            margin-right: 0.3rem;
+            line-height: 1;
+            vertical-align: middle;
+        }
+
+        .leaderboard-table td:first-child {
+            font-weight: 800 !important;
+            letter-spacing: 0.02em;
         }
 
         .compact-number {
@@ -1132,7 +1138,7 @@ elif st.session_state.active_hero_button == "Classifiche":
 
         medal_map = {1: "🥇", 2: "🥈", 3: "🥉"}
         leaderboard_display["Posizione"] = leaderboard_display["Posizione"].map(
-            lambda pos: f"<span class='leaderboard-medal'>{medal_map.get(pos, '')}</span>{pos}" if pos in medal_map else str(pos)
+            lambda pos: f"<span class='leaderboard-medal'>{medal_map.get(pos, '')}</span>" if pos in medal_map else str(pos)
         )
 
         leaderboard_display_html = leaderboard_display.to_html(
