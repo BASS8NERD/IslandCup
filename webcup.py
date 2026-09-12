@@ -794,10 +794,11 @@ st.markdown(
         }
 
         .leaderboard-table th {
-            background: linear-gradient(180deg, rgba(168, 236, 244, 0.8), rgba(236, 252, 255, 0.95));
+            background: linear-gradient(135deg, rgba(255, 219, 88, 0.85), rgba(123, 210, 255, 0.88));
             color: #0a4d57 !important;
             font-size: 0.9rem;
             letter-spacing: 0.02em;
+            border-bottom: 1px solid rgba(15, 98, 120, 0.18) !important;
         }
 
         .leaderboard-table td:first-child {
