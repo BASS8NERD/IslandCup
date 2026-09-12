@@ -1166,8 +1166,8 @@ elif st.session_state.active_hero_button == "Classifiche":
 
         leaderboard = pd.DataFrame(leaderboard_rows)
         leaderboard = leaderboard.sort_values(["Totale punti", "Quantità"], ascending=[False, False]).reset_index(drop=True)
-        leaderboard.insert(0, "Posizione", range(1, len(leaderboard) + 1))
-        leaderboard_display = leaderboard[["Posizione", "Nome partecipante", "Quantità", "Totale punti"]].copy()
+        leaderboard.insert(0, "Rango", range(1, len(leaderboard) + 1))
+        leaderboard_display = leaderboard[["Rango", "Nome partecipante", "Quantità", "Totale punti"]].copy()
         leaderboard_display["Totale punti"] = leaderboard_display["Totale punti"].map(int)
 
         medal_map = {1: "🥇", 2: "🥈", 3: "🥉"}
