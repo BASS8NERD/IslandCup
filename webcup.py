@@ -763,11 +763,11 @@ st.markdown(
             justify-content: center;
             min-height: 54px;
             border-radius: 12px;
-            background: linear-gradient(180deg, rgba(255, 228, 228, 0.95), rgba(255, 194, 194, 0.85));
-            border: 1px solid rgba(180, 35, 35, 0.18);
+            background: linear-gradient(180deg, rgba(218,248,250,0.95), rgba(184,237,242,0.85));
+            border: 1px solid rgba(12, 135, 154, 0.12);
             font-size: 1.05rem;
             font-weight: 800;
-            color: #a11b1b;
+            color: #0d6d7b;
             width: 100%;
             margin-top: 0.35rem;
         }
