@@ -794,8 +794,8 @@ st.markdown(
         }
 
         .leaderboard-table th {
-            background: linear-gradient(135deg, rgba(255, 219, 88, 0.85), rgba(123, 210, 255, 0.88));
-            color: #0a4d57 !important;
+            background: linear-gradient(135deg, #1e88e5 0%, #5bb6ff 100%) !important;
+            color: #ffffff !important;
             font-size: 0.9rem;
             letter-spacing: 0.02em;
             border-bottom: 1px solid rgba(15, 98, 120, 0.18) !important;
@@ -1142,12 +1142,22 @@ elif st.session_state.active_hero_button == "Classifiche":
             lambda pos: f"<span class='leaderboard-medal'>{medal_map.get(pos, '')}</span>" if pos in medal_map else str(pos)
         )
 
-        leaderboard_display_html = leaderboard_display.to_html(
-            index=False,
-            escape=False,
-            classes="leaderboard-table",
-            border=0,
-        )
+        header_html = "".join(f"<th>{col}</th>" for col in leaderboard_display.columns)
+        rows_html = []
+        for _, row in leaderboard_display.iterrows():
+            cells = "".join(f"<td>{value}</td>" for value in row.tolist())
+            rows_html.append(f"<tr>{cells}</tr>")
+
+        leaderboard_display_html = f"""
+        <table class="leaderboard-table">
+            <thead>
+                <tr>{header_html}</tr>
+            </thead>
+            <tbody>
+                {''.join(rows_html)}
+            </tbody>
+        </table>
+        """
         st.markdown(leaderboard_display_html, unsafe_allow_html=True)
 
 elif st.session_state.active_hero_button == "Eventi":
