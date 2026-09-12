@@ -826,9 +826,10 @@ st.markdown(
 
         .leaderboard-table-wrapper {
             width: 100%;
+            max-width: 540px;
+            margin: 0.8rem auto 0;
             overflow-x: auto;
             -webkit-overflow-scrolling: touch;
-            margin-top: 0.8rem;
             padding-bottom: 0.3rem;
         }
 
@@ -837,19 +838,26 @@ st.markdown(
         }
 
         @media (max-width: 640px) {
+            .leaderboard-table-wrapper {
+                max-width: 100%;
+            }
+
             .leaderboard-table {
-                min-width: 420px;
-                font-size: 0.76rem;
+                width: 100%;
+                min-width: 0;
+                font-size: 0.72rem;
             }
 
             .leaderboard-table th,
             .leaderboard-table td {
-                padding: 0.7rem 0.5rem !important;
-                font-size: 0.76rem !important;
+                padding: 0.55rem 0.38rem !important;
+                font-size: 0.72rem !important;
+                white-space: normal !important;
+                word-break: break-word !important;
             }
 
             .leaderboard-medal {
-                font-size: 1.2rem;
+                font-size: 1.15rem;
             }
         }
 
