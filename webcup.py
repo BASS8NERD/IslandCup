@@ -1159,7 +1159,7 @@ elif st.session_state.active_hero_button == "Classifiche":
             qty = int(capture_df["Quantità"].sum())
             total = int((capture_df["Valore"] * capture_df["Quantità"]).sum())
             leaderboard_rows.append({
-                "Nome partecipante": participant,
+                "Partecipante": participant,
                 "Quantità": qty,
                 "Totale punti": total,
             })
