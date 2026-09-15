@@ -9,18 +9,7 @@ st.set_page_config(
     page_icon="🌊",
     layout="wide",
 )
-import streamlit as st
 
-# Nasconde il menu in alto a destra e il footer "Made with Streamlit"
-hide_menu_style = """
-        <style>
-        #MainMenu {visibility: hidden;}
-        footer {visibility: hidden;}
-        header {visibility: hidden;}
-        </style>
-        """
-st.markdown(hide_menu_style, unsafe_allow_html=True)
-s
 GITHUB_RAW_BASE = "https://raw.githubusercontent.com/BASS8NERD/IslandCup/main"
 
 POINTS_BY_IMAGE = {
